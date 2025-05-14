@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "241430276628",
+    "project_id": "fitnesapp-6cfd4",
+    "storage_bucket": "fitnesapp-6cfd4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241430276628:android:f7d9b7817e606d3ba75501",
+        "android_client_info": {
+          "package_name": "com.NosratiSanam.FitnessApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "241430276628-6gtb26dml5d3tc6fi96skqacad5oj7v0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQehf1mNWxMEdbXWkWdrtaciSFkJO8p0Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "241430276628-6gtb26dml5d3tc6fi96skqacad5oj7v0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "241430276628-1shjbr3hok34gc7jvnnfsqa7jcusoekr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.NosratiSanam.FitnessApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241430276628:android:3ca080e60f458489a75501",
+        "android_client_info": {
+          "package_name": "com.example.fitness_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "241430276628-6gtb26dml5d3tc6fi96skqacad5oj7v0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQehf1mNWxMEdbXWkWdrtaciSFkJO8p0Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "241430276628-6gtb26dml5d3tc6fi96skqacad5oj7v0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "241430276628-1shjbr3hok34gc7jvnnfsqa7jcusoekr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.NosratiSanam.FitnessApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
