@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'muscle_detail_screen.dart';
 
 class LowerBodyMusclesScreen extends StatelessWidget {
   const LowerBodyMusclesScreen({super.key});
@@ -28,7 +29,15 @@ class LowerBodyMusclesScreen extends StatelessWidget {
                 title: Text(lowerBodyMuscles[index]),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  // Navigate to details if needed
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (_) => MuscleDetailScreen(
+                            muscle: lowerBodyMuscles[index],
+                          ),
+                    ),
+                  );
                 },
               ),
             );

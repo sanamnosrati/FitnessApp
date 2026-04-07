@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseDetailScreen extends StatelessWidget {
@@ -5,58 +6,71 @@ class ExerciseDetailScreen extends StatelessWidget {
 
   const ExerciseDetailScreen({super.key, required this.exerciseName});
 
-  Map<String, dynamic> getExerciseDetails(String name) {
-    switch (name) {
-      case 'Bench Press':
-        return {
-          'description':
-              'A compound exercise targeting the chest, shoulders, and triceps.',
-          'sets': '3-4',
-          'reps': '8-12',
-          'tips': 'Keep your back slightly arched and control the movement.',
-        };
-
-      case 'Push-Up':
-        return {
-          'description': 'Bodyweight chest exercise.',
-          'sets': '3',
-          'reps': '10-20',
-          'tips': 'Keep your body straight and core tight.',
-        };
-
-      default:
-        return {
-          'description': 'No description yet.',
-          'sets': '-',
-          'reps': '-',
-          'tips': '-',
-        };
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final details = getExerciseDetails(exerciseName);
-
     return Scaffold(
       appBar: AppBar(title: Text(exerciseName)),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(details['description'], style: const TextStyle(fontSize: 18)),
-            const SizedBox(height: 20),
+      body: FutureBuilder<QuerySnapshot>(
+        future:
+            FirebaseFirestore.instance
+                .collection('exercises')
+                .where('name', isEqualTo: exerciseName)
+                .limit(1)
+                .get(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-            Text('Sets: ${details['sets']}'),
-            Text('Reps: ${details['reps']}'),
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
 
-            const SizedBox(height: 20),
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text('No exercise data found.'));
+          }
 
-            Text('Tips:', style: const TextStyle(fontWeight: FontWeight.bold)),
-            Text(details['tips']),
-          ],
-        ),
+          final doc = snapshot.data!.docs.first;
+          final data = doc.data() as Map<String, dynamic>;
+
+          final targetMuscles = data['targetMuscles'] ?? 'Not added yet';
+          final instructions =
+              data['instructions'] ?? 'No instructions available yet.';
+          final sets = data['sets'] ?? '-';
+          final reps = data['reps'] ?? '-';
+          final tips = data['tips'] ?? 'Add more details later.';
+
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: ListView(
+              children: [
+                const Text(
+                  'Target Muscles',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(targetMuscles),
+                const SizedBox(height: 20),
+                const Text(
+                  'How to Perform',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(instructions),
+                const SizedBox(height: 20),
+                Text('Sets: $sets'),
+                Text('Reps: $reps'),
+                const SizedBox(height: 20),
+                const Text(
+                  'Tips',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(tips),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

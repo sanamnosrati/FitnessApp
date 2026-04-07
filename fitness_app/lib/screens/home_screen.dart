@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'WorkoutCategoriesScreen.dart';
-import 'CategorySelectionScreen.dart'; // Achtung! <-- der neue Screen!
+import 'CategorySelectionScreen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -23,7 +23,8 @@ class HomeScreen extends StatelessWidget {
               'What would you like to do?',
               style: TextStyle(fontSize: 18),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 20),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -46,9 +47,7 @@ class HomeScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder:
-                            (context) =>
-                                const CategorySelectionScreen(), // ← neu hier
+                        builder: (context) => const CategorySelectionScreen(),
                       ),
                     );
                   },
@@ -57,7 +56,7 @@ class HomeScreen extends StatelessWidget {
                   icon: Icons.local_fire_department,
                   label: 'Calorie Counting',
                   onPressed: () {
-                    // Hier kannst du später noch was einfügen
+                    // später hinzufügen
                   },
                 ),
               ],
