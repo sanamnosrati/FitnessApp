@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'WorkoutCategoriesScreen.dart';
 import 'CategorySelectionScreen.dart';
 import 'package:fitness_app/screens/ProgressScreen.dart' as progress;
-import 'package:fitness_app/screens/AchievementsScreen.dart' as achievements;
-import 'package:fitness_app/screens/SettingsScreen.dart' as settings;
+import 'package:fitness_app/screens/MentalHealthScreen.dart' as mental_health;
+import 'package:fitness_app/screens/ProfileScreen.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -19,8 +19,8 @@ class _MainNavigationState extends State<MainNavigation> {
     WorkoutCategoriesScreen(),
     CategorySelectionScreen(),
     progress.ProgressScreen(),
-    achievements.AchievementsScreen(),
-    settings.SettingsScreen(),
+    const mental_health.MentalHealthScreen(),
+    const ProfileScreen(),
   ];
 
   void _onTap(int index) {
@@ -53,13 +53,10 @@ class _MainNavigationState extends State<MainNavigation> {
             label: 'Progress',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.emoji_events),
-            label: 'Achievements',
+            icon: Icon(Icons.self_improvement),
+            label: 'Mental',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );
