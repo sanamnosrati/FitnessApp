@@ -5,26 +5,44 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.7.0
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
+  cupertino_icons: ^1.0.2
   firebase_core: ^3.13.0
   firebase_auth: ^5.5.2
   google_sign_in: ^6.1.4
   sign_in_with_apple: ^7.0.1
   cloud_firestore: ^5.6.5
-  shared_preferences: ^2.0.15 
+  shared_preferences: ^2.0.15
+  google_fonts: ^4.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^2.0.0
 
 flutter:
   uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/images/food/
+    - assets/illustrations/
+    - assets/fonts/
+
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
 
 dependency_overrides:
   async: ^2.13.0

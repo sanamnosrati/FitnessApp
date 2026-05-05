@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0">
+  <office:styles>
+    <style:style style:name="BFit-Title" style:family="presentation">
+      <style:text-properties fo:color="#FFD700" fo:font-size="44pt" fo:font-weight="bold"/>
+      <style:graphic-properties draw:fill-color="#121212"/>
+    </style:style>
+    <style:style style:name="BFit-Heading" style:family="presentation">
+      <style:text-properties fo:color="#FFC107" fo:font-size="32pt" fo:font-weight="bold"/>
+      <style:graphic-properties draw:fill-color="#121212"/>
+    </style:style>
+    <style:style style:name="BFit-Body" style:family="presentation">
+      <style:text-properties fo:color="#FFFFFF" fo:font-size="24pt"/>
+      <style:graphic-properties draw:fill-color="#121212"/>
+    </style:style>
+  </office:styles>
+</office:document-styles> 

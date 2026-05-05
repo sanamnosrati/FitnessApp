@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../components/food_placeholder.dart';
 
 // Assuming FoodDetailScreen is defined above or imported here
 import 'food_detail_screen.dart'; // Import FoodDetailScreen if it's in a different file
@@ -920,64 +921,106 @@ class _CategorySelectionScreenState extends State<CategorySelectionScreen> {
     }).toList();
   }
 
+  Widget _buildFoodCard(Map<String, dynamic> food) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FoodDetailScreen(food: food),
+            ),
+          );
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: FoodPlaceholder(
+                foodName: food['name'],
+                categories: List<String>.from(food['categories']),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    food['name'],
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    food['categories'].join(', '),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final filteredFoods = getFilteredFoods();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Categories & Recipes')),
-      body: Column(
-        children: [
-          const SizedBox(height: 10),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              children:
-                  categories.map((category) {
-                    final isSelected = selectedCategories.contains(category);
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                      child: FilterChip(
-                        label: Text(category),
-                        selected: isSelected,
-                        onSelected: (_) => toggleCategory(category),
-                        selectedColor: Colors.blueAccent,
-                        checkmarkColor: Colors.white,
-                      ),
-                    );
-                  }).toList(),
+      body: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 10),
+            Container(
+              height: 60,
+              child: ListView(
+                physics: const BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: categories.map((category) {
+                  final isSelected = selectedCategories.contains(category);
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: FilterChip(
+                      label: Text(category),
+                      selected: isSelected,
+                      onSelected: (_) => toggleCategory(category),
+                      selectedColor: Colors.blueAccent,
+                      checkmarkColor: Colors.white,
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-          const Divider(),
-          Expanded(
-            child:
-                filteredFoods.isEmpty
-                    ? const Center(
+            const Divider(),
+            Expanded(
+              child: filteredFoods.isEmpty
+                  ? const Center(
                       child: Text('No foods match the selected categories.'),
                     )
-                    : ListView.builder(
+                  : ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       itemCount: filteredFoods.length,
                       itemBuilder: (context, index) {
                         final food = filteredFoods[index];
-                        return ListTile(
-                          title: Text(food['name']),
-                          subtitle: Text(food['categories'].join(', ')),
-                          onTap: () {
-                            // Navigate to FoodDetailScreen on tapping the item
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) => FoodDetailScreen(food: food),
-                              ),
-                            );
-                          },
-                        );
+                        return _buildFoodCard(food);
                       },
                     ),
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

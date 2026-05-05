@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
-import 'screens/main_navigation.dart';
+import 'package:flutter/services.dart';
+import 'screens/splash_screen.dart';
+import 'theme/app_theme.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+    ),
+  );
   runApp(const MyApp());
 }
 
@@ -11,9 +20,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Fitness App',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const MainNavigation(),
+      title: 'BFit',
+      theme: AppTheme.lightTheme,
+      debugShowCheckedModeBanner: false,
+      home: const SplashScreen(),
     );
   }
 }

@@ -3,56 +3,104 @@ import 'package:flutter/material.dart';
 class FoodDetailScreen extends StatelessWidget {
   final Map<String, dynamic> food;
 
-  const FoodDetailScreen({Key? key, required this.food}) : super(key: key);
+  const FoodDetailScreen({super.key, required this.food});
 
   @override
   Widget build(BuildContext context) {
+    final categories = food['categories'] ?? [];
+    final ingredients = food['ingredients'] ?? [];
+    final instructions = food['instructions'] ?? [];
+    final nutrition = food['nutritionalInfo'] ?? {};
+
     return Scaffold(
-      appBar: AppBar(title: Text(food['name'])),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      appBar: AppBar(
+        title: Text(food['name'] ?? 'Food Details'),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(
-              food['image'] ?? 'https://via.placeholder.com/150',
-              height: 200,
-              fit: BoxFit.cover,
-            ),
-            const SizedBox(height: 16),
+            if (food['image'] != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.asset(
+                  food['image'],
+                  height: 220,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+
+            const SizedBox(height: 20),
+
             Text(
-              'Categories: ${food['categories'].join(', ')}',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              food['name'] ?? '',
+              style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 16),
+
+            const SizedBox(height: 12),
+
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: categories
+                  .map<Widget>((c) => Chip(label: Text(c.toString())))
+                  .toList(),
+            ),
+
+            const SizedBox(height: 24),
+
             const Text(
-              'Ingredients:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              'Ingredients',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Text(food['ingredients'] ?? 'No ingredients available'),
-            const SizedBox(height: 16),
+
+            ...ingredients.map<Widget>(
+              (item) => Text('• $item', style: const TextStyle(fontSize: 16)),
+            ),
+
+            const SizedBox(height: 24),
+
             const Text(
-              'Cooking Instructions:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              'Cooking Instructions',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Text(food['instructions'] ?? 'No instructions available'),
-            const SizedBox(height: 16),
+
+            ...instructions.asMap().entries.map<Widget>(
+              (entry) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(
+                  '${entry.key + 1}. ${entry.value}',
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
             const Text(
-              'Nutritional Information:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              'Nutritional Information',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Text(food['nutritionalInfo'] ?? 'No nutritional info available'),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Food saved/liked')),
-                );
-              },
-              child: const Text('Save/Like'),
+
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Calories: ${nutrition['calories'] ?? '-'}'),
+                    Text('Protein: ${nutrition['protein'] ?? '-'}'),
+                    Text('Carbs: ${nutrition['carbs'] ?? '-'}'),
+                    Text('Fat: ${nutrition['fat'] ?? '-'}'),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
