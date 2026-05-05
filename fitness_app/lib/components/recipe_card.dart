@@ -23,6 +23,8 @@ class RecipeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isLocalImage = imageUrl.startsWith('assets/');
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -45,17 +47,26 @@ class RecipeCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image Container
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(20),
+              ),
               child: Stack(
                 children: [
-                  Image.network(
-                    imageUrl,
-                    height: 200,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
+                  isLocalImage
+                      ? Image.asset(
+                        imageUrl,
+                        height: 200,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      )
+                      : Image.network(
+                        imageUrl,
+                        height: 200,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+
                   Positioned(
                     bottom: 0,
                     left: 0,
@@ -74,6 +85,7 @@ class RecipeCard extends StatelessWidget {
                       ),
                     ),
                   ),
+
                   Positioned(
                     bottom: 16,
                     left: 16,
@@ -97,23 +109,24 @@ class RecipeCard extends StatelessWidget {
                 ],
               ),
             ),
-            // Info Container
+
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Nutritional Info Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _buildInfoItem(Icons.timer, duration),
-                      _buildInfoItem(Icons.local_fire_department, '$calories kcal'),
+                      _buildInfoItem(
+                        Icons.local_fire_department,
+                        '$calories kcal',
+                      ),
                       _buildInfoItem(Icons.fitness_center, '$protein protein'),
                     ],
                   ),
                   const SizedBox(height: 16),
-                  // Tags
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -131,18 +144,11 @@ class RecipeCard extends StatelessWidget {
   Widget _buildInfoItem(IconData icon, String text) {
     return Row(
       children: [
-        Icon(
-          icon,
-          color: AppTheme.primaryColor,
-          size: 20,
-        ),
+        Icon(icon, color: AppTheme.primaryColor, size: 20),
         const SizedBox(width: 4),
         Text(
           text,
-          style: TextStyle(
-            color: AppTheme.textSecondaryColor,
-            fontSize: 14,
-          ),
+          style: TextStyle(color: AppTheme.textSecondaryColor, fontSize: 14),
         ),
       ],
     );
@@ -169,4 +175,4 @@ class RecipeCard extends StatelessWidget {
       ),
     );
   }
-} 
+}

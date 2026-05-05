@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Fitness App',
       theme: ThemeData(primarySwatch: Colors.blue),
       debugShowCheckedModeBanner: false,
-      home: const AuthGate(),
+      home: const MainNavigation(), // ✅ HIER GEÄNDERT
     );
   }
 }
