@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fitness_app/services/auth_service.dart'; // Importiere AuthService
-import 'package:fitness_app/screens/home_screen.dart'; // HomeScreen importieren
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitness_app/services/auth_service.dart';
+import 'package:fitness_app/screens/main_navigation.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -12,30 +13,26 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool isLoading = false; // Ladeindikator
+  bool isLoading = false;
 
-  final AuthService _authService = AuthService(); // Instanziiere AuthService
+  final AuthService _authService = AuthService();
 
   @override
   void initState() {
     super.initState();
-    // Prüfen, ob der Benutzer bereits eingeloggt ist
     _checkLoginStatus();
   }
 
-  // Überprüfen, ob der Benutzer eingeloggt ist
   Future<void> _checkLoginStatus() async {
-    bool isLoggedIn = await _authService.getLoginStatus();
-    if (isLoggedIn) {
-      // Wenn der Benutzer eingeloggt ist, zum HomeScreen weiterleiten
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null && mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        MaterialPageRoute(builder: (context) => const MainNavigation()),
       );
     }
   }
 
-  // ------------------ Login ------------------
   Future<void> _signIn() async {
     setState(() => isLoading = true);
     try {
@@ -43,10 +40,10 @@ class _AuthScreenState extends State<AuthScreen> {
         emailController.text.trim(),
         passwordController.text.trim(),
       );
-      if (user != null) {
+      if (user != null && mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(builder: (context) => const MainNavigation()),
         );
       } else {
         _showError("Login fehlgeschlagen");
@@ -54,10 +51,11 @@ class _AuthScreenState extends State<AuthScreen> {
     } catch (e) {
       _showError("Fehler beim Login");
     }
-    setState(() => isLoading = false);
+    if (mounted) {
+      setState(() => isLoading = false);
+    }
   }
 
-  // ------------------ Registrierung ------------------
   Future<void> _signUp() async {
     setState(() => isLoading = true);
     try {
@@ -65,10 +63,10 @@ class _AuthScreenState extends State<AuthScreen> {
         emailController.text.trim(),
         passwordController.text.trim(),
       );
-      if (user != null) {
+      if (user != null && mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(builder: (context) => const MainNavigation()),
         );
       } else {
         _showError("Registrierung fehlgeschlagen");
@@ -76,14 +74,22 @@ class _AuthScreenState extends State<AuthScreen> {
     } catch (e) {
       _showError("Fehler bei der Registrierung");
     }
-    setState(() => isLoading = false);
+    if (mounted) {
+      setState(() => isLoading = false);
+    }
   }
 
-  // ------------------ Fehler anzeigen ------------------
   void _showError(String message) {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override

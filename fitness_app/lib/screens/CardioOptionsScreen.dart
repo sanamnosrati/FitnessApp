@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'cardio_detail_screen.dart';
 
 class CardioOptionsScreen extends StatelessWidget {
   const CardioOptionsScreen({super.key});
@@ -6,10 +7,10 @@ class CardioOptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cardioWorkouts = [
-      'Running / Jogging',
+      'Running',
       'Cycling',
       'Jump Rope',
-      'HIIT (High Intensity Interval Training)',
+      'HIIT',
       'Swimming',
       'Rowing',
       'Stair Climbing',
@@ -22,14 +23,21 @@ class CardioOptionsScreen extends StatelessWidget {
         child: ListView.builder(
           itemCount: cardioWorkouts.length,
           itemBuilder: (context, index) {
+            final workout = cardioWorkouts[index];
+
             return Card(
               margin: const EdgeInsets.symmetric(vertical: 8),
               elevation: 3,
               child: ListTile(
-                title: Text(cardioWorkouts[index]),
+                title: Text(workout),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  // Navigate to details if needed
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CardioDetailScreen(cardioName: workout),
+                    ),
+                  );
                 },
               ),
             );
