@@ -18,7 +18,7 @@ class _MainNavigationState extends State<MainNavigation> {
   final List<Widget> _screens = [
     WorkoutCategoriesScreen(),
     CategorySelectionScreen(),
-    progress.ProgressScreen(),
+    const progress.ProgressScreen(),
     const mental_health.MentalHealthScreen(),
     const ProfileScreen(),
   ];
@@ -33,30 +33,31 @@ class _MainNavigationState extends State<MainNavigation> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _screens[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onTap,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fitness_center),
-            label: 'Workouts',
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: _onTap,
+        height: 74,
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.fitness_center_rounded),
+            label: 'Workout',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.restaurant_menu),
-            label: 'Recipes',
+          NavigationDestination(
+            icon: Icon(Icons.grid_view_rounded),
+            label: 'Categories',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
+          NavigationDestination(
+            icon: Icon(Icons.show_chart_rounded),
             label: 'Progress',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.self_improvement),
-            label: 'Mental',
+          NavigationDestination(
+            icon: Icon(Icons.favorite_rounded),
+            label: 'Mind',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          NavigationDestination(
+            icon: Icon(Icons.person_rounded),
+            label: 'Profile',
+          ),
         ],
       ),
     );
