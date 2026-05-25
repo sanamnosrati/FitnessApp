@@ -3,7 +3,7 @@ class RecipeSeedSnack {
     {
       'id': 'greek_yogurt_berry_cup',
       'title': 'Greek Yogurt Berry Cup',
-      'category': 'Snack',
+      'category': 'Snacks',
       'imageUrl': 'assets/images/recipes/snacks/greek_yogurt_berry_cup.jpg',
       'calories': 220,
       'protein': 20,
@@ -46,7 +46,7 @@ class RecipeSeedSnack {
     {
       'id': 'apple_peanut_butter_snack',
       'title': 'Apple Peanut Butter Snack',
-      'category': 'Snack',
+      'category': 'Snacks',
       'imageUrl': 'assets/images/recipes/snacks/apple_peanut_butter_snack.jpg',
       'calories': 260,
       'protein': 8,
@@ -76,7 +76,7 @@ class RecipeSeedSnack {
     {
       'id': 'protein_energy_balls',
       'title': 'Protein Energy Balls',
-      'category': 'Snack',
+      'category': 'Snacks',
       'imageUrl': 'assets/images/recipes/snacks/protein_energy_balls.jpg',
       'calories': 190,
       'protein': 12,
@@ -117,7 +117,7 @@ class RecipeSeedSnack {
     {
       'id': 'cottage_cheese_crackers',
       'title': 'Cottage Cheese Crackers',
-      'category': 'Snack',
+      'category': 'Snacks',
       'imageUrl': 'assets/images/recipes/snacks/cottage_cheese_crackers.jpg',
       'calories': 210,
       'protein': 18,
@@ -152,7 +152,7 @@ class RecipeSeedSnack {
     {
       'id': 'banana_chocolate_protein_shake',
       'title': 'Banana Chocolate Protein Shake',
-      'category': 'Snack',
+      'category': 'Snacks',
       'imageUrl':
           'assets/images/recipes/snacks/banana_chocolate_protein_shake.jpg',
       'calories': 320,
@@ -183,7 +183,7 @@ class RecipeSeedSnack {
     {
       'id': 'hummus_veggie_box',
       'title': 'Hummus Veggie Box',
-      'category': 'Snack',
+      'category': 'Snacks',
       'imageUrl': 'assets/images/recipes/snacks/hummus_veggie_box.jpg',
       'calories': 180,
       'protein': 7,
@@ -218,7 +218,7 @@ class RecipeSeedSnack {
     {
       'id': 'rice_cakes_tuna_stack',
       'title': 'Rice Cakes Tuna Stack',
-      'category': 'Snack',
+      'category': 'Snacks',
       'imageUrl': 'assets/images/recipes/snacks/rice_cakes_tuna_stack.jpg',
       'calories': 240,
       'protein': 22,
@@ -254,7 +254,7 @@ class RecipeSeedSnack {
     {
       'id': 'dark_chocolate_nut_mix',
       'title': 'Dark Chocolate Nut Mix',
-      'category': 'Snack',
+      'category': 'Snacks',
       'imageUrl': 'assets/images/recipes/snacks/dark_chocolate_nut_mix.jpg',
       'calories': 290,
       'protein': 9,
@@ -279,7 +279,7 @@ class RecipeSeedSnack {
     {
       'id': 'egg_avocado_toast',
       'title': 'Egg Avocado Toast',
-      'category': 'Snack',
+      'category': 'Snacks',
       'imageUrl': 'assets/images/recipes/snacks/egg_avocado_toast.jpg',
       'calories': 310,
       'protein': 15,
@@ -320,7 +320,7 @@ class RecipeSeedSnack {
     {
       'id': 'frozen_yogurt_bark',
       'title': 'Frozen Yogurt Bark',
-      'category': 'Snack',
+      'category': 'Snacks',
       'imageUrl': 'assets/images/recipes/snacks/frozen_yogurt_bark.jpg',
       'calories': 170,
       'protein': 14,

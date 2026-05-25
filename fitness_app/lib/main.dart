@@ -4,11 +4,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'firebase_options.dart';
 import 'screens/main_navigation.dart';
-import 'screens/login_screen.dart'; // <- passe den Namen an, falls dein Login Screen anders heißt
+import 'screens/login_screen.dart';
+import 'data/upload_recipes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Rezepte zu Firestore hochladen
+  await RecipeSeedUploader.uploadAllRecipes();
+
   runApp(const MyApp());
 }
 
@@ -21,7 +27,7 @@ class MyApp extends StatelessWidget {
       title: 'Fitness App',
       theme: ThemeData(primarySwatch: Colors.blue),
       debugShowCheckedModeBanner: false,
-      home: const MainNavigation(), // ✅ HIER GEÄNDERT
+      home: const MainNavigation(),
     );
   }
 }

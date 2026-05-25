@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'WorkoutCategoriesScreen.dart';
-import 'package:fitness_app/screens/ProgressScreen.dart' as progress;
+import 'package:fitness_app/screens/nutrition_screen.dart';
+import 'package:fitness_app/screens/daily_dashboard_screen.dart';
 import 'package:fitness_app/screens/MentalHealthScreen.dart' as mental_health;
 import 'package:fitness_app/screens/ProfileScreen.dart';
-import 'package:fitness_app/screens/nutrition_screen.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -14,12 +14,12 @@ class MainNavigation extends StatefulWidget {
 }
 
 class _MainNavigationState extends State<MainNavigation> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
 
   final List<Widget> _screens = [
     const WorkoutCategoriesScreen(),
     const NutritionScreen(),
-    const progress.ProgressScreen(),
+    const DailyDashboardScreen(),
     const mental_health.MentalHealthScreen(),
     const ProfileScreen(),
   ];
@@ -47,17 +47,14 @@ class _MainNavigationState extends State<MainNavigation> {
             icon: Icon(Icons.restaurant_menu_rounded),
             label: 'Nutrition',
           ),
-          NavigationDestination(
-            icon: Icon(Icons.show_chart_rounded),
-            label: 'Progress',
-          ),
+          NavigationDestination(icon: Icon(Icons.home_rounded), label: 'Home'),
           NavigationDestination(
             icon: Icon(Icons.favorite_rounded),
             label: 'Mind',
           ),
           NavigationDestination(
-            icon: Icon(Icons.person_rounded),
-            label: 'Profile',
+            icon: Icon(Icons.settings_rounded),
+            label: 'Settings',
           ),
         ],
       ),
