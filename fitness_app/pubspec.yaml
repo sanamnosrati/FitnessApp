@@ -13,32 +13,38 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
-  # 🔥 Firebase
-  firebase_core: ^3.13.0
-  firebase_auth: ^5.5.2
-  cloud_firestore: ^5.6.5
+  firebase_core: ^4.9.0
+  firebase_auth: ^6.5.1
+  cloud_firestore: ^6.4.1
 
-  # 🔐 Login
-  google_sign_in: ^6.1.4
-  sign_in_with_apple: ^7.0.1
+  google_sign_in: ^6.3.0
+  sign_in_with_apple: ^8.0.0
 
-  # 💾 Local storage
   shared_preferences: ^2.0.15
-
-  # 📅 DATUM FORMAT (NEU 🔥)
-  intl: ^0.19.0
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+
+  flutter_lints: ^6.0.0
 
 flutter:
   uses-material-design: true
+
   assets:
+    - assets/images/
     - assets/images/foods/
-    - assets/images/workouts/
     - assets/images/muscles/
+    - assets/images/workouts/
+    - assets/images/recipes/
+    - assets/images/recipes/breakfast/
+    - assets/images/recipes/lunch/
+    - assets/images/recipes/dinner/
+    - assets/images/recipes/snacks/
+    - assets/images/recipes/drinks/
+    - assets/images/recipes/desserts/
+    - assets/images/recipes/starters/
 
 dependency_overrides:
   async: ^2.13.0

@@ -1,159 +1,107 @@
 import 'package:flutter/material.dart';
-import '../components/custom_app_bar.dart';
-import '../theme/app_theme.dart';
+import '../widgets/recipe_image.dart';
 
 class RecipeDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> recipe;
-  final List<String> steps = [
-    'Prepare all ingredients',
-    'Mix dry ingredients',
-    'Add wet ingredients',
-    'Cook according to instructions',
-    'Let it rest for 5 minutes',
-    'Serve and enjoy!',
-  ];
 
-  final List<String> ingredients = [
-    '1 cup oats',
-    '1 scoop protein powder',
-    '1 banana',
-    '1 cup almond milk',
-    '1 tbsp honey',
-    'Handful of berries',
-  ];
-
-  final List<String> additionalPhotos = [
-    'https://images.unsplash.com/photo-1517673400267-0251440c45dc',
-    'https://images.unsplash.com/photo-1512621776951-a57141f2eefd',
-    'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea',
-    'https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38',
-  ];
-
-  RecipeDetailsScreen({
-    super.key,
-    required this.recipe,
-  });
+  const RecipeDetailsScreen({super.key, required this.recipe});
 
   @override
   Widget build(BuildContext context) {
+    final List ingredients = recipe['ingredients'] ?? [];
+    final List instructions = recipe['instructions'] ?? [];
+    final List tags = recipe['tags'] ?? [];
+
+    final String imageUrl =
+        (recipe['imageUrl'] ?? '').toString().isNotEmpty
+            ? recipe['imageUrl']
+            : 'assets/images/recipes/breakfast/${recipe['id']}.jpg';
+
     return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
+      backgroundColor: const Color(0xFFF8F9FB),
+
       body: CustomScrollView(
         slivers: [
-          // App Bar with Hero Image
           SliverAppBar(
-            expandedHeight: 300,
+            expandedHeight: 240,
             pinned: true,
-            backgroundColor: AppTheme.surfaceColor,
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+
             flexibleSpace: FlexibleSpaceBar(
-              background: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.network(
-                    recipe['imageUrl'],
-                    fit: BoxFit.cover,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          AppTheme.backgroundColor.withOpacity(0.8),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+              title: Text(recipe['title'] ?? 'Recipe'),
+
+              background: RecipeImage(
+                imageUrl: recipe['imageUrl'] ?? '',
+                height: 220,
+                width: double.infinity,
+                borderRadius: BorderRadius.circular(24),
               ),
             ),
           ),
-          // Content
+
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(18),
+
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+
                 children: [
-                  // Title
-                  Text(
-                    recipe['title'],
-                    style: const TextStyle(
-                      color: AppTheme.textPrimaryColor,
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Info Row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _buildInfoItem(Icons.timer, recipe['duration']),
-                      _buildInfoItem(Icons.local_fire_department, '${recipe['calories']} kcal'),
-                      _buildInfoItem(Icons.fitness_center, '${recipe['protein']} protein'),
-                    ],
-                  ),
+                  _infoCards(),
+
+                  const SizedBox(height: 20),
+
+                  if (tags.isNotEmpty) ...[
+                    _sectionTitle('Tags'),
+
+                    const SizedBox(height: 10),
+
+                    _tagWrap(tags),
+
+                    const SizedBox(height: 24),
+                  ],
+
+                  if (recipe['goal'] != null) ...[
+                    _sectionTitle('Why this recipe is useful'),
+
+                    const SizedBox(height: 10),
+
+                    _goalBox(recipe['goal']),
+
+                    const SizedBox(height: 24),
+                  ],
+
+                  _sectionTitle('Ingredients'),
+
+                  const SizedBox(height: 10),
+
+                  ...ingredients.map((item) => _bulletItem(item)).toList(),
+
                   const SizedBox(height: 24),
-                  // Additional Photos
-                  const Text(
-                    'Process Photos',
-                    style: TextStyle(
-                      color: AppTheme.primaryColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    height: 100,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: additionalPhotos.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Image.network(
-                              additionalPhotos[index],
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  // Ingredients
-                  const Text(
-                    'Ingredients',
-                    style: TextStyle(
-                      color: AppTheme.primaryColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  ...ingredients.map((ingredient) => _buildListItem(ingredient)),
-                  const SizedBox(height: 24),
-                  // Steps
-                  const Text(
-                    'Instructions',
-                    style: TextStyle(
-                      color: AppTheme.primaryColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  ...List.generate(
-                    steps.length,
-                    (index) => _buildStepItem(index + 1, steps[index]),
-                  ),
+
+                  _sectionTitle('Preparation'),
+
+                  const SizedBox(height: 10),
+
+                  ...instructions.asMap().entries.map((entry) {
+                    final stepNumber = entry.key + 1;
+                    final step = entry.value;
+
+                    if (step is Map) {
+                      return _stepItem(
+                        step['step'] ?? stepNumber,
+                        step['title'] ?? 'Step $stepNumber',
+                        step['description'] ?? '',
+                      );
+                    }
+
+                    return _stepItem(
+                      stepNumber,
+                      'Step $stepNumber',
+                      step.toString(),
+                    );
+                  }).toList(),
                 ],
               ),
             ),
@@ -163,87 +111,208 @@ class RecipeDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoItem(IconData icon, String text) {
+  Widget _infoCards() {
     return Column(
       children: [
-        Icon(
-          icon,
-          color: AppTheme.primaryColor,
-          size: 24,
+        Row(
+          children: [
+            _infoCard(
+              Icons.local_fire_department_rounded,
+              '${recipe['calories']} kcal',
+            ),
+
+            const SizedBox(width: 12),
+
+            _infoCard(
+              Icons.fitness_center_rounded,
+              '${recipe['protein']}g protein',
+            ),
+
+            const SizedBox(width: 12),
+
+            _infoCard(Icons.timer_rounded, recipe['time'] ?? 'No time'),
+          ],
         ),
-        const SizedBox(height: 4),
-        Text(
-          text,
-          style: const TextStyle(
-            color: AppTheme.textSecondaryColor,
-            fontSize: 14,
-          ),
+
+        const SizedBox(height: 12),
+
+        Row(
+          children: [
+            _infoCard(Icons.rice_bowl_rounded, '${recipe['carbs']}g carbs'),
+
+            const SizedBox(width: 12),
+
+            _infoCard(Icons.opacity_rounded, '${recipe['fats']}g fats'),
+
+            const SizedBox(width: 12),
+
+            _infoCard(Icons.eco_rounded, '${recipe['fiber']}g fiber'),
+          ],
         ),
       ],
     );
   }
 
-  Widget _buildListItem(String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+  Widget _infoCard(IconData icon, String text) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(22),
+        ),
+
+        child: Column(
+          children: [
+            Icon(icon, color: Colors.green),
+
+            const SizedBox(height: 8),
+
+            Text(
+              text,
+              textAlign: TextAlign.center,
+
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _sectionTitle(String title) {
+    return Text(
+      title,
+
+      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+    );
+  }
+
+  Widget _tagWrap(List tags) {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+
+      children:
+          tags.map((tag) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+
+              decoration: BoxDecoration(
+                color: Colors.green.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(20),
+              ),
+
+              child: Text(
+                tag.toString(),
+
+                style: const TextStyle(
+                  color: Colors.green,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            );
+          }).toList(),
+    );
+  }
+
+  Widget _goalBox(dynamic goal) {
+    return Container(
+      width: double.infinity,
+
+      padding: const EdgeInsets.all(16),
+
+      decoration: BoxDecoration(
+        color: Colors.green.withOpacity(0.10),
+        borderRadius: BorderRadius.circular(20),
+      ),
+
+      child: Text(
+        goal.toString(),
+
+        style: const TextStyle(
+          fontSize: 15,
+          height: 1.4,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+
+  Widget _bulletItem(dynamic text) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+
+      padding: const EdgeInsets.all(14),
+
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+      ),
+
       child: Row(
         children: [
-          Container(
-            width: 8,
-            height: 8,
-            decoration: BoxDecoration(
-              color: AppTheme.primaryColor,
-              borderRadius: BorderRadius.circular(4),
-            ),
-          ),
+          const Icon(Icons.check_circle_rounded, color: Colors.green),
+
           const SizedBox(width: 12),
-          Text(
-            text,
-            style: const TextStyle(
-              color: AppTheme.textPrimaryColor,
-              fontSize: 16,
-            ),
-          ),
+
+          Expanded(child: Text(text.toString())),
         ],
       ),
     );
   }
 
-  Widget _buildStepItem(int number, String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+  Widget _stepItem(dynamic number, String title, String description) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+
+      padding: const EdgeInsets.all(14),
+
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+      ),
+
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
+
         children: [
-          Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              color: AppTheme.primaryColor,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: Text(
-                number.toString(),
-                style: TextStyle(
-                  color: AppTheme.backgroundColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+          CircleAvatar(
+            radius: 15,
+            backgroundColor: Colors.green,
+
+            child: Text(
+              '$number',
+
+              style: const TextStyle(color: Colors.white, fontSize: 13),
             ),
           ),
+
           const SizedBox(width: 12),
+
           Expanded(
-            child: Text(
-              text,
-              style: const TextStyle(
-                color: AppTheme.textPrimaryColor,
-                fontSize: 16,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+
+              children: [
+                Text(
+                  title,
+
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                ),
+
+                const SizedBox(height: 5),
+
+                Text(description, style: const TextStyle(height: 1.4)),
+              ],
             ),
           ),
         ],
       ),
     );
   }
-} 
+}

@@ -1,310 +1,134 @@
 import 'package:flutter/material.dart';
-import 'EditProfileScreen.dart';
-import '../services/profile_service.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-  final ProfileService _profileService = ProfileService();
-  late Future<UserProfile> _profileFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _profileFuture = _profileService.loadProfile();
-  }
-
-  Future<void> _refreshProfile() async {
-    setState(() {
-      _profileFuture = _profileService.loadProfile();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    const eaten = 400;
+    const burned = 100;
+    const goal = 1200;
+    const protein = 32;
+    final progress = eaten / goal;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF6F7FB),
-      body: FutureBuilder<UserProfile>(
-        future: _profileFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          final profile = snapshot.data ?? UserProfile.empty();
-
-          return SafeArea(
-            child: RefreshIndicator(
-              onRefresh: _refreshProfile,
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.fromLTRB(18, 18, 18, 28),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildTopHeader(profile),
-                    const SizedBox(height: 18),
-                    _buildOverviewCards(profile),
-                    const SizedBox(height: 18),
-                    _buildGoalSection(profile),
-                    const SizedBox(height: 18),
-                    _buildCalorieCard(profile),
-                    const SizedBox(height: 18),
-                    _buildSettingsSection(profile),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _profileHeader(),
+              const SizedBox(height: 18),
+              _bodyData(),
+              const SizedBox(height: 18),
+              _calorieCircle(progress, eaten, burned, goal, protein),
+              const SizedBox(height: 18),
+              _todayLog(),
+              const SizedBox(height: 18),
+              _settingsMenu(),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildTopHeader(UserProfile profile) {
+  Widget _profileHeader() {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [Color(0xFF6A5AE0), Color(0xFF8B7CFF)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(28),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF6A5AE0).withOpacity(0.25),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
-          ),
-        ],
       ),
       child: Row(
         children: [
-          Container(
-            width: 74,
-            height: 74,
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.20),
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.white.withOpacity(0.25),
-                width: 2,
-              ),
-            ),
-            child: const Icon(
-              Icons.person_rounded,
-              color: Colors.white,
-              size: 38,
-            ),
+          const CircleAvatar(
+            radius: 38,
+            backgroundColor: Colors.white24,
+            child: Icon(Icons.person, color: Colors.white, size: 42),
           ),
           const SizedBox(width: 16),
-          Expanded(
+          const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  profile.name,
-                  style: const TextStyle(
+                  "Sanam Hadadnosrati",
+                  style: TextStyle(
                     color: Colors.white,
-                    fontSize: 23,
+                    fontSize: 21,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
-                  profile.email,
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.90),
-                    fontSize: 13,
-                  ),
+                  "sanam@email.com",
+                  style: TextStyle(color: Colors.white70),
                 ),
-                const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 7,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.18),
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  child: Text(
-                    profile.goal,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 12.5,
-                    ),
+                SizedBox(height: 8),
+                Text(
+                  "Goal: Lose Weight",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
             ),
           ),
           IconButton(
-            onPressed: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => EditProfileScreen(profile: profile),
-                ),
-              );
-              _refreshProfile();
-            },
-            icon: const Icon(Icons.edit_rounded, color: Colors.white),
+            onPressed: () {},
+            icon: const Icon(Icons.edit, color: Colors.white),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildOverviewCards(UserProfile profile) {
-    return Row(
-      children: [
-        Expanded(
-          child: _infoCard(
-            title: 'Current Weight',
-            value: '${profile.currentWeight.toStringAsFixed(1)} kg',
-            icon: Icons.monitor_weight_rounded,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _infoCard(
-            title: 'Target Weight',
-            value: '${profile.targetWeight.toStringAsFixed(1)} kg',
-            icon: Icons.flag_rounded,
-          ),
-        ),
+  Widget _bodyData() {
+    return GridView.count(
+      crossAxisCount: 2,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      mainAxisSpacing: 12,
+      crossAxisSpacing: 12,
+      childAspectRatio: 1.7,
+      children: const [
+        _InfoCard(title: "Gender", value: "Female", icon: Icons.female),
+        _InfoCard(title: "Age", value: "19", icon: Icons.cake),
+        _InfoCard(title: "Height", value: "165 cm", icon: Icons.height),
+        _InfoCard(title: "Weight", value: "62 kg", icon: Icons.monitor_weight),
+        _InfoCard(title: "Goal Weight", value: "57 kg", icon: Icons.flag),
+        _InfoCard(title: "Phone", value: "Optional", icon: Icons.phone),
       ],
     );
   }
 
-  Widget _buildGoalSection(UserProfile profile) {
-    final goals = [
-      'Lose Weight',
-      'Build Muscle',
-      'Maintain Weight',
-      'Improve Fitness',
-      'Stay Healthy',
-    ];
-
+  Widget _calorieCircle(
+    double progress,
+    int eaten,
+    int burned,
+    int goal,
+    int protein,
+  ) {
     return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 14,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Fitness Goal',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'Choose a clear goal so your profile feels more like a real fitness app.',
-            style: TextStyle(
-              fontSize: 13.5,
-              color: Colors.black54,
-              height: 1.35,
-            ),
-          ),
-          const SizedBox(height: 14),
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children:
-                goals.map((goal) {
-                  final selected = goal == profile.goal;
-                  return Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color:
-                          selected
-                              ? const Color(0xFF6A5AE0).withOpacity(0.12)
-                              : const Color(0xFFF2F3F7),
-                      borderRadius: BorderRadius.circular(999),
-                      border: Border.all(
-                        color:
-                            selected
-                                ? const Color(0xFF6A5AE0)
-                                : Colors.transparent,
-                      ),
-                    ),
-                    child: Text(
-                      goal,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color:
-                            selected ? const Color(0xFF4E3FD0) : Colors.black87,
-                      ),
-                    ),
-                  );
-                }).toList(),
-          ),
-          const SizedBox(height: 14),
-          Row(
-            children: [
-              Expanded(
-                child: _smallStatCard(
-                  label: 'Age',
-                  value: '${profile.age}',
-                  icon: Icons.cake_rounded,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _smallStatCard(
-                  label: 'Height',
-                  value: '${profile.height.toStringAsFixed(0)} cm',
-                  icon: Icons.height_rounded,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCalorieCard(UserProfile profile) {
-    final diff = (profile.currentWeight - profile.targetWeight).abs();
-
-    return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: const Color(0xFF111827),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(28),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
             children: [
-              Icon(
-                Icons.local_fire_department_rounded,
-                color: Colors.orangeAccent,
-              ),
+              Icon(Icons.local_fire_department, color: Colors.orangeAccent),
               SizedBox(width: 8),
               Text(
-                'Daily Nutrition Goal',
+                "Today’s Calories",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -313,178 +137,135 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: 160,
+            height: 160,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                CircularProgressIndicator(
+                  value: progress,
+                  strokeWidth: 15,
+                  backgroundColor: Colors.white12,
+                  valueColor: const AlwaysStoppedAnimation(Color(0xFF8B7CFF)),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "$eaten kcal",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    Text(
+                      "of $goal kcal",
+                      style: const TextStyle(color: Colors.white60),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      "-$burned burned",
+                      style: const TextStyle(color: Colors.greenAccent),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 18),
           Row(
             children: [
-              Expanded(
-                child: _darkMetricCard(
-                  title: 'Daily Calories',
-                  value: '${profile.dailyCalorieGoal} kcal',
-                ),
-              ),
+              Expanded(child: _DarkMini(title: "Protein", value: "$protein g")),
               const SizedBox(width: 12),
               Expanded(
-                child: _darkMetricCard(
-                  title: 'Weight Gap',
-                  value: '${diff.toStringAsFixed(1)} kg',
+                child: _DarkMini(
+                  title: "Remaining",
+                  value: "${goal - eaten + burned} kcal",
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 14),
-          Text(
-            'Später können wir hier direkt Food Search, Meal Logging und Kalorienberechnung anbinden.',
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.75),
-              fontSize: 13.5,
-              height: 1.35,
-            ),
-          ),
         ],
       ),
     );
   }
 
-  Widget _buildSettingsSection(UserProfile profile) {
+  Widget _todayLog() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Today",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+        ),
+        const SizedBox(height: 12),
+        _logTile(Icons.directions_walk, "30 min Walk", "-100 kcal", "Activity"),
+        _logTile(
+          Icons.breakfast_dining,
+          "Breakfast",
+          "+400 kcal",
+          "32g Protein",
+        ),
+        _logTile(
+          Icons.calendar_month,
+          "Last 15 days",
+          "View history",
+          "Nutrition & activity",
+        ),
+      ],
+    );
+  }
+
+  Widget _settingsMenu() {
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 14,
-            offset: const Offset(0, 6),
-          ),
-        ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Settings',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-          ),
-          const SizedBox(height: 12),
-          _settingsTile(
-            icon: Icons.edit_rounded,
-            title: 'Edit Profile',
-            subtitle: 'Update your data, goals and calorie target',
-            onTap: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => EditProfileScreen(profile: profile),
-                ),
-              );
-              _refreshProfile();
-            },
-          ),
-          const Divider(height: 18),
-          _settingsTile(
-            icon: Icons.restaurant_menu_rounded,
-            title: 'Nutrition & Food',
-            subtitle: 'Later connect calorie tracking and food search',
-            onTap: () {},
-          ),
-          const Divider(height: 18),
-          _settingsTile(
-            icon: Icons.notifications_active_rounded,
-            title: 'Notifications',
-            subtitle: 'Workout and habit reminders',
-            onTap: () {},
-          ),
-          const Divider(height: 18),
-          _settingsTile(
-            icon: Icons.logout_rounded,
-            title: 'Logout',
-            subtitle: 'Sign out from the app',
-            onTap: () {},
-            iconColor: Colors.redAccent,
-          ),
+          _menuTile(Icons.bookmark, "Saved"),
+          _menuTile(Icons.language, "Language"),
+          _menuTile(Icons.notifications, "Notifications"),
+          _menuTile(Icons.help_outline, "Help Center: your-email@example.com"),
+          _menuTile(Icons.logout, "Logout", red: true),
         ],
       ),
     );
   }
 
-  Widget _infoCard({
-    required String title,
-    required String value,
-    required IconData icon,
-  }) {
+  Widget _logTile(IconData icon, String title, String value, String subtitle) {
     return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 12,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: const Color(0xFF6A5AE0).withOpacity(0.10),
-            child: Icon(icon, color: const Color(0xFF6A5AE0)),
-          ),
-          const SizedBox(height: 14),
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.black54,
-              fontSize: 12.5,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            value,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _smallStatCard({
-    required String label,
-    required String value,
-    required IconData icon,
-  }) {
-    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7F7FB),
-        borderRadius: BorderRadius.circular(18),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         children: [
           CircleAvatar(
-            radius: 17,
-            backgroundColor: Colors.white,
-            child: Icon(icon, size: 18, color: const Color(0xFF6A5AE0)),
+            backgroundColor: const Color(0xFF6A5AE0).withOpacity(0.12),
+            child: Icon(icon, color: const Color(0xFF6A5AE0)),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.w700),
+            ),
+          ),
           Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              Text(value, style: const TextStyle(fontWeight: FontWeight.w800)),
               Text(
-                label,
-                style: const TextStyle(color: Colors.black54, fontSize: 12),
-              ),
-              Text(
-                value,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w800,
-                  fontSize: 14.5,
-                ),
+                subtitle,
+                style: const TextStyle(color: Colors.black45, fontSize: 12),
               ),
             ],
           ),
@@ -493,55 +274,92 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _darkMetricCard({required String title, required String value}) {
+  Widget _menuTile(IconData icon, String title, {bool red = false}) {
+    return ListTile(
+      leading: Icon(
+        icon,
+        color: red ? Colors.redAccent : const Color(0xFF6A5AE0),
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: red ? Colors.redAccent : Colors.black87,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () {},
+    );
+  }
+}
+
+class _InfoCard extends StatelessWidget {
+  final String title;
+  final String value;
+  final IconData icon;
+
+  const _InfoCard({
+    required this.title,
+    required this.value,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.08),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: const Color(0xFF6A5AE0)),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(color: Colors.black45, fontSize: 12),
+              ),
+              Text(value, style: const TextStyle(fontWeight: FontWeight.w800)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DarkMini extends StatelessWidget {
+  final String title;
+  final String value;
+
+  const _DarkMini({required this.title, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white10,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.70),
-              fontSize: 12.5,
-            ),
-          ),
-          const SizedBox(height: 6),
+          Text(title, style: const TextStyle(color: Colors.white60)),
+          const SizedBox(height: 4),
           Text(
             value,
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w800,
-              fontSize: 18,
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _settingsTile({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required VoidCallback onTap,
-    Color iconColor = const Color(0xFF6A5AE0),
-  }) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: CircleAvatar(
-        radius: 22,
-        backgroundColor: iconColor.withOpacity(0.10),
-        child: Icon(icon, color: iconColor),
-      ),
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
-      subtitle: Text(subtitle),
-      trailing: const Icon(Icons.chevron_right_rounded),
-      onTap: onTap,
     );
   }
 }

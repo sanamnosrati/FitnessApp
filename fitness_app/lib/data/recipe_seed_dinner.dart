@@ -1,0 +1,435 @@
+class RecipeSeedDinner {
+  static final List<Map<String, dynamic>> recipes = [
+    {
+      'id': 'garlic_chicken_veggie_skillet',
+      'title': 'Garlic Chicken Veggie Skillet',
+      'category': 'Dinner',
+      'imageUrl':
+          'assets/images/recipes/dinner/garlic_chicken_veggie_skillet.jpg',
+      'calories': 520,
+      'protein': 46,
+      'carbs': 24,
+      'fats': 26,
+      'fiber': 7,
+      'time': '30 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['High Protein', 'Low Carb', 'Healthy Fats', 'Muscle Gain'],
+      'ingredients': [
+        '180g chicken breast',
+        '1 zucchini',
+        '1/2 red bell pepper',
+        '1 tsp olive oil',
+        '2 garlic cloves',
+        'Italian herbs',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook chicken',
+          'description': 'Season chicken and cook in a skillet until golden.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook vegetables',
+          'description': 'Add sliced vegetables and garlic to the pan.',
+        },
+        {
+          'step': 3,
+          'title': 'Finish',
+          'description': 'Cook until vegetables are tender and serve warm.',
+        },
+      ],
+      'goal':
+          'A balanced high-protein dinner supporting muscle recovery and satiety.',
+    },
+
+    {
+      'id': 'salmon_sweet_potato_plate',
+      'title': 'Salmon Sweet Potato Plate',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/salmon_sweet_potato_plate.jpg',
+      'calories': 610,
+      'protein': 42,
+      'carbs': 38,
+      'fats': 30,
+      'fiber': 8,
+      'time': '35 min',
+      'difficulty': 'Medium',
+      'servings': 1,
+      'tags': ['High Protein', 'Healthy Fats', 'Gluten Free', 'Post Workout'],
+      'ingredients': [
+        '170g salmon fillet',
+        '220g sweet potato',
+        'Broccoli',
+        '1 tsp olive oil',
+        'Lemon juice',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Bake sweet potato',
+          'description': 'Bake sweet potato until soft.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook salmon',
+          'description': 'Bake or pan-cook salmon until flaky.',
+        },
+        {
+          'step': 3,
+          'title': 'Prepare broccoli',
+          'description': 'Steam broccoli and season lightly.',
+        },
+      ],
+      'goal':
+          'Provides omega-3 fats and protein for recovery and overall health.',
+    },
+
+    {
+      'id': 'turkey_zucchini_boats',
+      'title': 'Turkey Zucchini Boats',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/turkey_zucchini_boats.jpg',
+      'calories': 430,
+      'protein': 39,
+      'carbs': 16,
+      'fats': 22,
+      'fiber': 5,
+      'time': '35 min',
+      'difficulty': 'Medium',
+      'servings': 2,
+      'tags': ['High Protein', 'Low Carb', 'Meal Prep', 'Cutting'],
+      'ingredients': [
+        '2 zucchinis',
+        '200g lean ground turkey',
+        '100ml tomato sauce',
+        '30g mozzarella',
+        'Garlic powder',
+        'Parsley',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Prepare zucchini',
+          'description': 'Cut zucchinis in half and scoop out the center.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook filling',
+          'description': 'Cook turkey with tomato sauce and spices.',
+        },
+        {
+          'step': 3,
+          'title': 'Bake',
+          'description':
+              'Fill zucchinis, top with mozzarella and bake until tender.',
+        },
+      ],
+      'goal':
+          'A filling low-carb dinner ideal for fat loss and high protein intake.',
+    },
+
+    {
+      'id': 'creamy_tomato_lentil_pasta',
+      'title': 'Creamy Tomato Lentil Pasta',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/creamy_tomato_lentil_pasta.jpg',
+      'calories': 540,
+      'protein': 26,
+      'carbs': 64,
+      'fats': 18,
+      'fiber': 12,
+      'time': '30 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Vegetarian', 'High Fiber', 'Meal Prep', 'Budget Friendly'],
+      'ingredients': [
+        '80g lentil pasta',
+        '150ml tomato sauce',
+        '40g Greek yogurt',
+        'Spinach',
+        'Parmesan cheese',
+        'Italian herbs',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook pasta',
+          'description': 'Cook lentil pasta according to instructions.',
+        },
+        {
+          'step': 2,
+          'title': 'Prepare sauce',
+          'description': 'Heat tomato sauce and stir in Greek yogurt.',
+        },
+        {
+          'step': 3,
+          'title': 'Combine',
+          'description':
+              'Mix pasta with sauce and spinach, then top with parmesan.',
+        },
+      ],
+      'goal': 'A vegetarian dinner rich in fiber and plant-based protein.',
+    },
+
+    {
+      'id': 'shrimp_rice_noodle_stirfry',
+      'title': 'Shrimp Rice Noodle Stir-Fry',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/shrimp_rice_noodle_stirfry.jpg',
+      'calories': 560,
+      'protein': 38,
+      'carbs': 52,
+      'fats': 20,
+      'fiber': 5,
+      'time': '25 min',
+      'difficulty': 'Medium',
+      'servings': 1,
+      'tags': ['High Protein', 'Dairy Free', 'Quick', 'Athletic'],
+      'ingredients': [
+        '160g shrimp',
+        '80g rice noodles',
+        'Carrot strips',
+        'Bell pepper',
+        '1 tsp sesame oil',
+        'Soy sauce',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook noodles',
+          'description':
+              'Prepare rice noodles according to package instructions.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook shrimp',
+          'description': 'Cook shrimp in sesame oil until pink.',
+        },
+        {
+          'step': 3,
+          'title': 'Stir-fry',
+          'description':
+              'Add vegetables and noodles, then season with soy sauce.',
+        },
+      ],
+      'goal': 'A quick athletic dinner with protein and carbs for recovery.',
+    },
+
+    {
+      'id': 'beef_stuffed_eggplant',
+      'title': 'Beef Stuffed Eggplant',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/beef_stuffed_eggplant.jpg',
+      'calories': 590,
+      'protein': 44,
+      'carbs': 20,
+      'fats': 34,
+      'fiber': 7,
+      'time': '40 min',
+      'difficulty': 'Medium',
+      'servings': 2,
+      'tags': ['High Protein', 'Low Carb', 'Healthy Fats', 'Muscle Gain'],
+      'ingredients': [
+        '1 eggplant',
+        '220g lean ground beef',
+        '100ml tomato sauce',
+        '40g feta cheese',
+        'Parsley',
+        'Garlic powder',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Prepare eggplant',
+          'description': 'Cut eggplant in half and bake until soft.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook beef',
+          'description': 'Cook beef with tomato sauce and spices.',
+        },
+        {
+          'step': 3,
+          'title': 'Fill eggplant',
+          'description':
+              'Fill eggplant halves with beef mixture and top with feta.',
+        },
+      ],
+      'goal': 'A satisfying protein-rich dinner with Mediterranean flavors.',
+    },
+
+    {
+      'id': 'tofu_teriyaki_bowl',
+      'title': 'Tofu Teriyaki Bowl',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/tofu_teriyaki_bowl.jpg',
+      'calories': 480,
+      'protein': 24,
+      'carbs': 46,
+      'fats': 20,
+      'fiber': 8,
+      'time': '25 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Vegan', 'High Fiber', 'Dairy Free', 'Meal Prep'],
+      'ingredients': [
+        '180g tofu',
+        '120g jasmine rice',
+        'Broccoli',
+        'Carrot strips',
+        '2 tbsp teriyaki sauce',
+        'Sesame seeds',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook tofu',
+          'description': 'Cook tofu cubes in a pan until crispy.',
+        },
+        {
+          'step': 2,
+          'title': 'Prepare rice',
+          'description': 'Cook jasmine rice.',
+        },
+        {
+          'step': 3,
+          'title': 'Assemble bowl',
+          'description': 'Add vegetables, tofu and teriyaki sauce over rice.',
+        },
+      ],
+      'goal': 'A plant-based dinner rich in fiber and balanced energy.',
+    },
+
+    {
+      'id': 'chicken_fajita_wraps',
+      'title': 'Chicken Fajita Wraps',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/chicken_fajita_wraps.jpg',
+      'calories': 570,
+      'protein': 43,
+      'carbs': 44,
+      'fats': 22,
+      'fiber': 6,
+      'time': '25 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['High Protein', 'Quick', 'Kid Friendly', 'Meal Prep'],
+      'ingredients': [
+        '150g chicken breast',
+        '2 whole wheat tortillas',
+        'Bell peppers',
+        'Greek yogurt',
+        'Paprika spice',
+        'Lettuce',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook chicken',
+          'description': 'Cook sliced chicken with paprika seasoning.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook vegetables',
+          'description': 'Cook peppers in the same pan until tender.',
+        },
+        {
+          'step': 3,
+          'title': 'Assemble wraps',
+          'description':
+              'Fill tortillas with chicken, vegetables and yogurt sauce.',
+        },
+      ],
+      'goal': 'A balanced dinner with protein and carbs for active lifestyles.',
+    },
+
+    {
+      'id': 'mediterranean_baked_cod',
+      'title': 'Mediterranean Baked Cod',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/mediterranean_baked_cod.jpg',
+      'calories': 470,
+      'protein': 41,
+      'carbs': 18,
+      'fats': 24,
+      'fiber': 5,
+      'time': '30 min',
+      'difficulty': 'Medium',
+      'servings': 1,
+      'tags': ['High Protein', 'Gluten Free', 'Healthy Fats', 'Low Carb'],
+      'ingredients': [
+        '180g cod fillet',
+        'Cherry tomatoes',
+        'Olives',
+        'Zucchini',
+        '1 tsp olive oil',
+        'Lemon slices',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Prepare tray',
+          'description': 'Place vegetables and cod onto a baking tray.',
+        },
+        {
+          'step': 2,
+          'title': 'Season',
+          'description': 'Add olive oil, lemon and herbs.',
+        },
+        {
+          'step': 3,
+          'title': 'Bake',
+          'description': 'Bake until cod flakes easily with a fork.',
+        },
+      ],
+      'goal':
+          'A lighter Mediterranean dinner with lean protein and healthy fats.',
+    },
+
+    {
+      'id': 'turkey_mushroom_creamy_rice',
+      'title': 'Turkey Mushroom Creamy Rice',
+      'category': 'Dinner',
+      'imageUrl':
+          'assets/images/recipes/dinner/turkey_mushroom_creamy_rice.jpg',
+      'calories': 620,
+      'protein': 46,
+      'carbs': 54,
+      'fats': 22,
+      'fiber': 5,
+      'time': '35 min',
+      'difficulty': 'Medium',
+      'servings': 1,
+      'tags': ['High Protein', 'Comfort Food', 'Muscle Gain', 'Meal Prep'],
+      'ingredients': [
+        '180g turkey breast',
+        '120g cooked rice',
+        'Mushrooms',
+        '40g light cream cheese',
+        'Garlic',
+        'Parsley',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook turkey',
+          'description': 'Cook turkey pieces in a pan until browned.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook mushrooms',
+          'description': 'Add mushrooms and garlic and cook until soft.',
+        },
+        {
+          'step': 3,
+          'title': 'Finish dish',
+          'description': 'Stir in cream cheese and rice until creamy.',
+        },
+      ],
+      'goal':
+          'A comforting high-protein dinner supporting recovery and muscle growth.',
+    },
+  ];
+}

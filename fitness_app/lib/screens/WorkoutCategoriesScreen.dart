@@ -61,18 +61,22 @@ class WorkoutCategoriesScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F3FA),
+
       appBar: AppBar(
         title: const Text(
           'Workout Categories',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+
         centerTitle: true,
         backgroundColor: const Color(0xFFF8F3FA),
         elevation: 0,
         foregroundColor: Colors.black,
       ),
+
       body: ListView(
         padding: const EdgeInsets.all(16),
+
         children: [
           ...categories.map((category) {
             return _WorkoutCategoryCard(
@@ -80,6 +84,7 @@ class WorkoutCategoriesScreen extends StatelessWidget {
               subtitle: category['subtitle'] as String,
               imagePath: category['image'] as String,
               icon: category['icon'] as IconData,
+
               onTap: () {
                 switch (category['name']) {
                   case 'Upper Body':
@@ -155,11 +160,14 @@ class _WorkoutCategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+
       child: Container(
         height: 75,
         margin: const EdgeInsets.only(bottom: 12),
+
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
+
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.15),
@@ -168,12 +176,30 @@ class _WorkoutCategoryCard extends StatelessWidget {
             ),
           ],
         ),
+
         child: ClipRRect(
           borderRadius: BorderRadius.circular(18),
+
           child: Stack(
             fit: StackFit.expand,
+
             children: [
-              Image.asset(imagePath, fit: BoxFit.fitWidth),
+              Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey.shade300,
+
+                    child: const Icon(
+                      Icons.fitness_center_rounded,
+                      size: 40,
+                      color: Colors.grey,
+                    ),
+                  );
+                },
+              ),
 
               Container(
                 decoration: BoxDecoration(
@@ -183,6 +209,7 @@ class _WorkoutCategoryCard extends StatelessWidget {
                       Colors.black.withOpacity(0.25),
                       Colors.transparent,
                     ],
+
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                   ),
@@ -191,11 +218,13 @@ class _WorkoutCategoryCard extends StatelessWidget {
 
               Padding(
                 padding: const EdgeInsets.all(14),
+
                 child: Row(
                   children: [
                     CircleAvatar(
                       radius: 20,
                       backgroundColor: Colors.white.withOpacity(0.2),
+
                       child: Icon(icon, color: Colors.white, size: 22),
                     ),
 
@@ -204,10 +233,13 @@ class _WorkoutCategoryCard extends StatelessWidget {
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+
                         crossAxisAlignment: CrossAxisAlignment.start,
+
                         children: [
                           Text(
                             title,
+
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 15,
@@ -219,8 +251,10 @@ class _WorkoutCategoryCard extends StatelessWidget {
 
                           Text(
                             subtitle,
+
                             style: TextStyle(
                               color: Colors.white.withOpacity(0.9),
+
                               fontSize: 12,
                             ),
                           ),
