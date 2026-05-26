@@ -23,19 +23,68 @@ class RecipeDetailsScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 240,
+            expandedHeight: 280,
             pinned: true,
-            backgroundColor: Colors.green,
-            foregroundColor: Colors.white,
+            elevation: 0,
+            backgroundColor: const Color(0xFFF8F9FB),
+            foregroundColor: Colors.black,
 
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(recipe['title'] ?? 'Recipe'),
+              titlePadding: const EdgeInsets.only(left: 20, bottom: 16),
 
-              background: RecipeImage(
-                imageUrl: recipe['imageUrl'] ?? '',
-                height: 220,
-                width: double.infinity,
-                borderRadius: BorderRadius.circular(24),
+              title: Text(
+                recipe['title'] ?? 'Recipe',
+
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+
+              background: Container(
+                color: const Color(0xFFF8F9FB),
+
+                child: Center(
+                  child: Container(
+                    margin: const EdgeInsets.only(
+                      top: 70,
+                      left: 20,
+                      right: 20,
+                      bottom: 20,
+                    ),
+
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(32),
+
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.12),
+                          blurRadius: 18,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(32),
+
+                      child: Container(
+                        height: 230,
+                        width: double.infinity,
+                        color: Colors.white,
+                        padding: const EdgeInsets.all(8),
+                        child: RecipeImage(
+                          imageUrl: imageUrl,
+                          height: 220,
+                          width: double.infinity,
+                          fit: BoxFit.contain,
+                          borderRadius: BorderRadius.zero,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -161,6 +210,14 @@ class RecipeDetailsScreen extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(22),
+
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
 
         child: Column(
@@ -249,6 +306,14 @@ class RecipeDetailsScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
+
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
 
       child: Row(
@@ -272,6 +337,14 @@ class RecipeDetailsScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
+
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
 
       child: Row(
