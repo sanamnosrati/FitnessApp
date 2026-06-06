@@ -449,5 +449,392 @@ class RecipeSeedLunch {
       'goal':
           'A balanced protein-rich sandwich ideal for active lifestyles and quick lunches.',
     },
+    {
+      'id': 'garlic_parmesan_chicken_skillet',
+      'title': 'Garlic Parmesan Chicken Skillet',
+      'category': 'Lunch',
+      'imageUrl':
+          'assets/images/recipes/lunch/garlic_parmesan_chicken_skillet.jpg',
+      'calories': 610,
+      'protein': 49,
+      'carbs': 34,
+      'fats': 28,
+      'fiber': 5,
+      'time': '28 min',
+      'difficulty': 'Medium',
+      'servings': 1,
+      'tags': ['High Protein', 'Comfort Food', 'Muscle Gain', 'Gym Fuel'],
+
+      'ingredients': [
+        '170g chicken breast',
+        '150g baby potatoes',
+        '25g parmesan cheese',
+        '2 garlic cloves',
+        '1 tbsp olive oil',
+        '50ml light cream',
+        'Fresh parsley',
+        'Salt & pepper',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook potatoes',
+          'description':
+              'Slice baby potatoes and cook them in a pan until golden and crispy.',
+        },
+
+        {
+          'step': 2,
+          'title': 'Prepare chicken',
+          'description':
+              'Season chicken breast with salt and pepper and slice into strips.',
+        },
+
+        {
+          'step': 3,
+          'title': 'Cook chicken',
+          'description':
+              'Cook chicken in olive oil until golden brown and fully cooked.',
+        },
+
+        {
+          'step': 4,
+          'title': 'Make parmesan sauce',
+          'description':
+              'Add garlic, light cream and parmesan cheese to the pan and stir well.',
+        },
+
+        {
+          'step': 5,
+          'title': 'Combine',
+          'description':
+              'Mix potatoes with creamy chicken and garnish with fresh parsley.',
+        },
+      ],
+
+      'goal':
+          'A comforting high-protein skillet meal perfect for muscle recovery and energy support.',
+    },
+
+    {
+      'id': 'loaded_turkey_taco_bowl',
+      'title': 'Loaded Turkey Taco Bowl',
+      'category': 'Lunch',
+      'imageUrl': 'assets/images/recipes/lunch/loaded_turkey_taco_bowl.jpg',
+      'calories': 570,
+      'protein': 44,
+      'carbs': 46,
+      'fats': 19,
+      'fiber': 9,
+      'time': '25 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Mexican Inspired', 'High Protein', 'Meal Prep', 'Balanced'],
+
+      'ingredients': [
+        '150g lean ground turkey',
+        '120g rice',
+        '40g corn',
+        '50g black beans',
+        '1/2 avocado',
+        'Cherry tomatoes',
+        '1 tsp taco seasoning',
+        'Fresh cilantro',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook rice',
+          'description':
+              'Cook rice until soft and fluffy according to package instructions.',
+        },
+
+        {
+          'step': 2,
+          'title': 'Cook turkey',
+          'description':
+              'Cook ground turkey with taco seasoning until browned and flavorful.',
+        },
+
+        {
+          'step': 3,
+          'title': 'Prepare toppings',
+          'description': 'Slice avocado and tomatoes and rinse beans and corn.',
+        },
+
+        {
+          'step': 4,
+          'title': 'Assemble bowl',
+          'description':
+              'Add rice, turkey and toppings into a bowl and garnish with cilantro.',
+        },
+      ],
+
+      'goal':
+          'A balanced high-protein taco bowl supporting recovery and sustained energy.',
+    },
+
+    {
+      'id': 'pesto_chicken_gnocchi',
+      'title': 'Pesto Chicken Gnocchi',
+      'category': 'Lunch',
+      'imageUrl': 'assets/images/recipes/lunch/pesto_chicken_gnocchi.jpg',
+      'calories': 690,
+      'protein': 47,
+      'carbs': 58,
+      'fats': 27,
+      'fiber': 6,
+      'time': '30 min',
+      'difficulty': 'Medium',
+      'servings': 2,
+      'tags': [
+        'Italian Inspired',
+        'Comfort Food',
+        'High Protein',
+        'Performance Meal',
+      ],
+
+      'ingredients': [
+        '250g potato gnocchi',
+        '180g chicken breast',
+        '2 tbsp pesto',
+        '40g spinach',
+        '20g parmesan',
+        '1 tsp olive oil',
+        'Salt & pepper',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook gnocchi',
+          'description': 'Boil gnocchi until they float to the top then drain.',
+        },
+
+        {
+          'step': 2,
+          'title': 'Cook chicken',
+          'description':
+              'Cook seasoned chicken pieces in olive oil until golden brown.',
+        },
+
+        {
+          'step': 3,
+          'title': 'Combine ingredients',
+          'description':
+              'Add gnocchi, pesto and spinach into the pan and mix well.',
+        },
+
+        {
+          'step': 4,
+          'title': 'Finish',
+          'description': 'Top with parmesan cheese and serve warm.',
+        },
+      ],
+
+      'goal':
+          'A comforting high-protein pasta meal ideal for muscle recovery and energy.',
+    },
+
+    {
+      'id': 'crispy_halloumi_power_bowl',
+      'title': 'Crispy Halloumi Power Bowl',
+      'category': 'Lunch',
+      'imageUrl': 'assets/images/recipes/lunch/crispy_halloumi_power_bowl.jpg',
+      'calories': 540,
+      'protein': 31,
+      'carbs': 39,
+      'fats': 24,
+      'fiber': 8,
+      'time': '22 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Vegetarian', 'Mediterranean', 'Healthy', 'High Fiber'],
+
+      'ingredients': [
+        '120g halloumi cheese',
+        '90g quinoa',
+        '1/2 cucumber',
+        'Cherry tomatoes',
+        '40g chickpeas',
+        '1 tbsp olive oil',
+        'Fresh parsley',
+        'Lemon juice',
+        'Salt & pepper',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook quinoa',
+          'description':
+              'Cook quinoa according to package instructions until fluffy.',
+        },
+
+        {
+          'step': 2,
+          'title': 'Cook halloumi',
+          'description':
+              'Slice halloumi and cook in a hot pan until crispy and golden.',
+        },
+
+        {
+          'step': 3,
+          'title': 'Prepare vegetables',
+          'description': 'Chop cucumber and tomatoes into bite-sized pieces.',
+        },
+
+        {
+          'step': 4,
+          'title': 'Assemble bowl',
+          'description':
+              'Add quinoa, vegetables, chickpeas and crispy halloumi into a bowl.',
+        },
+
+        {
+          'step': 5,
+          'title': 'Finish',
+          'description':
+              'Top with parsley, lemon juice and olive oil before serving.',
+        },
+      ],
+
+      'goal':
+          'A fresh Mediterranean-inspired power bowl packed with protein and healthy fats.',
+    },
+
+    {
+      'id': 'teriyaki_salmon_noodle_bowl',
+      'title': 'Teriyaki Salmon Noodle Bowl',
+      'category': 'Lunch',
+      'imageUrl': 'assets/images/recipes/lunch/teriyaki_salmon_noodle_bowl.jpg',
+      'calories': 650,
+      'protein': 43,
+      'carbs': 52,
+      'fats': 26,
+      'fiber': 5,
+      'time': '30 min',
+      'difficulty': 'Medium',
+      'servings': 1,
+      'tags': ['Asian Inspired', 'Omega 3', 'High Protein', 'Recovery Meal'],
+
+      'ingredients': [
+        '150g salmon fillet',
+        '120g rice noodles',
+        '1 tbsp teriyaki sauce',
+        '1 small carrot',
+        '40g edamame',
+        '1 tsp sesame oil',
+        'Spring onions',
+        'Sesame seeds',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook noodles',
+          'description':
+              'Cook rice noodles according to package instructions and drain.',
+        },
+
+        {
+          'step': 2,
+          'title': 'Cook salmon',
+          'description':
+              'Cook salmon in sesame oil until crispy on the outside and tender inside.',
+        },
+
+        {
+          'step': 3,
+          'title': 'Prepare vegetables',
+          'description':
+              'Slice carrot into thin strips and cook edamame for a few minutes.',
+        },
+
+        {
+          'step': 4,
+          'title': 'Add teriyaki sauce',
+          'description': 'Brush teriyaki sauce over the salmon while cooking.',
+        },
+
+        {
+          'step': 5,
+          'title': 'Assemble bowl',
+          'description':
+              'Add noodles, vegetables and salmon into a bowl and top with sesame seeds.',
+        },
+      ],
+
+      'goal':
+          'A nutrient-rich salmon bowl supporting recovery, energy and healthy fats intake.',
+    },
+
+    {
+      'id': 'bbq_chicken_loaded_fries',
+      'title': 'BBQ Chicken Loaded Fries',
+      'category': 'Lunch',
+      'imageUrl': 'assets/images/recipes/lunch/bbq_chicken_loaded_fries.jpg',
+      'calories': 720,
+      'protein': 50,
+      'carbs': 61,
+      'fats': 31,
+      'fiber': 7,
+      'time': '35 min',
+      'difficulty': 'Medium',
+      'servings': 2,
+      'tags': ['Gym Favorite', 'Comfort Food', 'High Protein', 'Energy Boost'],
+
+      'ingredients': [
+        '250g potato fries',
+        '180g chicken breast',
+        '40g cheddar cheese',
+        '2 tbsp BBQ sauce',
+        '30g greek yogurt',
+        'Spring onions',
+        '1 tsp olive oil',
+        'Salt & pepper',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook fries',
+          'description':
+              'Bake or air fry potato fries until crispy and golden.',
+        },
+
+        {
+          'step': 2,
+          'title': 'Cook chicken',
+          'description':
+              'Season and cook chicken breast until golden brown then slice.',
+        },
+
+        {
+          'step': 3,
+          'title': 'Assemble fries',
+          'description':
+              'Place fries on a plate and top with chicken and cheddar cheese.',
+        },
+
+        {
+          'step': 4,
+          'title': 'Add toppings',
+          'description': 'Drizzle BBQ sauce and greek yogurt over the fries.',
+        },
+
+        {
+          'step': 5,
+          'title': 'Finish',
+          'description':
+              'Top with chopped spring onions and serve immediately.',
+        },
+      ],
+
+      'goal':
+          'A high-protein comfort meal designed to refuel energy and support muscle recovery.',
+    },
   ];
 }

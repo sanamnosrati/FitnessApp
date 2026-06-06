@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/recipe_image.dart';
 
 class RecipeDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> recipe;
@@ -23,75 +22,82 @@ class RecipeDetailsScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 280,
+            expandedHeight: 470,
             pinned: true,
             elevation: 0,
             backgroundColor: const Color(0xFFF8F9FB),
             foregroundColor: Colors.black,
 
             flexibleSpace: FlexibleSpaceBar(
-              titlePadding: const EdgeInsets.only(left: 20, bottom: 16),
+              titlePadding: const EdgeInsets.only(left: 20, bottom: 18),
 
               title: Text(
                 recipe['title'] ?? 'Recipe',
 
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 19,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
 
-              background: Container(
-                color: const Color(0xFFF8F9FB),
+              background: Stack(
+                fit: StackFit.expand,
 
-                child: Center(
-                  child: Container(
-                    margin: const EdgeInsets.only(
-                      top: 70,
-                      left: 20,
-                      right: 20,
-                      bottom: 20,
-                    ),
+                children: [
+                  Container(color: const Color(0xFFF8F9FB)),
 
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(32),
+                  Positioned(
+                    top: 58,
+                    left: 10,
+                    right: 10,
+                    bottom: 18,
 
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.12),
-                          blurRadius: 18,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(42),
 
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(32),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.18),
+                            blurRadius: 28,
+                            offset: const Offset(0, 14),
+                          ),
+                        ],
+                      ),
 
-                      child: Container(
-                        height: 230,
-                        width: double.infinity,
-                        color: Colors.white,
-                        padding: const EdgeInsets.all(8),
-                        child: RecipeImage(
-                          imageUrl: imageUrl,
-                          height: 220,
-                          width: double.infinity,
-                          fit: BoxFit.contain,
-                          borderRadius: BorderRadius.zero,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(42),
+
+                        child: Container(
+                          color: Colors.white,
+
+                          padding: const EdgeInsets.all(14),
+
+                          child: InteractiveViewer(
+                            minScale: 1,
+                            maxScale: 4,
+
+                            child: Image.asset(
+                              imageUrl,
+
+                              fit: BoxFit.contain,
+                              width: double.infinity,
+                              height: double.infinity,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
 
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(18),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
 
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +105,7 @@ class RecipeDetailsScreen extends StatelessWidget {
                 children: [
                   _infoCards(),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 22),
 
                   if (tags.isNotEmpty) ...[
                     _sectionTitle('Tags'),
@@ -108,7 +114,7 @@ class RecipeDetailsScreen extends StatelessWidget {
 
                     _tagWrap(tags),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 26),
                   ],
 
                   if (recipe['goal'] != null) ...[
@@ -118,20 +124,20 @@ class RecipeDetailsScreen extends StatelessWidget {
 
                     _goalBox(recipe['goal']),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 26),
                   ],
 
                   _sectionTitle('Ingredients'),
 
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
 
                   ...ingredients.map((item) => _bulletItem(item)).toList(),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 28),
 
                   _sectionTitle('Preparation'),
 
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
 
                   ...instructions.asMap().entries.map((entry) {
                     final stepNumber = entry.key + 1;
@@ -205,24 +211,24 @@ class RecipeDetailsScreen extends StatelessWidget {
   Widget _infoCard(IconData icon, String text) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.symmetric(vertical: 17),
 
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(24),
 
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 12,
+              offset: const Offset(0, 5),
             ),
           ],
         ),
 
         child: Column(
           children: [
-            Icon(icon, color: Colors.green),
+            Icon(icon, color: Colors.green, size: 24),
 
             const SizedBox(height: 8),
 
@@ -242,7 +248,7 @@ class RecipeDetailsScreen extends StatelessWidget {
     return Text(
       title,
 
-      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+      style: const TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
     );
   }
 
@@ -254,7 +260,7 @@ class RecipeDetailsScreen extends StatelessWidget {
       children:
           tags.map((tag) {
             return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
 
               decoration: BoxDecoration(
                 color: Colors.green.withOpacity(0.12),
@@ -278,11 +284,11 @@ class RecipeDetailsScreen extends StatelessWidget {
     return Container(
       width: double.infinity,
 
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(18),
 
       decoration: BoxDecoration(
         color: Colors.green.withOpacity(0.10),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
       ),
 
       child: Text(
@@ -290,7 +296,7 @@ class RecipeDetailsScreen extends StatelessWidget {
 
         style: const TextStyle(
           fontSize: 15,
-          height: 1.4,
+          height: 1.5,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -299,13 +305,13 @@ class RecipeDetailsScreen extends StatelessWidget {
 
   Widget _bulletItem(dynamic text) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 12),
 
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(15),
 
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(20),
 
         boxShadow: [
           BoxShadow(
@@ -322,7 +328,9 @@ class RecipeDetailsScreen extends StatelessWidget {
 
           const SizedBox(width: 12),
 
-          Expanded(child: Text(text.toString())),
+          Expanded(
+            child: Text(text.toString(), style: const TextStyle(fontSize: 15)),
+          ),
         ],
       ),
     );
@@ -330,13 +338,13 @@ class RecipeDetailsScreen extends StatelessWidget {
 
   Widget _stepItem(dynamic number, String title, String description) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 14),
 
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(15),
 
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(22),
 
         boxShadow: [
           BoxShadow(
@@ -352,17 +360,21 @@ class RecipeDetailsScreen extends StatelessWidget {
 
         children: [
           CircleAvatar(
-            radius: 15,
+            radius: 16,
             backgroundColor: Colors.green,
 
             child: Text(
               '$number',
 
-              style: const TextStyle(color: Colors.white, fontSize: 13),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
 
-          const SizedBox(width: 12),
+          const SizedBox(width: 14),
 
           Expanded(
             child: Column(
@@ -374,13 +386,17 @@ class RecipeDetailsScreen extends StatelessWidget {
 
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 15,
+                    fontSize: 16,
                   ),
                 ),
 
-                const SizedBox(height: 5),
+                const SizedBox(height: 6),
 
-                Text(description, style: const TextStyle(height: 1.4)),
+                Text(
+                  description,
+
+                  style: const TextStyle(height: 1.5, fontSize: 14),
+                ),
               ],
             ),
           ),

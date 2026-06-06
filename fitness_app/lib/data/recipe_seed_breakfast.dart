@@ -420,63 +420,6 @@ class RecipeSeedBreakfast {
 
       'goal': 'High fiber breakfast that provides long-lasting energy.',
     },
-    {
-      'id': 'turkish_simit_breakfast_plate',
-
-      'title': 'Turkish Simit Breakfast Plate',
-
-      'category': 'Breakfast',
-
-      'imageUrl':
-          'assets/images/recipes/breakfast/turkish_simit_breakfast_plate.jpg',
-
-      'calories': 445,
-      'protein': 19,
-      'carbs': 48,
-      'fats': 18,
-      'fiber': 6,
-
-      'time': '10 min',
-
-      'difficulty': 'Easy',
-
-      'servings': 1,
-
-      'tags': ['Balanced', 'Mediterranean', 'Traditional', 'Healthy'],
-
-      'ingredients': [
-        '1/2 simit',
-        '2 boiled eggs',
-        '40g feta cheese',
-        'Cucumber slices',
-        'Tomato slices',
-        'Olives',
-      ],
-
-      'instructions': [
-        {
-          'step': 1,
-          'title': 'Prepare vegetables',
-          'description': 'Slice cucumber and tomatoes.',
-        },
-
-        {
-          'step': 2,
-          'title': 'Cook eggs',
-          'description': 'Boil eggs for 8–10 minutes.',
-        },
-
-        {
-          'step': 3,
-          'title': 'Assemble plate',
-          'description':
-              'Arrange simit, eggs, feta cheese and vegetables on a plate.',
-        },
-      ],
-
-      'goal':
-          'Balanced Mediterranean breakfast with protein, fiber and healthy fats.',
-    },
 
     {
       'id': 'korean_egg_rice_bowl',
@@ -1257,6 +1200,190 @@ class RecipeSeedBreakfast {
 
       'goal':
           'Balanced breakfast with complex carbs and high protein for active lifestyles.',
+    },
+    {
+      'id': 'blueberry_cloud_pancakes',
+      'title': 'Blueberry Cloud Pancakes',
+      'category': 'Breakfast',
+      'imageUrl':
+          'assets/images/recipes/breakfast/blueberry_cloud_pancakes.jpg',
+      'calories': 340,
+      'protein': 27,
+      'carbs': 33,
+      'fats': 10,
+      'fiber': 5,
+      'time': '15 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['High Protein', 'Aesthetic', 'Sweet', 'Fitness'],
+      'ingredients': [
+        '2 eggs',
+        '40g oat flour',
+        '80g blueberries',
+        '100g greek yogurt',
+        '1 tsp honey',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Prepare batter',
+          'description': 'Mix eggs and oat flour until smooth.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook pancakes',
+          'description': 'Cook small fluffy pancakes in a non-stick pan.',
+        },
+        {
+          'step': 3,
+          'title': 'Add toppings',
+          'description': 'Top with greek yogurt and blueberries.',
+        },
+        {
+          'step': 4,
+          'title': 'Finish',
+          'description': 'Drizzle honey before serving.',
+        },
+      ],
+      'goal': 'Fluffy sweet breakfast with protein and fresh berries.',
+    },
+
+    {
+      'id': 'sunrise_breakfast_toast',
+      'title': 'Sunrise Breakfast Toast',
+      'category': 'Breakfast',
+      'imageUrl': 'assets/images/recipes/breakfast/sunrise_breakfast_toast.jpg',
+      'calories': 365,
+      'protein': 23,
+      'carbs': 29,
+      'fats': 16,
+      'fiber': 6,
+      'time': '10 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Healthy', 'Savory', 'Balanced', 'Quick'],
+      'ingredients': [
+        '2 slices sourdough bread',
+        '1 avocado',
+        '2 eggs',
+        'Cherry tomatoes',
+        'Chili flakes',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Toast bread',
+          'description': 'Toast the sourdough bread until crispy.',
+        },
+        {
+          'step': 2,
+          'title': 'Prepare avocado',
+          'description': 'Mash avocado lightly with salt.',
+        },
+        {
+          'step': 3,
+          'title': 'Cook eggs',
+          'description': 'Cook eggs sunny side up.',
+        },
+        {
+          'step': 4,
+          'title': 'Assemble',
+          'description': 'Top toast with avocado, eggs and tomatoes.',
+        },
+      ],
+      'goal': 'Modern café-style breakfast with healthy fats and protein.',
+    },
+
+    {
+      'id': 'strawberry_matcha_oats',
+      'title': 'Strawberry Matcha Oats',
+      'category': 'Breakfast',
+      'imageUrl': 'assets/images/recipes/breakfast/strawberry_matcha_oats.jpg',
+      'calories': 315,
+      'protein': 24,
+      'carbs': 34,
+      'fats': 9,
+      'fiber': 7,
+      'time': '7 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Matcha', 'Aesthetic', 'Healthy', 'High Fiber'],
+      'ingredients': [
+        '50g oats',
+        '150ml milk',
+        '1 tsp matcha powder',
+        '70g strawberries',
+        '100g skyr',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook oats',
+          'description': 'Cook oats with milk until creamy.',
+        },
+        {
+          'step': 2,
+          'title': 'Add matcha',
+          'description': 'Mix matcha powder into the oats.',
+        },
+        {
+          'step': 3,
+          'title': 'Prepare toppings',
+          'description': 'Slice strawberries and prepare skyr.',
+        },
+        {
+          'step': 4,
+          'title': 'Serve',
+          'description': 'Top oats with strawberries and skyr.',
+        },
+      ],
+      'goal': 'A trendy breakfast with antioxidants and balanced nutrition.',
+    },
+    {
+      'id': 'peanut_banana_breakfast_toast',
+      'title': 'Peanut Banana Breakfast Toast',
+      'category': 'Breakfast',
+      'imageUrl':
+          'assets/images/recipes/breakfast/peanut_banana_breakfast_toast.jpg',
+      'calories': 340,
+      'protein': 19,
+      'carbs': 33,
+      'fats': 15,
+      'fiber': 6,
+      'time': '6 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Healthy', 'Sweet', 'Balanced', 'Quick'],
+      'ingredients': [
+        '2 slices whole grain bread',
+        '1 tbsp peanut butter',
+        '1 banana',
+        '1 tsp chia seeds',
+        'Cinnamon',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Toast bread',
+          'description': 'Toast whole grain bread until crispy.',
+        },
+        {
+          'step': 2,
+          'title': 'Add peanut butter',
+          'description': 'Spread peanut butter evenly on the toast.',
+        },
+        {
+          'step': 3,
+          'title': 'Add toppings',
+          'description': 'Top with banana slices and chia seeds.',
+        },
+        {
+          'step': 4,
+          'title': 'Finish',
+          'description': 'Sprinkle cinnamon before serving.',
+        },
+      ],
+      'goal': 'Healthy breakfast with natural energy and balanced nutrients.',
     },
   ];
 }

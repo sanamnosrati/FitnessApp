@@ -431,5 +431,620 @@ class RecipeSeedDinner {
       'goal':
           'A comforting high-protein dinner supporting recovery and muscle growth.',
     },
+    {
+      'id': 'lemon_garlic_salmon_plate',
+      'title': 'Lemon Garlic Salmon Plate',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/lemon_garlic_salmon_plate.jpg',
+      'calories': 610,
+      'protein': 45,
+      'carbs': 36,
+      'fats': 29,
+      'fiber': 7,
+      'time': '30 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Fish', 'Omega 3', 'High Protein', 'Healthy Fats'],
+      'ingredients': [
+        '160g salmon fillet',
+        '180g sweet potato',
+        '100g broccoli',
+        '1 garlic clove',
+        '1 tsp olive oil',
+        'Lemon juice',
+        'Salt & pepper',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Bake sweet potato',
+          'description': 'Cut sweet potato into cubes and bake until tender.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook salmon',
+          'description':
+              'Season salmon with garlic, lemon juice, salt and pepper, then pan fry or bake.',
+        },
+        {
+          'step': 3,
+          'title': 'Steam broccoli',
+          'description': 'Steam broccoli until bright green and tender.',
+        },
+        {
+          'step': 4,
+          'title': 'Serve',
+          'description': 'Plate salmon with sweet potato and broccoli.',
+        },
+      ],
+      'goal':
+          'A balanced dinner rich in omega-3 fats, protein and slow-digesting carbs.',
+    },
+
+    {
+      'id': 'herb_chicken_couscous_bowl',
+      'title': 'Herb Chicken Couscous Bowl',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/herb_chicken_couscous_bowl.jpg',
+      'calories': 560,
+      'protein': 48,
+      'carbs': 44,
+      'fats': 17,
+      'fiber': 6,
+      'time': '25 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Chicken', 'High Protein', 'Balanced', 'Clean Eating'],
+      'ingredients': [
+        '170g chicken breast',
+        '100g couscous',
+        '1/2 cucumber',
+        'Cherry tomatoes',
+        '30g feta cheese',
+        'Parsley',
+        '1 tsp olive oil',
+        'Lemon juice',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Prepare couscous',
+          'description':
+              'Pour hot water over couscous and let it soften for 5 minutes.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook chicken',
+          'description':
+              'Season chicken with herbs and cook until golden and fully done.',
+        },
+        {
+          'step': 3,
+          'title': 'Prepare vegetables',
+          'description': 'Chop cucumber, tomatoes and parsley.',
+        },
+        {
+          'step': 4,
+          'title': 'Assemble bowl',
+          'description':
+              'Combine couscous, chicken, vegetables and feta with lemon juice.',
+        },
+      ],
+      'goal':
+          'A light but filling high-protein dinner for recovery and clean energy.',
+    },
+
+    {
+      'id': 'lamb_kofta_yogurt_plate',
+      'title': 'Lamb Kofta Yogurt Plate',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/lamb_kofta_yogurt_plate.jpg',
+      'calories': 670,
+      'protein': 43,
+      'carbs': 38,
+      'fats': 34,
+      'fiber': 7,
+      'time': '35 min',
+      'difficulty': 'Medium',
+      'servings': 2,
+      'tags': ['Lamb', 'Mediterranean', 'High Protein', 'Dinner'],
+      'ingredients': [
+        '200g lean lamb mince',
+        '100g bulgur',
+        '80g greek yogurt',
+        '1/2 cucumber',
+        '1 garlic clove',
+        'Parsley',
+        'Cumin',
+        'Salt & pepper',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Prepare bulgur',
+          'description': 'Cook bulgur until soft and fluffy.',
+        },
+        {
+          'step': 2,
+          'title': 'Shape kofta',
+          'description':
+              'Mix lamb mince with cumin, garlic, parsley, salt and pepper, then shape into small kofta.',
+        },
+        {
+          'step': 3,
+          'title': 'Cook kofta',
+          'description':
+              'Cook kofta in a hot pan until browned and fully cooked.',
+        },
+        {
+          'step': 4,
+          'title': 'Make yogurt sauce',
+          'description':
+              'Mix greek yogurt with grated cucumber, garlic and lemon juice.',
+        },
+        {
+          'step': 5,
+          'title': 'Serve',
+          'description': 'Serve kofta with bulgur and yogurt sauce.',
+        },
+      ],
+      'goal':
+          'A protein-rich Mediterranean dinner with satisfying flavor and long-lasting fullness.',
+    },
+
+    {
+      'id': 'steak_green_beans_potatoes',
+      'title': 'Steak Green Beans & Potatoes',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/steak_green_beans_potatoes.jpg',
+      'calories': 720,
+      'protein': 55,
+      'carbs': 42,
+      'fats': 32,
+      'fiber': 8,
+      'time': '35 min',
+      'difficulty': 'Medium',
+      'servings': 1,
+      'tags': ['Steak', 'Muscle Gain', 'High Protein', 'Performance Meal'],
+      'ingredients': [
+        '180g lean steak',
+        '180g baby potatoes',
+        '120g green beans',
+        '1 tsp olive oil',
+        '1 garlic clove',
+        'Rosemary',
+        'Salt & pepper',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook potatoes',
+          'description': 'Boil or roast baby potatoes until soft and golden.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook steak',
+          'description':
+              'Season steak and cook in a hot pan to your preferred doneness.',
+        },
+        {
+          'step': 3,
+          'title': 'Cook green beans',
+          'description': 'Sauté green beans with garlic and olive oil.',
+        },
+        {
+          'step': 4,
+          'title': 'Rest and serve',
+          'description':
+              'Let steak rest for a few minutes, then serve with potatoes and beans.',
+        },
+      ],
+      'goal':
+          'A strong high-protein dinner ideal for muscle growth and post-training recovery.',
+    },
+
+    {
+      'id': 'beef_stir_fry_rice_bowl',
+      'title': 'Beef Stir-Fry Rice Bowl',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/beef_stir_fry_rice_bowl.jpg',
+      'calories': 640,
+      'protein': 46,
+      'carbs': 55,
+      'fats': 22,
+      'fiber': 6,
+      'time': '25 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Beef', 'Asian Inspired', 'High Protein', 'Quick Dinner'],
+      'ingredients': [
+        '160g lean beef strips',
+        '130g cooked rice',
+        '80g bell pepper',
+        '70g broccoli',
+        '1 tbsp soy sauce',
+        '1 garlic clove',
+        '1 tsp sesame oil',
+        'Spring onions',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook rice',
+          'description': 'Cook rice until fluffy or use pre-cooked rice.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook beef',
+          'description':
+              'Stir-fry beef strips with garlic and soy sauce in a hot pan.',
+        },
+        {
+          'step': 3,
+          'title': 'Add vegetables',
+          'description':
+              'Add bell pepper and broccoli and cook until tender-crisp.',
+        },
+        {
+          'step': 4,
+          'title': 'Assemble',
+          'description':
+              'Serve beef and vegetables over rice and top with spring onions.',
+        },
+      ],
+      'goal':
+          'A quick high-protein dinner with balanced carbs for energy and recovery.',
+    },
+
+    {
+      'id': 'creamy_cod_spinach_rice',
+      'title': 'Creamy Cod Spinach Rice',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/creamy_cod_spinach_rice.jpg',
+      'calories': 520,
+      'protein': 42,
+      'carbs': 43,
+      'fats': 17,
+      'fiber': 5,
+      'time': '28 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Fish', 'Lean Protein', 'Light Dinner', 'Healthy'],
+      'ingredients': [
+        '180g cod fillet',
+        '120g cooked rice',
+        '80g spinach',
+        '50ml light cream',
+        '1 garlic clove',
+        '1 tsp olive oil',
+        'Lemon juice',
+        'Salt & pepper',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook rice',
+          'description': 'Prepare rice until soft and fluffy.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook cod',
+          'description':
+              'Season cod with salt, pepper and lemon juice, then cook until flaky.',
+        },
+        {
+          'step': 3,
+          'title': 'Make spinach sauce',
+          'description':
+              'Cook garlic and spinach, then add light cream and stir.',
+        },
+        {
+          'step': 4,
+          'title': 'Serve',
+          'description': 'Serve cod with rice and creamy spinach sauce.',
+        },
+      ],
+      'goal':
+          'A light high-protein fish dinner supporting recovery without feeling too heavy.',
+    },
+
+    {
+      'id': 'vegan_lentil_tahini_bowl',
+      'title': 'Vegan Lentil Tahini Bowl',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/vegan_lentil_tahini_bowl.jpg',
+      'calories': 580,
+      'protein': 28,
+      'carbs': 62,
+      'fats': 21,
+      'fiber': 15,
+      'time': '30 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Vegan', 'High Fiber', 'Plant Protein', 'Healthy'],
+      'ingredients': [
+        '150g cooked lentils',
+        '120g cooked quinoa',
+        '80g roasted zucchini',
+        '60g cherry tomatoes',
+        '1 tbsp tahini',
+        'Lemon juice',
+        'Parsley',
+        'Salt & pepper',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Prepare quinoa',
+          'description': 'Cook quinoa until fluffy.',
+        },
+        {
+          'step': 2,
+          'title': 'Roast vegetables',
+          'description':
+              'Roast zucchini and tomatoes until soft and lightly golden.',
+        },
+        {
+          'step': 3,
+          'title': 'Make tahini sauce',
+          'description':
+              'Mix tahini with lemon juice, water, salt and pepper until creamy.',
+        },
+        {
+          'step': 4,
+          'title': 'Assemble bowl',
+          'description':
+              'Add quinoa, lentils and vegetables into a bowl and drizzle with tahini sauce.',
+        },
+      ],
+      'goal':
+          'A nourishing vegan dinner rich in fiber, plant protein and slow energy.',
+    },
+    {
+      'id': 'japanese_katsu_curry',
+      'title': 'Japanese Katsu Curry',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/japanese_katsu_curry.jpg',
+      'calories': 760,
+      'protein': 48,
+      'carbs': 74,
+      'fats': 29,
+      'fiber': 7,
+      'time': '45 min',
+      'difficulty': 'Medium',
+      'servings': 2,
+      'tags': ['Japanese', 'Comfort Food', 'Crispy', 'High Protein'],
+
+      'ingredients': [
+        '180g chicken breast',
+        '120g jasmine rice',
+        '40g panko breadcrumbs',
+        '1 egg',
+        '1 carrot',
+        '1 potato',
+        '1 onion',
+        '1 tbsp curry paste',
+        '1 tsp olive oil',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Prepare curry',
+          'description':
+              'Cook onion, carrot and potato until soft, then add curry paste and simmer.',
+        },
+
+        {
+          'step': 2,
+          'title': 'Prepare chicken',
+          'description': 'Coat chicken breast in egg and panko breadcrumbs.',
+        },
+
+        {
+          'step': 3,
+          'title': 'Cook chicken',
+          'description': 'Air fry or pan fry until crispy and golden.',
+        },
+
+        {
+          'step': 4,
+          'title': 'Cook rice',
+          'description': 'Cook jasmine rice until fluffy.',
+        },
+
+        {
+          'step': 5,
+          'title': 'Serve',
+          'description': 'Serve crispy chicken over rice with curry sauce.',
+        },
+      ],
+
+      'goal':
+          'A comforting Japanese-inspired protein dinner packed with flavor and energy.',
+    },
+
+    {
+      'id': 'greek_souvlaki_plate',
+      'title': 'Greek Souvlaki Plate',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/greek_souvlaki_plate.jpg',
+      'calories': 640,
+      'protein': 51,
+      'carbs': 42,
+      'fats': 26,
+      'fiber': 6,
+      'time': '35 min',
+      'difficulty': 'Easy',
+      'servings': 2,
+      'tags': ['Greek', 'Mediterranean', 'High Protein', 'Fresh'],
+
+      'ingredients': [
+        '180g chicken breast',
+        '100g pita bread',
+        '80g greek yogurt',
+        '1/2 cucumber',
+        'Cherry tomatoes',
+        'Red onion',
+        'Oregano',
+        '1 tsp olive oil',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Marinate chicken',
+          'description':
+              'Season chicken with oregano, olive oil, salt and pepper.',
+        },
+
+        {
+          'step': 2,
+          'title': 'Cook chicken',
+          'description': 'Cook chicken until golden and juicy.',
+        },
+
+        {
+          'step': 3,
+          'title': 'Prepare tzatziki',
+          'description': 'Mix greek yogurt with grated cucumber and garlic.',
+        },
+
+        {
+          'step': 4,
+          'title': 'Warm pita',
+          'description': 'Heat pita bread for a few seconds in a pan.',
+        },
+
+        {
+          'step': 5,
+          'title': 'Serve',
+          'description': 'Serve chicken with pita, tzatziki and vegetables.',
+        },
+      ],
+
+      'goal':
+          'A fresh Mediterranean dinner with balanced macros and lean protein.',
+    },
+
+    {
+      'id': 'thai_red_curry_shrimp',
+      'title': 'Thai Red Curry Shrimp',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/thai_red_curry_shrimp.jpg',
+      'calories': 620,
+      'protein': 43,
+      'carbs': 48,
+      'fats': 25,
+      'fiber': 5,
+      'time': '30 min',
+      'difficulty': 'Medium',
+      'servings': 2,
+      'tags': ['Thai', 'Seafood', 'Spicy', 'Creamy'],
+
+      'ingredients': [
+        '170g shrimp',
+        '120ml coconut milk',
+        '120g jasmine rice',
+        'Red bell pepper',
+        '1 tbsp red curry paste',
+        'Fresh basil',
+        '1 tsp olive oil',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook rice',
+          'description': 'Cook jasmine rice until soft and fluffy.',
+        },
+
+        {
+          'step': 2,
+          'title': 'Cook vegetables',
+          'description': 'Cook bell peppers in olive oil until slightly soft.',
+        },
+
+        {
+          'step': 3,
+          'title': 'Make curry',
+          'description':
+              'Add curry paste and coconut milk and simmer for a few minutes.',
+        },
+
+        {
+          'step': 4,
+          'title': 'Cook shrimp',
+          'description': 'Add shrimp and cook until pink and tender.',
+        },
+
+        {
+          'step': 5,
+          'title': 'Serve',
+          'description': 'Serve curry over rice and top with basil.',
+        },
+      ],
+
+      'goal':
+          'A flavorful Thai-inspired seafood dinner rich in protein and satisfying textures.',
+    },
+
+    {
+      'id': 'mexican_street_corn_chicken',
+      'title': 'Mexican Street Corn Chicken',
+      'category': 'Dinner',
+      'imageUrl':
+          'assets/images/recipes/dinner/mexican_street_corn_chicken.jpg',
+      'calories': 680,
+      'protein': 52,
+      'carbs': 46,
+      'fats': 29,
+      'fiber': 8,
+      'time': '35 min',
+      'difficulty': 'Easy',
+      'servings': 2,
+      'tags': ['Mexican', 'High Protein', 'Comfort Food', 'Bold Flavors'],
+
+      'ingredients': [
+        '180g chicken breast',
+        '150g roasted potatoes',
+        '70g corn',
+        '30g feta cheese',
+        '20g greek yogurt',
+        'Paprika',
+        'Lime juice',
+        'Fresh cilantro',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook potatoes',
+          'description': 'Roast potatoes until crispy and golden.',
+        },
+
+        {
+          'step': 2,
+          'title': 'Cook chicken',
+          'description': 'Season chicken with paprika and cook until juicy.',
+        },
+
+        {
+          'step': 3,
+          'title': 'Prepare street corn',
+          'description':
+              'Mix corn with greek yogurt, feta cheese and lime juice.',
+        },
+
+        {
+          'step': 4,
+          'title': 'Serve',
+          'description': 'Plate chicken with potatoes and creamy street corn.',
+        },
+      ],
+
+      'goal':
+          'A bold and satisfying Mexican-inspired dinner with balanced macros.',
+    },
   ];
 }
