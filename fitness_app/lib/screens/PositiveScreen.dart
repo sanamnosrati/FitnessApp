@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 
 class PositiveScreen extends StatefulWidget {
   const PositiveScreen({super.key});
@@ -44,64 +45,88 @@ class _PositiveScreenState extends State<PositiveScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
         title: const Text('Positive Thoughts'),
-        backgroundColor: Colors.orange,
+        backgroundColor: AppTheme.backgroundColor,
+        foregroundColor: AppTheme.textPrimaryColor,
+        elevation: 0,
+        centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(18),
         child: Column(
           children: [
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(22),
+              padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Colors.orange, Color(0xFFFFC46A)],
+                gradient: LinearGradient(
+                  colors: [
+                    AppTheme.primaryColor.withOpacity(0.95),
+                    AppTheme.secondaryColor.withOpacity(0.85),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(26),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppTheme.primaryColor.withOpacity(0.25),
+                    blurRadius: 24,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
-                  const Icon(Icons.wb_sunny, color: Colors.white, size: 36),
-                  const SizedBox(height: 14),
+                  const Icon(Icons.auto_awesome, color: Colors.white, size: 38),
+                  const SizedBox(height: 18),
                   Text(
                     currentQuote,
                     style: const TextStyle(
-                      fontSize: 22,
+                      fontSize: 24,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      height: 1.25,
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+
+            const SizedBox(height: 18),
+
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
+              child: ElevatedButton.icon(
                 onPressed: newQuote,
+                icon: const Icon(Icons.refresh),
+                label: const Text('New Thought'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
+                  backgroundColor: AppTheme.primaryColor,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(18),
                   ),
                 ),
-                child: const Text('New Thought'),
               ),
             ),
+
             const SizedBox(height: 20),
+
             Expanded(
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(18),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(18),
+                  color: AppTheme.surfaceColor,
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(
+                    color: AppTheme.primaryColor.withOpacity(0.18),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,26 +134,37 @@ class _PositiveScreenState extends State<PositiveScreen> {
                     const Text(
                       'Daily Affirmations',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
+                        color: AppTheme.textPrimaryColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 14),
+
+                    const SizedBox(height: 16),
+
                     ...affirmations.map(
-                      (item) => Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
+                      (item) => Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: AppTheme.surfaceLightColor,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                         child: Row(
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.favorite,
-                              color: Colors.orange,
+                              color: AppTheme.primaryColor,
                               size: 20,
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 12),
                             Expanded(
                               child: Text(
                                 item,
-                                style: const TextStyle(fontSize: 16),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: AppTheme.textPrimaryColor,
+                                ),
                               ),
                             ),
                           ],

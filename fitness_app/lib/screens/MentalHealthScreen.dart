@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fitness_app/theme/app_theme.dart';
+
 import 'mental_health_service.dart';
 import 'RelaxScreen.dart';
 import 'PositiveScreen.dart';
@@ -24,6 +26,10 @@ class _MentalHealthScreenState extends State<MentalHealthScreen> {
 
   List<int> weeklyMood = [];
   List<String> weekDays = [];
+
+  static const Color accentPurple = Color(0xFF7C4DFF);
+  static const Color accentBlue = Color(0xFF00B8FF);
+  static const Color softBorder = Color(0xFF2A2D35);
 
   final Map<String, List<Map<String, String>>> moodGroups = {
     'Positive': [
@@ -94,6 +100,7 @@ class _MentalHealthScreenState extends State<MentalHealthScreen> {
         SnackBar(
           content: Text('Error loading graph: $e'),
           behavior: SnackBarBehavior.floating,
+          backgroundColor: AppTheme.surfaceColor,
         ),
       );
     } finally {
@@ -150,6 +157,7 @@ class _MentalHealthScreenState extends State<MentalHealthScreen> {
         const SnackBar(
           content: Text('Mental entry saved successfully'),
           behavior: SnackBarBehavior.floating,
+          backgroundColor: AppTheme.surfaceColor,
         ),
       );
     } catch (e) {
@@ -157,6 +165,7 @@ class _MentalHealthScreenState extends State<MentalHealthScreen> {
         SnackBar(
           content: Text('Error saving entry: $e'),
           behavior: SnackBarBehavior.floating,
+          backgroundColor: AppTheme.surfaceColor,
         ),
       );
     } finally {
@@ -208,17 +217,21 @@ class _MentalHealthScreenState extends State<MentalHealthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const accent = Colors.teal;
-    final bgColor = Colors.grey.shade100;
-
     return Scaffold(
-      backgroundColor: bgColor,
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.teal,
-        title: const Text('Mental Health'),
+        centerTitle: true,
+        backgroundColor: AppTheme.backgroundColor,
+        foregroundColor: AppTheme.textPrimaryColor,
+        title: const Text(
+          'Mental Health',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: RefreshIndicator(
+        color: accentPurple,
+        backgroundColor: AppTheme.surfaceColor,
         onRefresh: loadWeeklyMood,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -226,436 +239,48 @@ class _MentalHealthScreenState extends State<MentalHealthScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(22),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Colors.teal, Color(0xFF64C9C0)],
-                  ),
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'How do you feel today?',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Track your emotions, reflect on your day, and care for your mental well-being.',
-                      style: TextStyle(fontSize: 15, color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
+              _heroCard(),
+
+              const SizedBox(height: 18),
+
+              _currentMoodCard(),
 
               const SizedBox(height: 20),
 
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.teal.withOpacity(0.08),
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.favorite, color: Colors.teal),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        'Current mood: ${getMoodEmoji()} ${getMoodText()}',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.teal,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              if (selectedMoods.isNotEmpty) ...[
-                const Text(
-                  'Selected Feelings',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children:
-                      selectedMoods
-                          .map(
-                            (m) => Chip(
-                              label: Text(m),
-                              backgroundColor: Colors.teal.withOpacity(0.15),
-                              deleteIcon: const Icon(Icons.close, size: 18),
-                              onDeleted: () {
-                                setState(() {
-                                  selectedMoods.remove(m);
-                                });
-                              },
-                            ),
-                          )
-                          .toList(),
-                ),
-                const SizedBox(height: 20),
-              ],
+              if (selectedMoods.isNotEmpty) _selectedFeelings(),
 
               const Text(
                 'Choose up to 4 feelings',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.textPrimaryColor,
+                ),
               ),
+
               const SizedBox(height: 14),
 
-              ...moodGroups.entries.map((entry) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      entry.key,
-                      style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      children:
-                          entry.value.map((mood) {
-                            final label = mood['label']!;
-                            final emoji = mood['emoji']!;
-                            final selected = selectedMoods.contains(label);
-
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  if (selected) {
-                                    selectedMoods.remove(label);
-                                  } else if (selectedMoods.length < 4) {
-                                    selectedMoods.add(label);
-                                  }
-                                });
-                              },
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 14,
-                                  vertical: 12,
-                                ),
-                                decoration: BoxDecoration(
-                                  color:
-                                      selected
-                                          ? accent.withOpacity(0.15)
-                                          : Colors.white,
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(
-                                    color:
-                                        selected
-                                            ? accent
-                                            : Colors.grey.shade300,
-                                    width: 1.3,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.04),
-                                      blurRadius: 6,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      emoji,
-                                      style: const TextStyle(fontSize: 20),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      label,
-                                      style: TextStyle(
-                                        fontWeight:
-                                            selected
-                                                ? FontWeight.bold
-                                                : FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                    ),
-                    const SizedBox(height: 18),
-                  ],
-                );
-              }),
+              ...moodGroups.entries.map((entry) => _moodGroup(entry)),
 
               const SizedBox(height: 8),
 
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(18),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(22),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
-                      blurRadius: 8,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Daily Check-In',
-                      style: TextStyle(
-                        fontSize: 19,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      '${getMoodEmoji()} ${getMoodText()}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.teal,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: List.generate(5, (index) {
-                        final value = index + 1;
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              moodScore = value;
-                            });
-                          },
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 180),
-                            width: 52,
-                            height: 52,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color:
-                                  moodScore == value
-                                      ? accent
-                                      : Colors.grey.shade300,
-                            ),
-                            child: Center(
-                              child: Text(
-                                value.toString(),
-                                style: TextStyle(
-                                  color:
-                                      moodScore == value
-                                          ? Colors.white
-                                          : Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }),
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Short Note',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: reflectionController,
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                        hintText: 'Write about your day...',
-                        filled: true,
-                        fillColor: Colors.grey.shade100,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.all(14),
-                      ),
-                    ),
-                    const SizedBox(height: 18),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed:
-                            selectedMoods.isEmpty || isSaving
-                                ? null
-                                : saveMentalEntry,
-                        icon:
-                            isSaving
-                                ? const SizedBox(
-                                  height: 18,
-                                  width: 18,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  ),
-                                )
-                                : const Icon(Icons.favorite),
-                        label: Text(
-                          isSaving ? 'Saving...' : 'Save Mental Entry',
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              _dailyCheckInCard(),
 
               const SizedBox(height: 24),
 
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(18),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(22),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
-                      blurRadius: 8,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Weekly Mood Graph',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: loadWeeklyMood,
-                          icon: const Icon(Icons.refresh),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Your recent mood scores from 1 to 5',
-                      style: TextStyle(fontSize: 14, color: Colors.black54),
-                    ),
-                    const SizedBox(height: 20),
-                    if (isLoadingGraph)
-                      const Center(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 30),
-                          child: CircularProgressIndicator(),
-                        ),
-                      )
-                    else if (weeklyMood.isEmpty)
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 28),
-                        child: const Column(
-                          children: [
-                            Icon(Icons.bar_chart, size: 42, color: Colors.grey),
-                            SizedBox(height: 10),
-                            Text(
-                              'No mood data yet',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black54,
-                              ),
-                            ),
-                            SizedBox(height: 6),
-                            Text(
-                              'Save your first mental entry to see the graph.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.black45),
-                            ),
-                          ],
-                        ),
-                      )
-                    else
-                      SizedBox(
-                        height: 170,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: List.generate(weeklyMood.length, (index) {
-                            final value = weeklyMood[index];
-                            final day =
-                                index < weekDays.length ? weekDays[index] : '-';
-
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  value.toString(),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 6),
-                                Container(
-                                  width: 26,
-                                  height: value * 25,
-                                  decoration: BoxDecoration(
-                                    color: Colors.teal,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(day, style: const TextStyle(fontSize: 12)),
-                              ],
-                            );
-                          }),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
+              _weeklyMoodGraph(),
 
               const SizedBox(height: 26),
 
               const Text(
                 'Health Care Tools',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.textPrimaryColor,
+                ),
               ),
+
               const SizedBox(height: 12),
 
               GridView.count(
@@ -670,7 +295,7 @@ class _MentalHealthScreenState extends State<MentalHealthScreen> {
                     title: 'Relax',
                     subtitle: 'Breathing & calming',
                     icon: Icons.self_improvement,
-                    color: Colors.teal,
+                    accent: accentPurple,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -681,8 +306,8 @@ class _MentalHealthScreenState extends State<MentalHealthScreen> {
                   _HealthCard(
                     title: 'Positive',
                     subtitle: 'Daily motivation',
-                    icon: Icons.wb_sunny,
-                    color: Colors.orange,
+                    icon: Icons.auto_awesome,
+                    accent: accentBlue,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -694,9 +319,9 @@ class _MentalHealthScreenState extends State<MentalHealthScreen> {
                   ),
                   _HealthCard(
                     title: 'History',
-                    subtitle: 'View past notes',
-                    icon: Icons.history,
-                    color: Colors.purple,
+                    subtitle: 'Past notes',
+                    icon: Icons.history_rounded,
+                    accent: accentPurple,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -709,8 +334,8 @@ class _MentalHealthScreenState extends State<MentalHealthScreen> {
                   _HealthCard(
                     title: 'Mood Tips',
                     subtitle: 'Small mental reset',
-                    icon: Icons.psychology,
-                    color: Colors.blue,
+                    icon: Icons.psychology_rounded,
+                    accent: accentBlue,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -728,6 +353,452 @@ class _MentalHealthScreenState extends State<MentalHealthScreen> {
       ),
     );
   }
+
+  Widget _heroCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF1D1F24), Color(0xFF15161A)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(26),
+        border: Border.all(color: softBorder),
+      ),
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.favorite_rounded, color: accentPurple, size: 28),
+          SizedBox(height: 14),
+          Text(
+            'How do you feel today?',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.textPrimaryColor,
+            ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            'Track your emotions, reflect on your day, and care for your mental well-being.',
+            style: TextStyle(
+              fontSize: 15,
+              color: AppTheme.textSecondaryColor,
+              height: 1.35,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _currentMoodCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceColor,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: softBorder),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.favorite, color: accentPurple),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              'Current mood: ${getMoodEmoji()} ${getMoodText()}',
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textPrimaryColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _selectedFeelings() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Selected Feelings',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: AppTheme.textPrimaryColor,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children:
+              selectedMoods
+                  .map(
+                    (m) => Chip(
+                      label: Text(m),
+                      labelStyle: const TextStyle(
+                        color: AppTheme.textPrimaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      backgroundColor: accentPurple.withOpacity(0.18),
+                      deleteIcon: const Icon(
+                        Icons.close,
+                        size: 18,
+                        color: AppTheme.textPrimaryColor,
+                      ),
+                      side: BorderSide(color: accentPurple.withOpacity(0.35)),
+                      onDeleted: () {
+                        setState(() {
+                          selectedMoods.remove(m);
+                        });
+                      },
+                    ),
+                  )
+                  .toList(),
+        ),
+        const SizedBox(height: 20),
+      ],
+    );
+  }
+
+  Widget _moodGroup(MapEntry<String, List<Map<String, String>>> entry) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          entry.key,
+          style: const TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+            color: AppTheme.textSecondaryColor,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children:
+              entry.value.map((mood) {
+                final label = mood['label']!;
+                final emoji = mood['emoji']!;
+                final selected = selectedMoods.contains(label);
+
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (selected) {
+                        selectedMoods.remove(label);
+                      } else if (selectedMoods.length < 4) {
+                        selectedMoods.add(label);
+                      }
+                    });
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color:
+                          selected
+                              ? accentPurple.withOpacity(0.18)
+                              : AppTheme.surfaceColor,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: selected ? accentPurple : softBorder,
+                        width: 1.2,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(emoji, style: const TextStyle(fontSize: 20)),
+                        const SizedBox(width: 8),
+                        Text(
+                          label,
+                          style: TextStyle(
+                            color:
+                                selected
+                                    ? AppTheme.textPrimaryColor
+                                    : AppTheme.textSecondaryColor,
+                            fontWeight:
+                                selected ? FontWeight.bold : FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+        ),
+        const SizedBox(height: 18),
+      ],
+    );
+  }
+
+  Widget _dailyCheckInCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceColor,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: softBorder),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Daily Check-In',
+            style: TextStyle(
+              fontSize: 19,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.textPrimaryColor,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '${getMoodEmoji()} ${getMoodText()}',
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: accentPurple,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(5, (index) {
+              final value = index + 1;
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    moodScore = value;
+                  });
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 180),
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color:
+                        moodScore == value
+                            ? accentPurple
+                            : AppTheme.surfaceLightColor,
+                    border: Border.all(
+                      color: moodScore == value ? accentPurple : softBorder,
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      value.toString(),
+                      style: TextStyle(
+                        color:
+                            moodScore == value
+                                ? Colors.white
+                                : AppTheme.textSecondaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            'Short Note',
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.textPrimaryColor,
+            ),
+          ),
+          const SizedBox(height: 10),
+          TextField(
+            controller: reflectionController,
+            maxLines: 5,
+            style: const TextStyle(color: AppTheme.textPrimaryColor),
+            decoration: InputDecoration(
+              hintText: 'Write about your day...',
+              hintStyle: const TextStyle(color: AppTheme.textSecondaryColor),
+              filled: true,
+              fillColor: AppTheme.surfaceLightColor,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: const EdgeInsets.all(14),
+            ),
+          ),
+          const SizedBox(height: 18),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed:
+                  selectedMoods.isEmpty || isSaving ? null : saveMentalEntry,
+              icon:
+                  isSaving
+                      ? const SizedBox(
+                        height: 18,
+                        width: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                      : const Icon(Icons.favorite),
+              label: Text(isSaving ? 'Saving...' : 'Save Mental Entry'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: accentPurple,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _weeklyMoodGraph() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceColor,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: softBorder),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Weekly Mood Graph',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.textPrimaryColor,
+                ),
+              ),
+              IconButton(
+                onPressed: loadWeeklyMood,
+                icon: const Icon(
+                  Icons.refresh,
+                  color: AppTheme.textPrimaryColor,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Your recent mood scores from 1 to 5',
+            style: TextStyle(fontSize: 14, color: AppTheme.textSecondaryColor),
+          ),
+          const SizedBox(height: 20),
+          if (isLoadingGraph)
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 30),
+                child: CircularProgressIndicator(color: accentPurple),
+              ),
+            )
+          else if (weeklyMood.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 28),
+              child: Center(
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.bar_chart,
+                      size: 42,
+                      color: AppTheme.textSecondaryColor,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'No mood data yet',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.textPrimaryColor,
+                      ),
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      'Save your first mental entry to see the graph.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: AppTheme.textSecondaryColor),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          else
+            SizedBox(
+              height: 170,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: List.generate(weeklyMood.length, (index) {
+                  final value = weeklyMood[index];
+                  final day = index < weekDays.length ? weekDays[index] : '-';
+
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        value.toString(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.textPrimaryColor,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        width: 26,
+                        height: value * 25,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [accentPurple, accentBlue],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        day,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppTheme.textSecondaryColor,
+                        ),
+                      ),
+                    ],
+                  );
+                }),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 }
 
 class _HealthCard extends StatelessWidget {
@@ -735,32 +806,28 @@ class _HealthCard extends StatelessWidget {
   final String subtitle;
   final IconData icon;
   final VoidCallback onTap;
-  final Color color;
+  final Color accent;
 
   const _HealthCard({
     required this.title,
     required this.subtitle,
     required this.icon,
     required this.onTap,
-    required this.color,
+    required this.accent,
   });
+
+  static const Color softBorder = Color(0xFF2A2D35);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(22),
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 3),
-            ),
-          ],
+          borderRadius: BorderRadius.circular(22),
+          color: AppTheme.surfaceColor,
+          border: Border.all(color: softBorder),
         ),
         padding: const EdgeInsets.all(14),
         child: Column(
@@ -768,19 +835,26 @@ class _HealthCard extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 24,
-              backgroundColor: color.withOpacity(0.12),
-              child: Icon(icon, size: 26, color: color),
+              backgroundColor: accent.withOpacity(0.14),
+              child: Icon(icon, size: 26, color: accent),
             ),
             const SizedBox(height: 12),
             Text(
               title,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.textPrimaryColor,
+              ),
             ),
             const SizedBox(height: 6),
             Text(
               subtitle,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+              style: const TextStyle(
+                fontSize: 12,
+                color: AppTheme.textSecondaryColor,
+              ),
             ),
           ],
         ),

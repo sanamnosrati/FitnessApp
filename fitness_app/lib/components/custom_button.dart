@@ -21,7 +21,8 @@ class CustomButton extends StatefulWidget {
   State<CustomButton> createState() => _CustomButtonState();
 }
 
-class _CustomButtonState extends State<CustomButton> with SingleTickerProviderStateMixin {
+class _CustomButtonState extends State<CustomButton>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   bool _isPressed = false;
@@ -33,12 +34,10 @@ class _CustomButtonState extends State<CustomButton> with SingleTickerProviderSt
       duration: const Duration(milliseconds: 150),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInOut,
-      ),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -49,21 +48,22 @@ class _CustomButtonState extends State<CustomButton> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    final buttonStyle = widget.isOutlined
-        ? ElevatedButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            foregroundColor: AppTheme.primaryColor,
-            elevation: 0,
-            side: const BorderSide(color: AppTheme.primaryColor, width: 2),
-            shadowColor: AppTheme.primaryColor,
-          )
-        : ElevatedButton.styleFrom(
-            backgroundColor: AppTheme.primaryColor,
-            foregroundColor: AppTheme.backgroundColor,
-            elevation: _isPressed ? 2 : 4,
-            shadowColor: AppTheme.primaryColor,
-            surfaceTintColor: AppTheme.primaryColor,
-          );
+    final buttonStyle =
+        widget.isOutlined
+            ? ElevatedButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              foregroundColor: AppTheme.primaryColor,
+              elevation: 0,
+              side: const BorderSide(color: AppTheme.primaryColor, width: 2),
+              shadowColor: AppTheme.primaryColor,
+            )
+            : ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.primaryColor,
+              foregroundColor: AppTheme.backgroundColor,
+              elevation: _isPressed ? 2 : 4,
+              shadowColor: AppTheme.primaryColor,
+              surfaceTintColor: AppTheme.primaryColor,
+            );
 
     Widget buttonChild = Row(
       mainAxisSize: MainAxisSize.min,
@@ -89,7 +89,9 @@ class _CustomButtonState extends State<CustomButton> with SingleTickerProviderSt
         child: CircularProgressIndicator(
           strokeWidth: 2,
           valueColor: AlwaysStoppedAnimation<Color>(
-            widget.isOutlined ? AppTheme.primaryColor : AppTheme.backgroundColor,
+            widget.isOutlined
+                ? AppTheme.primaryColor
+                : AppTheme.backgroundColor,
           ),
         ),
       );
@@ -135,4 +137,4 @@ class _CustomButtonState extends State<CustomButton> with SingleTickerProviderSt
       ),
     );
   }
-} 
+}

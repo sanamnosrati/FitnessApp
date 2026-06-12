@@ -9,7 +9,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
@@ -72,7 +73,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             animation: _flameAnimation,
             builder: (context, child) {
               return CustomPaint(
-                size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height),
+                size: Size(
+                  MediaQuery.of(context).size.width,
+                  MediaQuery.of(context).size.height,
+                ),
                 painter: FlamesPainter(progress: _flameAnimation.value),
               );
             },
@@ -109,7 +113,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                                 borderRadius: BorderRadius.circular(40),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppTheme.primaryColor.withOpacity(0.3),
+                                    color: AppTheme.primaryColor.withOpacity(
+                                      0.3,
+                                    ),
                                     blurRadius: 20,
                                     spreadRadius: 5,
                                     offset: const Offset(0, 10),
@@ -128,15 +134,18 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       const SizedBox(height: 24),
                       // BFit Text with Custom Styling
                       ShaderMask(
-                        shaderCallback: (bounds) => const LinearGradient(
-                          colors: [
-                            AppTheme.primaryColor,
-                            Color(0xFFFFA000),
-                          ],
-                        ).createShader(bounds),
+                        shaderCallback:
+                            (bounds) => const LinearGradient(
+                              colors: [
+                                AppTheme.primaryColor,
+                                Color(0xFFFFA000),
+                              ],
+                            ).createShader(bounds),
                         child: Text(
                           'BFit',
-                          style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                          style: Theme.of(
+                            context,
+                          ).textTheme.displayLarge?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 64,
@@ -154,7 +163,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       const SizedBox(height: 16),
                       Text(
                         'Dein Weg zu mehr Fitness',
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        style: Theme.of(
+                          context,
+                        ).textTheme.headlineSmall?.copyWith(
                           color: AppTheme.textSecondaryColor,
                           letterSpacing: 1.5,
                           fontWeight: FontWeight.w500,
@@ -176,11 +187,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 class DumbbellPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4
-      ..strokeCap = StrokeCap.round;
+    final paint =
+        Paint()
+          ..color = Colors.white
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 4
+          ..strokeCap = StrokeCap.round;
 
     // Draw the bar
     canvas.drawLine(
@@ -190,25 +202,29 @@ class DumbbellPainter extends CustomPainter {
     );
 
     // Draw the weights
-    final leftWeight = Path()
-      ..addRRect(RRect.fromRectAndRadius(
-        Rect.fromCenter(
-          center: Offset(size.width * 0.2, size.height / 2),
-          width: 20,
-          height: 40,
-        ),
-        const Radius.circular(5),
-      ));
+    final leftWeight =
+        Path()..addRRect(
+          RRect.fromRectAndRadius(
+            Rect.fromCenter(
+              center: Offset(size.width * 0.2, size.height / 2),
+              width: 20,
+              height: 40,
+            ),
+            const Radius.circular(5),
+          ),
+        );
 
-    final rightWeight = Path()
-      ..addRRect(RRect.fromRectAndRadius(
-        Rect.fromCenter(
-          center: Offset(size.width * 0.8, size.height / 2),
-          width: 20,
-          height: 40,
-        ),
-        const Radius.circular(5),
-      ));
+    final rightWeight =
+        Path()..addRRect(
+          RRect.fromRectAndRadius(
+            Rect.fromCenter(
+              center: Offset(size.width * 0.8, size.height / 2),
+              width: 20,
+              height: 40,
+            ),
+            const Radius.circular(5),
+          ),
+        );
 
     canvas.drawPath(leftWeight, paint);
     canvas.drawPath(rightWeight, paint);
@@ -226,24 +242,25 @@ class FlamesPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.bottomCenter,
-        end: Alignment.topCenter,
-        colors: [
-          AppTheme.primaryColor.withOpacity(0.3 * progress),
-          const Color(0xFFFFA000).withOpacity(0.2 * progress),
-          Colors.transparent,
-        ],
-      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+    final paint =
+        Paint()
+          ..shader = LinearGradient(
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+            colors: [
+              AppTheme.primaryColor.withOpacity(0.3 * progress),
+              const Color(0xFFFFA000).withOpacity(0.2 * progress),
+              Colors.transparent,
+            ],
+          ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
 
     final path = Path();
-    
+
     // Create flame effect
     for (var i = 0; i < 5; i++) {
       final xOffset = size.width * (0.2 + (0.15 * i));
       final height = size.height * (0.6 + (0.1 * (i % 2)));
-      
+
       path.moveTo(xOffset, size.height);
       path.quadraticBezierTo(
         xOffset - 40,
@@ -266,4 +283,4 @@ class FlamesPainter extends CustomPainter {
   bool shouldRepaint(covariant FlamesPainter oldDelegate) {
     return oldDelegate.progress != progress;
   }
-} 
+}

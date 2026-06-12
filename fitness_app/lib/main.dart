@@ -1,3 +1,4 @@
+import 'package:fitness_app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Fitness App',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: AppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
       home: const MainNavigation(), // ✅ HIER GEÄNDERT
     );

@@ -1,3 +1,4 @@
+import 'package:fitness_app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class RelaxScreen extends StatelessWidget {
@@ -30,7 +31,7 @@ class RelaxScreen extends StatelessWidget {
             _sectionCard(
               title: 'Quick Relax Tips',
               icon: Icons.spa,
-              color: Colors.green,
+              color: AppTheme.primaryColor,
               child: const Text(
                 '• Sit comfortably\n'
                 '• Relax your shoulders\n'

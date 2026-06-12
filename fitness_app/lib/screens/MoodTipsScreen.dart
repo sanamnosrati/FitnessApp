@@ -1,3 +1,4 @@
+import 'package:fitness_app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class MoodTipsScreen extends StatelessWidget {
@@ -21,7 +22,7 @@ class MoodTipsScreen extends StatelessWidget {
     {
       'title': 'Go for a short walk',
       'icon': Icons.directions_walk,
-      'color': Colors.green,
+      'color': AppTheme.primaryColor,
       'text':
           'A 5 to 10 minute walk can help clear your mind, reduce stress, and improve your mood.',
     },

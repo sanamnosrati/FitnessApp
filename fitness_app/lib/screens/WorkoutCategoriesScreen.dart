@@ -151,93 +151,148 @@ class _WorkoutCategoryCard extends StatelessWidget {
     required this.onTap,
   });
 
+  Color getAccentColor() {
+    switch (title) {
+      case 'Upper Body':
+        return const Color(0xFF7C4DFF);
+
+      case 'Core':
+        return const Color(0xFF00B8FF);
+
+      case 'Lower Body':
+        return const Color(0xFFFF7043);
+
+      case 'Full Body Stretch':
+        return const Color(0xFF26A69A);
+
+      case 'Cardio':
+        return const Color(0xFFE53935);
+
+      default:
+        return const Color(0xFF7C4DFF);
+    }
+  }
+
+  String getWorkoutCount() {
+    switch (title) {
+      case 'Upper Body':
+        return '42 workouts';
+
+      case 'Core':
+        return '18 workouts';
+
+      case 'Lower Body':
+        return '36 workouts';
+
+      case 'Full Body Stretch':
+        return '15 workouts';
+
+      case 'Cardio':
+        return '20 workouts';
+
+      default:
+        return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final accent = getAccentColor();
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 75,
-        margin: const EdgeInsets.only(bottom: 12),
+        height: 120,
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(26),
+          gradient: const LinearGradient(
+            colors: [Color(0xFF1B1B1F), Color(0xFF121316)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          border: Border.all(color: accent.withOpacity(0.25)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.15),
-              blurRadius: 14,
-              offset: const Offset(0, 6),
+              color: Colors.black.withOpacity(0.28),
+              blurRadius: 18,
+              offset: const Offset(0, 10),
             ),
           ],
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(18),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              Image.asset(imagePath, fit: BoxFit.fitWidth),
 
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.black.withOpacity(0.72),
-                      Colors.black.withOpacity(0.25),
-                      Colors.transparent,
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
+        child: Row(
+          children: [
+            Container(
+              width: 62,
+              height: 62,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [accent, accent.withOpacity(0.65)],
                 ),
               ),
+              child: Icon(icon, color: Colors.white, size: 30),
+            ),
 
-              Padding(
-                padding: const EdgeInsets.all(14),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.white.withOpacity(0.2),
-                      child: Icon(icon, color: Colors.white, size: 22),
+            const SizedBox(width: 18),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
+                  ),
 
-                    const SizedBox(width: 16),
+                  const SizedBox(height: 6),
 
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            title,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: Colors.grey.shade400,
+                      fontSize: 13,
+                      height: 1.3,
+                    ),
+                  ),
 
-                          const SizedBox(height: 4),
+                  const SizedBox(height: 12),
 
-                          Text(
-                            subtitle,
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.9),
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: accent.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      getWorkoutCount(),
+                      style: TextStyle(
+                        color: accent,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
                       ),
                     ),
-
-                    const Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: Colors.grey.shade500,
+              size: 18,
+            ),
+          ],
         ),
       ),
     );

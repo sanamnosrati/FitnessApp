@@ -29,10 +29,7 @@ class RecipeDetailsScreen extends StatelessWidget {
     'https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38',
   ];
 
-  RecipeDetailsScreen({
-    super.key,
-    required this.recipe,
-  });
+  RecipeDetailsScreen({super.key, required this.recipe});
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +46,7 @@ class RecipeDetailsScreen extends StatelessWidget {
               background: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.network(
-                    recipe['imageUrl'],
-                    fit: BoxFit.cover,
-                  ),
+                  Image.network(recipe['imageUrl'], fit: BoxFit.cover),
                   Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -91,8 +85,14 @@ class RecipeDetailsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _buildInfoItem(Icons.timer, recipe['duration']),
-                      _buildInfoItem(Icons.local_fire_department, '${recipe['calories']} kcal'),
-                      _buildInfoItem(Icons.fitness_center, '${recipe['protein']} protein'),
+                      _buildInfoItem(
+                        Icons.local_fire_department,
+                        '${recipe['calories']} kcal',
+                      ),
+                      _buildInfoItem(
+                        Icons.fitness_center,
+                        '${recipe['protein']} protein',
+                      ),
                     ],
                   ),
                   const SizedBox(height: 24),
@@ -138,7 +138,9 @@ class RecipeDetailsScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  ...ingredients.map((ingredient) => _buildListItem(ingredient)),
+                  ...ingredients.map(
+                    (ingredient) => _buildListItem(ingredient),
+                  ),
                   const SizedBox(height: 24),
                   // Steps
                   const Text(
@@ -166,11 +168,7 @@ class RecipeDetailsScreen extends StatelessWidget {
   Widget _buildInfoItem(IconData icon, String text) {
     return Column(
       children: [
-        Icon(
-          icon,
-          color: AppTheme.primaryColor,
-          size: 24,
-        ),
+        Icon(icon, color: AppTheme.primaryColor, size: 24),
         const SizedBox(height: 4),
         Text(
           text,
@@ -246,4 +244,4 @@ class RecipeDetailsScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}

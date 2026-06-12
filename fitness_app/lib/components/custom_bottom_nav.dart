@@ -42,10 +42,7 @@ class CustomBottomNav extends StatelessWidget {
           fontSize: 12,
           letterSpacing: 0.5,
         ),
-        unselectedLabelStyle: const TextStyle(
-          fontSize: 12,
-          letterSpacing: 0.5,
-        ),
+        unselectedLabelStyle: const TextStyle(fontSize: 12, letterSpacing: 0.5),
         elevation: 0,
         items: [
           _buildNavItem(Icons.fitness_center, 'Workouts', 0),
@@ -58,15 +55,20 @@ class CustomBottomNav extends StatelessWidget {
     );
   }
 
-  BottomNavigationBarItem _buildNavItem(IconData icon, String label, int index) {
+  BottomNavigationBarItem _buildNavItem(
+    IconData icon,
+    String label,
+    int index,
+  ) {
     return BottomNavigationBarItem(
       icon: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: currentIndex == index
-              ? AppTheme.primaryColor.withOpacity(0.1)
-              : Colors.transparent,
+          color:
+              currentIndex == index
+                  ? AppTheme.primaryColor.withOpacity(0.1)
+                  : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(icon),
@@ -74,4 +76,4 @@ class CustomBottomNav extends StatelessWidget {
       label: label,
     );
   }
-} 
+}
