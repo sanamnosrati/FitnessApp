@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 import 'mental_health_service.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -10,399 +10,483 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  final MentalHealthService _mentalHealthService = MentalHealthService();
+  final MentalHealthService _service = MentalHealthService();
 
   bool isLoading = true;
-  List<Map<String, dynamic>> entries = [];
+  List<Map<String, dynamic>> last30Days = [];
 
   @override
   void initState() {
     super.initState();
-    loadHistory();
+    _loadHistory();
   }
 
-  Future<void> loadHistory() async {
-    try {
-      setState(() {
-        isLoading = true;
-      });
+  Future<void> _loadHistory() async {
+    setState(() => isLoading = true);
 
-      final loadedEntries = await _mentalHealthService.getAllMentalEntries();
+    final logs = await _service.getLast30Days();
 
-      setState(() {
-        entries = loadedEntries;
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error loading history: $e'),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
+    setState(() {
+      last30Days = logs;
+      isLoading = false;
+    });
   }
 
-  String _formatDate(dynamic createdAt) {
-    if (createdAt == null) return 'No date';
-
-    if (createdAt is Timestamp) {
-      final date = createdAt.toDate();
-      return '${date.day}.${date.month}.${date.year} • ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
-    }
-
-    return 'No date';
+  String _dateId(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 
-  String _moodText(int score) {
-    switch (score) {
-      case 1:
-        return 'Very bad';
-      case 2:
-        return 'Bad';
-      case 3:
-        return 'Okay';
-      case 4:
-        return 'Good';
-      case 5:
-        return 'Very good';
-      default:
-        return 'Okay';
-    }
+  String _scoreEmoji(double score) {
+    if (score <= 1.5) return '😢';
+    if (score <= 2.5) return '🙁';
+    if (score <= 3.5) return '😐';
+    if (score <= 4.5) return '🙂';
+    return '😄';
   }
 
-  String _moodEmoji(int score) {
-    switch (score) {
-      case 1:
-        return '😢';
-      case 2:
-        return '🙁';
-      case 3:
-        return '😐';
-      case 4:
-        return '🙂';
-      case 5:
-        return '😄';
-      default:
-        return '😐';
-    }
+  String _scoreLabel(double score) {
+    if (score == 0) return 'No data yet';
+    if (score <= 1.5) return 'Very Low';
+    if (score <= 2.5) return 'Low';
+    if (score <= 3.5) return 'Okay';
+    if (score <= 4.5) return 'Good';
+    return 'Great';
   }
 
-  List<int> _graphScores() {
-    final reversed = entries.reversed.toList();
-    return reversed.map((e) => (e['score'] as int?) ?? 3).toList();
-  }
+  List<Map<String, dynamic>> _logsForLastDays(int days) {
+    final today = DateTime.now();
+    final start = DateTime(
+      today.year,
+      today.month,
+      today.day,
+    ).subtract(Duration(days: days - 1));
 
-  List<String> _graphDays() {
-    final reversed = entries.reversed.toList();
+    return last30Days.where((log) {
+      final dateText = log['date']?.toString();
+      if (dateText == null) return false;
 
-    return reversed.map((e) {
-      final createdAt = e['createdAt'];
-      if (createdAt is Timestamp) {
-        final weekday = createdAt.toDate().weekday;
-        switch (weekday) {
-          case 1:
-            return 'Mo';
-          case 2:
-            return 'Tu';
-          case 3:
-            return 'We';
-          case 4:
-            return 'Th';
-          case 5:
-            return 'Fr';
-          case 6:
-            return 'Sa';
-          case 7:
-            return 'Su';
-          default:
-            return '-';
-        }
-      }
-      return '-';
+      final date = DateTime.tryParse(dateText);
+      if (date == null) return false;
+
+      final pureDate = DateTime(date.year, date.month, date.day);
+
+      return !pureDate.isBefore(start);
     }).toList();
   }
 
-  double _averageScore() {
-    if (entries.isEmpty) return 0;
-    final total = entries.fold<int>(
+  double _averageForLastDays(int days) {
+    final logs = _logsForLastDays(days).where((log) => log['score'] != null);
+
+    if (logs.isEmpty) return 0;
+
+    final total = logs.fold<int>(
       0,
-      (sum, e) => sum + ((e['score'] as int?) ?? 3),
+      (sum, log) => sum + ((log['score'] ?? 0) as int),
     );
-    return total / entries.length;
+
+    return total / logs.length;
+  }
+
+  int _loggedDaysForLastDays(int days) {
+    return _logsForLastDays(days).length;
+  }
+
+  List<int> _scoreBarsForLastDays(int days) {
+    final result = <int>[];
+    final now = DateTime.now();
+
+    for (int i = days - 1; i >= 0; i--) {
+      final date = now.subtract(Duration(days: i));
+      final id = _dateId(date);
+
+      final matches = last30Days.where((log) => log['date'] == id);
+
+      if (matches.isEmpty) {
+        result.add(0);
+      } else {
+        result.add(matches.first['score'] as int? ?? 0);
+      }
+    }
+
+    return result;
+  }
+
+  List<String> _barLabelsForLastDays(int days) {
+    final labels = <String>[];
+    final now = DateTime.now();
+
+    for (int i = days - 1; i >= 0; i--) {
+      final date = now.subtract(Duration(days: i));
+
+      if (days == 7) {
+        const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+        labels.add(weekdays[date.weekday - 1]);
+      } else {
+        labels.add(date.day.toString());
+      }
+    }
+
+    return labels;
+  }
+
+  String _mostCommonMood(int days) {
+    final logs = _logsForLastDays(days);
+    final counts = <String, int>{};
+
+    for (final log in logs) {
+      final moods = List<String>.from(log['moods'] ?? []);
+      for (final mood in moods) {
+        counts[mood] = (counts[mood] ?? 0) + 1;
+      }
+    }
+
+    if (counts.isEmpty) return 'No mood saved';
+
+    final sorted =
+        counts.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+
+    return sorted.first.key;
+  }
+
+  int _noteDays(int days) {
+    final logs = _logsForLastDays(days);
+
+    return logs.where((log) {
+      final note = (log['reflection'] ?? '').toString().trim();
+      return note.isNotEmpty;
+    }).length;
   }
 
   @override
   Widget build(BuildContext context) {
-    final avg = _averageScore();
-    final graphScores = _graphScores();
-    final graphDays = _graphDays();
+    const bg = Color(0xFFF8F6F2);
+    const dark = Color(0xFF171717);
+    const accent = Color(0xFFEFA6B4);
+    const soft = Color(0xFFFFEEF2);
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: bg,
       appBar: AppBar(
-        title: const Text('Mental History'),
-        backgroundColor: Colors.teal,
+        backgroundColor: bg,
+        elevation: 0,
+        foregroundColor: dark,
+        title: const Text(
+          'Mental Overview',
+          style: TextStyle(fontWeight: FontWeight.w900),
+        ),
       ),
-      body: RefreshIndicator(
-        onRefresh: loadHistory,
-        child:
-            isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : entries.isEmpty
-                ? ListView(
+      body:
+          isLoading
+              ? const Center(child: CircularProgressIndicator(color: dark))
+              : RefreshIndicator(
+                onRefresh: _loadHistory,
+                child: ListView(
                   physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.fromLTRB(20, 14, 20, 28),
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Column(
-                        children: [
-                          Icon(Icons.history, size: 46, color: Colors.grey),
-                          SizedBox(height: 12),
-                          Text(
-                            'No history yet',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Save your first mental entry to see your mood history and notes here.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.black54),
-                          ),
-                        ],
-                      ),
+                    _headerCard(dark, soft),
+                    const SizedBox(height: 22),
+                    _analysisCard(
+                      title: 'This Week',
+                      subtitle: 'Last 7 days',
+                      days: 7,
+                      dark: dark,
+                      accent: accent,
+                      soft: soft,
                     ),
-                  ],
-                )
-                : ListView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(16),
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(18),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Colors.teal, Color(0xFF64C9C0)],
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Your Mental History',
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Recent entries: ${entries.length}',
-                            style: const TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Average mood score: ${avg.toStringAsFixed(1)} / 5',
-                            style: const TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
+                    const SizedBox(height: 22),
+                    _analysisCard(
+                      title: 'Monthly Analysis',
+                      subtitle: 'Last 30 days',
+                      days: 30,
+                      dark: dark,
+                      accent: accent,
+                      soft: soft,
                     ),
-                    const SizedBox(height: 20),
-
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(18),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.04),
-                            blurRadius: 8,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Mood Overview',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            'Recent mood scores',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black54,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          SizedBox(
-                            height: 170,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: List.generate(graphScores.length, (
-                                index,
-                              ) {
-                                final value = graphScores[index];
-                                final day =
-                                    index < graphDays.length
-                                        ? graphDays[index]
-                                        : '-';
-
-                                return Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      value.toString(),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Container(
-                                      width: 24,
-                                      height: value * 24,
-                                      decoration: BoxDecoration(
-                                        color: Colors.teal,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      day,
-                                      style: const TextStyle(fontSize: 12),
-                                    ),
-                                  ],
-                                );
-                              }),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    const Text(
-                      'Recent Notes',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-
-                    ...entries.map((entry) {
-                      final score = entry['score'] as int? ?? 3;
-                      final moods = List<String>.from(entry['moods'] ?? []);
-                      final reflection =
-                          (entry['reflection'] ?? '').toString().trim();
-                      final createdAt = entry['createdAt'];
-
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 14),
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(18),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.04),
-                              blurRadius: 8,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  _moodEmoji(score),
-                                  style: const TextStyle(fontSize: 22),
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Text(
-                                    'Score $score • ${_moodText(score)}',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              _formatDate(createdAt),
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            if (moods.isNotEmpty)
-                              Wrap(
-                                spacing: 8,
-                                runSpacing: 8,
-                                children:
-                                    moods
-                                        .map(
-                                          (mood) => Chip(
-                                            label: Text(mood),
-                                            backgroundColor: Colors.teal
-                                                .withOpacity(0.10),
-                                          ),
-                                        )
-                                        .toList(),
-                              ),
-                            if (moods.isNotEmpty) const SizedBox(height: 12),
-                            Text(
-                              reflection.isEmpty
-                                  ? 'No note written.'
-                                  : reflection,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.grey.shade800,
-                                height: 1.4,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
                   ],
                 ),
+              ),
+    );
+  }
+
+  Widget _headerCard(Color dark, Color soft) {
+    final weekAvg = _averageForLastDays(7);
+    final monthAvg = _averageForLastDays(30);
+
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: soft,
+        borderRadius: BorderRadius.circular(34),
+      ),
+      child: Row(
+        children: [
+          Text(_scoreEmoji(monthAvg), style: const TextStyle(fontSize: 52)),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  monthAvg == 0 ? 'No overview yet' : 'Your mood overview',
+                  style: TextStyle(
+                    color: dark,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  monthAvg == 0
+                      ? 'Save mood scores in Mind Check-In to see weekly and monthly analysis.'
+                      : 'Week avg: ${weekAvg.toStringAsFixed(1)} • Month avg: ${monthAvg.toStringAsFixed(1)}',
+                  style: const TextStyle(
+                    color: Color(0xFF7A706C),
+                    fontSize: 14,
+                    height: 1.35,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _analysisCard({
+    required String title,
+    required String subtitle,
+    required int days,
+    required Color dark,
+    required Color accent,
+    required Color soft,
+  }) {
+    final average = _averageForLastDays(days);
+    final loggedDays = _loggedDaysForLastDays(days);
+    final commonMood = _mostCommonMood(days);
+    final noteDays = _noteDays(days);
+    final bars = _scoreBarsForLastDays(days);
+    final labels = _barLabelsForLastDays(days);
+
+    return Container(
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(32),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(_scoreEmoji(average), style: const TextStyle(fontSize: 38)),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        color: dark,
+                        fontSize: 23,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      subtitle,
+                      style: const TextStyle(
+                        color: Color(0xFF8A817C),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Text(
+                average == 0 ? '-' : average.toStringAsFixed(1),
+                style: TextStyle(
+                  color: accent,
+                  fontSize: 28,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 18),
+
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: soft,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Text(
+              average == 0
+                  ? 'No mood scores saved in this period.'
+                  : '${_scoreLabel(average)} mood trend based on $loggedDays saved day${loggedDays == 1 ? '' : 's'}.',
+              style: TextStyle(
+                color: dark,
+                height: 1.35,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 20),
+
+          SizedBox(
+            height: 150,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: List.generate(bars.length, (index) {
+                final score = bars[index];
+                final label = labels[index];
+
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 180),
+                              width: days == 7 ? 22 : 10,
+                              height: score == 0 ? 8 : score * 22,
+                              decoration: BoxDecoration(
+                                color:
+                                    score == 0
+                                        ? const Color(0xFFE9E2DC)
+                                        : accent,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          label,
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Color(0xFF8A817C),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
+
+          const SizedBox(height: 18),
+
+          Row(
+            children: [
+              Expanded(
+                child: _smallInsight(
+                  title: 'Saved Days',
+                  value: '$loggedDays',
+                  icon: Icons.calendar_month_rounded,
+                  soft: soft,
+                  accent: accent,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _smallInsight(
+                  title: 'Top Mood',
+                  value: commonMood,
+                  icon: Icons.favorite_rounded,
+                  soft: soft,
+                  accent: accent,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 10),
+
+          Row(
+            children: [
+              Expanded(
+                child: _smallInsight(
+                  title: 'Notes',
+                  value: '$noteDays days',
+                  icon: Icons.edit_note_rounded,
+                  soft: soft,
+                  accent: accent,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _smallInsight(
+                  title: 'Trend',
+                  value: _scoreLabel(average),
+                  icon: Icons.trending_up_rounded,
+                  soft: soft,
+                  accent: accent,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _smallInsight({
+    required String title,
+    required String value,
+    required IconData icon,
+    required Color soft,
+    required Color accent,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: soft,
+        borderRadius: BorderRadius.circular(22),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: accent, size: 24),
+          const SizedBox(width: 9),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Color(0xFF171717),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Color(0xFF8A817C),
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

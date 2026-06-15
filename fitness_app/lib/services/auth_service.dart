@@ -1,130 +1,83 @@
-import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  AuthService._();
 
-  User? get currentUser => _auth.currentUser;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<User?> signInWithEmail(String email, String password) async {
-    try {
-      log("Attempting email login: $email");
-
-      UserCredential result = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      log("Login successful");
-      return result.user;
-    } on FirebaseAuthException catch (e) {
-      log("Login failed: ${e.code}, ${e.message}");
-      return null;
-    } catch (e) {
-      log("General error during login: $e");
-      return null;
-    }
+  static Stream<User?> authStateChanges() {
+    return _auth.authStateChanges();
   }
 
-  Future<User?> signUpWithEmail(String email, String password) async {
-    try {
-      log("Attempting email registration: $email");
+  static User? get currentUser => _auth.currentUser;
 
-      UserCredential result = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      log("Registration successful");
-      return result.user;
-    } on FirebaseAuthException catch (e) {
-      log("Registration failed: ${e.code}, ${e.message}");
-      return null;
-    } catch (e) {
-      log("General error during registration: $e");
-      return null;
-    }
+  static Future<UserCredential> signIn({
+    required String email,
+    required String password,
+  }) async {
+    return await _auth.signInWithEmailAndPassword(
+      email: email.trim(),
+      password: password,
+    );
   }
 
-  Future<User?> signInWithGoogle() async {
-    try {
-      log("Attempting Google login");
+  static Future<UserCredential> signUp({
+    required String email,
+    required String password,
+  }) async {
+    final credential = await _auth.createUserWithEmailAndPassword(
+      email: email.trim(),
+      password: password,
+    );
 
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      if (googleUser == null) {
-        log("Google login canceled");
-        return null;
-      }
-
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      UserCredential result = await _auth.signInWithCredential(credential);
-
-      log("Google login successful");
-      return result.user;
-    } on FirebaseAuthException catch (e) {
-      log("Google login failed: ${e.code}, ${e.message}");
-      return null;
-    } catch (e) {
-      log("General error during Google login: $e");
-      return null;
-    }
+    await credential.user?.sendEmailVerification();
+    return credential;
   }
 
-  Future<User?> signInWithApple() async {
-    try {
-      log("Attempting Apple login");
-
-      final appleCredential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-      );
-
-      final oauthCredential = OAuthProvider(
-        "apple.com",
-      ).credential(idToken: appleCredential.identityToken);
-
-      UserCredential result = await _auth.signInWithCredential(oauthCredential);
-
-      log("Apple login successful");
-      return result.user;
-    } on FirebaseAuthException catch (e) {
-      log("Apple login failed: ${e.code}, ${e.message}");
-      return null;
-    } catch (e) {
-      log("General error during Apple login: $e");
-      return null;
-    }
+  static Future<void> resendVerificationEmail() async {
+    await _auth.currentUser?.sendEmailVerification();
   }
 
-  Future<void> resetPassword(String email) async {
-    try {
-      await _auth.sendPasswordResetEmail(email: email);
-      log("Password reset email sent to $email");
-    } on FirebaseAuthException catch (e) {
-      log("Password reset failed: ${e.code}, ${e.message}");
-    } catch (e) {
-      log("General error during password reset: $e");
-    }
+  static Future<void> reloadUser() async {
+    await _auth.currentUser?.reload();
   }
 
-  Future<void> signOut() async {
-    try {
-      await GoogleSignIn().signOut();
-    } catch (_) {}
+  static Future<void> resetPassword(String email) async {
+    await _auth.sendPasswordResetEmail(email: email.trim());
+  }
 
+  static Future<void> signOut() async {
     await _auth.signOut();
-    log("Logout successful");
+  }
+
+  static Future<void> reauthenticateWithPassword(String password) async {
+    final user = _auth.currentUser;
+    final email = user?.email;
+
+    if (user == null || email == null) {
+      throw Exception('No user found');
+    }
+
+    final credential = EmailAuthProvider.credential(
+      email: email,
+      password: password,
+    );
+
+    await user.reauthenticateWithCredential(credential);
+  }
+
+  static Future<void> deleteAccount() async {
+    final user = _auth.currentUser;
+
+    if (user == null) {
+      throw Exception('No user found');
+    }
+
+    final uid = user.uid;
+
+    await _db.collection('users').doc(uid).delete();
+    await user.delete();
   }
 }
