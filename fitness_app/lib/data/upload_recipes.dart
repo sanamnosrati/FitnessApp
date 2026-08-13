@@ -22,8 +22,18 @@ class RecipeSeedUploader {
       ...RecipeSeedStarter.recipes,
     ];
 
+    print('📦 Found ${allRecipes.length} recipes');
+
     for (final recipe in allRecipes) {
-      await firestore.collection('recipes').doc(recipe['id']).set(recipe);
+      final id = recipe['id'];
+
+      print('⬆️ Uploading: $id');
+
+      await firestore.collection('recipes').doc(id.toString()).set(recipe);
+
+      print('✅ Uploaded: $id');
     }
+
+    print('🎉 ALL ${allRecipes.length} RECIPES UPLOADED');
   }
 }

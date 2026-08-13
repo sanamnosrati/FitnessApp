@@ -1046,5 +1046,435 @@ class RecipeSeedDinner {
       'goal':
           'A bold and satisfying Mexican-inspired dinner with balanced macros.',
     },
+    {
+      'id': 'creamy_marry_me_chicken',
+      'title': 'Creamy Marry Me Chicken',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/creamy_marry_me_chicken.jpg',
+      'calories': 590,
+      'protein': 49,
+      'carbs': 34,
+      'fats': 28,
+      'fiber': 5,
+      'time': '30 min',
+      'difficulty': 'Medium',
+      'servings': 1,
+      'tags': ['Creamy', 'Comfort Food', 'Chicken', 'One Pan'],
+      'ingredients': [
+        '170g chicken breast',
+        '150g baby potatoes',
+        '30g sun-dried tomatoes',
+        '70ml light cooking cream',
+        '20g parmesan cheese',
+        '50g spinach',
+        '1 garlic clove',
+        '1 tsp olive oil',
+        'Italian herbs',
+        'Salt & pepper',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook potatoes',
+          'description':
+              'Roast or air fry the baby potatoes until golden and tender.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook chicken',
+          'description':
+              'Season the chicken and cook in olive oil until golden on both sides and fully cooked.',
+        },
+        {
+          'step': 3,
+          'title': 'Make sauce',
+          'description':
+              'Add garlic, sun-dried tomatoes, cream and parmesan to the pan and simmer until creamy.',
+        },
+        {
+          'step': 4,
+          'title': 'Add spinach',
+          'description': 'Stir in the spinach and cook briefly until wilted.',
+        },
+        {
+          'step': 5,
+          'title': 'Serve',
+          'description':
+              'Return the chicken to the creamy sauce and serve with the crispy potatoes.',
+        },
+      ],
+      'goal':
+          'A creamy and satisfying chicken dinner with plenty of protein and rich tomato-parmesan flavor.',
+    },
+
+    {
+      'id': 'crispy_salmon_sushi_bake',
+      'title': 'Crispy Salmon Sushi Bake',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/crispy_salmon_sushi_bake.jpg',
+      'calories': 625,
+      'protein': 39,
+      'carbs': 59,
+      'fats': 26,
+      'fiber': 5,
+      'time': '30 min',
+      'difficulty': 'Medium',
+      'servings': 1,
+      'tags': ['Salmon', 'Sushi', 'Trendy', 'Comfort Food'],
+      'ingredients': [
+        '140g salmon fillet',
+        '130g cooked sushi rice',
+        '50g cucumber',
+        '40g avocado',
+        '30g light cream cheese',
+        '1 tbsp sriracha',
+        '1 tsp soy sauce',
+        '1 nori sheet',
+        '1 tsp sesame seeds',
+        'Spring onion',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Prepare salmon',
+          'description':
+              'Cook the salmon until flaky, then break it into small pieces.',
+        },
+        {
+          'step': 2,
+          'title': 'Make salmon mixture',
+          'description':
+              'Mix the salmon with cream cheese, sriracha and soy sauce.',
+        },
+        {
+          'step': 3,
+          'title': 'Layer',
+          'description':
+              'Press sushi rice into a small baking dish and spread the salmon mixture evenly over the top.',
+        },
+        {
+          'step': 4,
+          'title': 'Bake',
+          'description':
+              'Bake at 200°C for about 10 minutes, then broil briefly until lightly golden.',
+        },
+        {
+          'step': 5,
+          'title': 'Finish',
+          'description':
+              'Top with cucumber, avocado, spring onion and sesame seeds and serve with pieces of nori.',
+        },
+      ],
+      'goal':
+          'A warm and crispy take on sushi with salmon, rice, avocado and a creamy spicy topping.',
+    },
+
+    {
+      'id': 'chicken_parmesan',
+      'title': 'Chicken Parmesan',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/chicken_parmesan.jpg',
+      'calories': 640,
+      'protein': 55,
+      'carbs': 48,
+      'fats': 24,
+      'fiber': 7,
+      'time': '35 min',
+      'difficulty': 'Medium',
+      'servings': 1,
+      'tags': ['Italian Inspired', 'Crispy', 'Cheesy', 'Comfort Food'],
+      'ingredients': [
+        '170g chicken breast',
+        '25g panko breadcrumbs',
+        '1 egg',
+        '120g tomato sauce',
+        '50g mozzarella',
+        '15g parmesan cheese',
+        '70g spaghetti',
+        'Fresh basil',
+        'Italian herbs',
+        'Salt & pepper',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Bread chicken',
+          'description':
+              'Dip the chicken into beaten egg and coat evenly with seasoned panko breadcrumbs.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook chicken',
+          'description':
+              'Bake or air fry until crispy, golden and fully cooked.',
+        },
+        {
+          'step': 3,
+          'title': 'Add toppings',
+          'description':
+              'Top the chicken with tomato sauce, mozzarella and parmesan.',
+        },
+        {
+          'step': 4,
+          'title': 'Melt cheese',
+          'description':
+              'Return to the oven until the mozzarella is melted and bubbling.',
+        },
+        {
+          'step': 5,
+          'title': 'Serve',
+          'description':
+              'Serve with cooked spaghetti, extra tomato sauce and fresh basil.',
+        },
+      ],
+      'goal':
+          'A crispy and cheesy classic with a generous serving of protein and comforting pasta.',
+    },
+
+    {
+      'id': 'sticky_honey_garlic_beef',
+      'title': 'Sticky Honey Garlic Beef',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/sticky_honey_garlic_beef.jpg',
+      'calories': 610,
+      'protein': 44,
+      'carbs': 62,
+      'fats': 20,
+      'fiber': 6,
+      'time': '22 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Sweet & Savory', 'Beef', 'Quick', 'Sticky'],
+      'ingredients': [
+        '160g lean beef strips',
+        '130g cooked jasmine rice',
+        '80g broccoli',
+        '1 tbsp honey',
+        '1 tbsp soy sauce',
+        '2 garlic cloves',
+        '1 tsp sesame oil',
+        '1 tsp cornstarch',
+        'Spring onion',
+        'Sesame seeds',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Prepare sauce',
+          'description':
+              'Mix honey, soy sauce, garlic and a splash of water in a small bowl.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook beef',
+          'description':
+              'Coat the beef lightly with cornstarch and sear in sesame oil until browned.',
+        },
+        {
+          'step': 3,
+          'title': 'Add sauce',
+          'description':
+              'Pour the honey garlic sauce into the pan and cook until glossy and sticky.',
+        },
+        {
+          'step': 4,
+          'title': 'Prepare broccoli',
+          'description': 'Steam or stir-fry the broccoli until tender-crisp.',
+        },
+        {
+          'step': 5,
+          'title': 'Serve',
+          'description':
+              'Serve the sticky beef with jasmine rice and broccoli and finish with spring onion and sesame seeds.',
+        },
+      ],
+      'goal':
+          'A quick sweet-and-savory beef dinner with a sticky garlic glaze and satisfying rice.',
+    },
+
+    {
+      'id': 'baked_feta_chicken_pasta',
+      'title': 'Baked Feta Chicken Pasta',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/baked_feta_chicken_pasta.jpg',
+      'calories': 650,
+      'protein': 50,
+      'carbs': 61,
+      'fats': 23,
+      'fiber': 8,
+      'time': '35 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Pasta', 'Creamy', 'Baked', 'Comfort Food'],
+      'ingredients': [
+        '150g chicken breast',
+        '80g pasta',
+        '60g feta cheese',
+        '150g cherry tomatoes',
+        '50g spinach',
+        '1 garlic clove',
+        '1 tsp olive oil',
+        'Chili flakes',
+        'Italian herbs',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Prepare baking dish',
+          'description':
+              'Place feta in the center of a baking dish and surround it with cherry tomatoes, garlic and olive oil.',
+        },
+        {
+          'step': 2,
+          'title': 'Bake',
+          'description':
+              'Bake at 200°C until the tomatoes burst and the feta becomes soft and golden.',
+        },
+        {
+          'step': 3,
+          'title': 'Cook chicken',
+          'description':
+              'Season and cook the chicken breast, then cut it into bite-sized pieces.',
+        },
+        {
+          'step': 4,
+          'title': 'Make sauce',
+          'description':
+              'Mash the baked feta and tomatoes together and stir in fresh spinach.',
+        },
+        {
+          'step': 5,
+          'title': 'Combine',
+          'description':
+              'Add cooked pasta and chicken to the creamy feta sauce and mix well.',
+        },
+      ],
+      'goal':
+          'A creamy baked pasta with feta, roasted tomatoes and chicken for a filling dinner.',
+    },
+
+    {
+      'id': 'crispy_chicken_bao_buns',
+      'title': 'Crispy Chicken Bao Buns',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/crispy_chicken_bao_buns.jpg',
+      'calories': 620,
+      'protein': 42,
+      'carbs': 68,
+      'fats': 20,
+      'fiber': 6,
+      'time': '30 min',
+      'difficulty': 'Medium',
+      'servings': 1,
+      'tags': ['Crispy', 'Street Food', 'Chicken', 'Sweet & Spicy'],
+      'ingredients': [
+        '3 bao buns',
+        '150g chicken breast',
+        '25g panko breadcrumbs',
+        '1 egg',
+        '1/2 cucumber',
+        '1 small carrot',
+        '1 tbsp sriracha',
+        '1 tbsp greek yogurt',
+        '1 tsp honey',
+        'Spring onion',
+        'Sesame seeds',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Prepare chicken',
+          'description':
+              'Dip chicken pieces into beaten egg and coat with panko breadcrumbs.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook chicken',
+          'description':
+              'Air fry or bake until the chicken is crispy and fully cooked.',
+        },
+        {
+          'step': 3,
+          'title': 'Make spicy sauce',
+          'description': 'Mix sriracha, greek yogurt and honey until smooth.',
+        },
+        {
+          'step': 4,
+          'title': 'Steam bao',
+          'description':
+              'Steam the bao buns according to package instructions until soft and fluffy.',
+        },
+        {
+          'step': 5,
+          'title': 'Assemble',
+          'description':
+              'Fill each bao with crispy chicken, cucumber, carrot and spicy sauce and finish with spring onion and sesame seeds.',
+        },
+      ],
+      'goal':
+          'A fun street-food style dinner with fluffy bao, crispy chicken and a creamy sweet-spicy sauce.',
+    },
+
+    {
+      'id': 'creamy_pesto_salmon_pasta',
+      'title': 'Creamy Pesto Salmon Pasta',
+      'category': 'Dinner',
+      'imageUrl': 'assets/images/recipes/dinner/creamy_pesto_salmon_pasta.jpg',
+      'calories': 685,
+      'protein': 42,
+      'carbs': 59,
+      'fats': 31,
+      'fiber': 7,
+      'time': '25 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Salmon', 'Pasta', 'Creamy', 'Comfort Food'],
+      'ingredients': [
+        '140g salmon fillet',
+        '80g pasta',
+        '1 tbsp pesto',
+        '60ml light cooking cream',
+        '50g spinach',
+        '5 cherry tomatoes',
+        '10g parmesan cheese',
+        '1 garlic clove',
+        'Lemon juice',
+        'Black pepper',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook pasta',
+          'description':
+              'Cook the pasta until al dente and reserve a little pasta water.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook salmon',
+          'description':
+              'Season the salmon and cook until golden outside and tender inside, then break into large flakes.',
+        },
+        {
+          'step': 3,
+          'title': 'Make sauce',
+          'description':
+              'Cook garlic briefly, then add pesto, light cream, spinach and cherry tomatoes.',
+        },
+        {
+          'step': 4,
+          'title': 'Combine',
+          'description':
+              'Add pasta and a splash of pasta water and toss until creamy.',
+        },
+        {
+          'step': 5,
+          'title': 'Finish',
+          'description':
+              'Gently fold in the salmon and finish with parmesan, black pepper and fresh lemon juice.',
+        },
+      ],
+      'goal':
+          'A rich and satisfying salmon pasta with creamy pesto sauce, spinach and fresh lemon.',
+    },
   ];
 }

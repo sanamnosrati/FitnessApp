@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../services/daily_log_service.dart';
+import 'food_search_screen.dart';
+import 'workout_search_screen.dart';
 
 class DailyDashboardScreen extends StatefulWidget {
   const DailyDashboardScreen({super.key});
@@ -14,6 +16,7 @@ class DailyDashboardScreen extends StatefulWidget {
 
 class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
   int selectedDayIndex = 0;
+
   bool isLoading = true;
   bool isSaving = false;
 
@@ -31,9 +34,28 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
   List<Map<String, dynamic>> workouts = [];
   List<Map<String, dynamic>> meals = [];
 
-  DateTime get selectedDate {
-    return DateTime.now().subtract(Duration(days: selectedDayIndex));
+  DateTime get selectedDate =>
+      DateTime.now().subtract(Duration(days: selectedDayIndex));
+
+  bool get isToday => selectedDayIndex == 0;
+
+  int get burnedCalories {
+    return workouts.fold<int>(0, (sum, workout) {
+      final value = workout['calories'];
+
+      if (value is int) {
+        return sum + value;
+      }
+
+      if (value is num) {
+        return sum + value.round();
+      }
+
+      return sum;
+    });
   }
+
+  int get netCalories => caloriesEaten - burnedCalories;
 
   @override
   void initState() {
@@ -42,7 +64,9 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
   }
 
   Future<void> _loadDailyData() async {
-    setState(() => isLoading = true);
+    setState(() {
+      isLoading = true;
+    });
 
     try {
       final data = await DailyLogService.loadDailyLog(selectedDate);
@@ -64,10 +88,13 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
 
         isLoading = false;
       });
-    } catch (e) {
-      setState(() => isLoading = false);
+    } catch (_) {
+      setState(() {
+        isLoading = false;
+      });
 
       if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Could not load daily data.')),
       );
@@ -77,7 +104,9 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
   List<Map<String, dynamic>> _loadMeals(dynamic rawMeals) {
     final fallback = DailyLogService.defaultMeals();
 
-    if (rawMeals is! List) return fallback;
+    if (rawMeals is! List) {
+      return fallback;
+    }
 
     return rawMeals.map<Map<String, dynamic>>((meal) {
       final map = Map<String, dynamic>.from(meal as Map);
@@ -93,7 +122,9 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
   }
 
   List<Map<String, dynamic>> _loadWorkouts(dynamic rawWorkouts) {
-    if (rawWorkouts is! List) return [];
+    if (rawWorkouts is! List) {
+      return [];
+    }
 
     return rawWorkouts.map<Map<String, dynamic>>((workout) {
       final map = Map<String, dynamic>.from(workout as Map);
@@ -111,25 +142,36 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
     switch (title) {
       case 'Breakfast':
         return Icons.free_breakfast_rounded;
+
       case 'Lunch':
         return Icons.lunch_dining_rounded;
+
       case 'Dinner':
         return Icons.dinner_dining_rounded;
+
       case 'Snacks':
         return Icons.cookie_rounded;
+
       case 'Drinks':
         return Icons.local_drink_rounded;
+
       case 'Dessert':
         return Icons.icecream_rounded;
+
       case 'Starter':
         return Icons.tapas_rounded;
+
       default:
         return Icons.restaurant_rounded;
     }
   }
 
   Future<void> _saveDailyData() async {
-    setState(() => isSaving = true);
+    if (!isToday) return;
+
+    setState(() {
+      isSaving = true;
+    });
 
     try {
       await DailyLogService.saveFullDailyLog(
@@ -146,68 +188,92 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
         workouts: workouts,
       );
     } finally {
-      if (mounted) setState(() => isSaving = false);
+      if (mounted) {
+        setState(() {
+          isSaving = false;
+        });
+      }
     }
   }
 
-  int get burnedCalories {
-    return workouts.fold<int>(
-      0,
-      (sum, workout) => sum + ((workout['calories'] ?? 0) as int),
-    );
+  String _dateText() {
+    if (selectedDayIndex == 0) {
+      return 'Today';
+    }
+
+    if (selectedDayIndex == 1) {
+      return 'Yesterday';
+    }
+
+    final d = selectedDate;
+
+    return '${d.day.toString().padLeft(2, '0')}.'
+        '${d.month.toString().padLeft(2, '0')}.'
+        '${d.year}';
+  }
+
+  String _subtitleText() {
+    return isToday ? 'Add and edit your day' : 'Read-only saved overview';
   }
 
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
 
-    final double waterProgress =
-        waterGoalMl == 0 ? 0 : waterDrunkMl / waterGoalMl;
+    final double waterProgress = waterGoalMl == 0
+        ? 0
+        : waterDrunkMl / waterGoalMl;
 
-    final double calorieProgress =
-        calorieGoal == 0 ? 0 : caloriesEaten / calorieGoal;
-
-    final int netCalories = caloriesEaten - burnedCalories;
+    final double calorieProgress = calorieGoal == 0
+        ? 0
+        : caloriesEaten / calorieGoal;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7F4FF),
       body: SafeArea(
-        child:
-            isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(18, 16, 18, 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _profileHeader(user),
-                      const SizedBox(height: 20),
-                      _dateSwitcher(),
-                      const SizedBox(height: 22),
-                      Center(
-                        child: _nutritionCircle(
-                          waterProgress: waterProgress,
-                          calorieProgress: calorieProgress,
-                        ),
-                      ),
-                      const SizedBox(height: 14),
-                      _burnedCaloriesFocus(netCalories),
-                      const SizedBox(height: 18),
-                      _macroCompactPanel(),
-                      const SizedBox(height: 22),
-                      _waterEditor(),
-                      const SizedBox(height: 24),
-                      _mealsSection(),
-                      const SizedBox(height: 24),
-                      _workoutSection(),
-                      if (isSaving)
-                        const Padding(
-                          padding: EdgeInsets.only(top: 18),
-                          child: Center(child: CircularProgressIndicator()),
-                        ),
-                    ],
-                  ),
-                ),
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : ListView(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.fromLTRB(18, 16, 18, 28),
+                children: [
+                  _profileHeader(user),
+
+                  const SizedBox(height: 18),
+
+                  _dateSwitcher(),
+
+                  const SizedBox(height: 22),
+
+                  _overviewCard(waterProgress, calorieProgress),
+
+                  const SizedBox(height: 18),
+
+                  _calorieSummary(),
+
+                  const SizedBox(height: 18),
+
+                  _macroPanel(),
+
+                  const SizedBox(height: 22),
+
+                  _waterCard(),
+
+                  const SizedBox(height: 24),
+
+                  _mealsSection(),
+
+                  const SizedBox(height: 24),
+
+                  _workoutSection(),
+
+                  if (isSaving)
+                    const Padding(
+                      padding: EdgeInsets.only(top: 18),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                ],
+              ),
       ),
     );
   }
@@ -218,18 +284,20 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
         CircleAvatar(
           radius: 30,
           backgroundColor: const Color(0xFFE5DBFF),
-          backgroundImage:
-              user?.photoURL != null ? NetworkImage(user!.photoURL!) : null,
-          child:
-              user?.photoURL == null
-                  ? const Icon(
-                    Icons.person_rounded,
-                    size: 34,
-                    color: Color(0xFF6C4DCC),
-                  )
-                  : null,
+          backgroundImage: user?.photoURL != null
+              ? NetworkImage(user!.photoURL!)
+              : null,
+          child: user?.photoURL == null
+              ? const Icon(
+                  Icons.person_rounded,
+                  size: 34,
+                  color: Color(0xFF6C4DCC),
+                )
+              : null,
         ),
+
         const SizedBox(width: 14),
+
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -238,73 +306,90 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
                 'Welcome back,',
                 style: TextStyle(fontSize: 14, color: Color(0xFF7A728A)),
               ),
+
               Text(
                 user?.displayName ?? 'User',
                 style: const TextStyle(
                   fontSize: 23,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w900,
                   color: Color(0xFF241C3B),
                 ),
               ),
             ],
           ),
         ),
-        IconButton(
-          onPressed: _showEditDailySheet,
-          style: IconButton.styleFrom(
-            backgroundColor: Colors.white,
-            foregroundColor: const Color(0xFF6C4DCC),
+
+        if (isToday)
+          IconButton(
+            onPressed: _showEditDailySheet,
+            style: IconButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: const Color(0xFF6C4DCC),
+            ),
+            icon: const Icon(Icons.edit_rounded),
           ),
-          icon: const Icon(Icons.edit_rounded),
-        ),
       ],
     );
   }
 
   Widget _dateSwitcher() {
-    final DateTime date = selectedDate;
-
-    final String text =
-        selectedDayIndex == 0
-            ? 'Today'
-            : '${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}';
-
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(24),
       ),
       child: Row(
         children: [
           IconButton(
-            onPressed: () async {
-              if (selectedDayIndex < 29) {
-                setState(() => selectedDayIndex++);
-                await _loadDailyData();
-              }
-            },
+            onPressed: selectedDayIndex >= 29
+                ? null
+                : () async {
+                    setState(() {
+                      selectedDayIndex++;
+                    });
+
+                    await _loadDailyData();
+                  },
             icon: const Icon(Icons.arrow_back_ios_new_rounded),
           ),
+
           Expanded(
-            child: Center(
-              child: Text(
-                text,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF241C3B),
+            child: Column(
+              children: [
+                Text(
+                  _dateText(),
+                  style: const TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.w900,
+                    color: Color(0xFF241C3B),
+                  ),
                 ),
-              ),
+
+                const SizedBox(height: 3),
+
+                Text(
+                  _subtitleText(),
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF7A728A),
+                  ),
+                ),
+              ],
             ),
           ),
+
           IconButton(
-            onPressed: () async {
-              if (selectedDayIndex > 0) {
-                setState(() => selectedDayIndex--);
-                await _loadDailyData();
-              }
-            },
+            onPressed: selectedDayIndex <= 0
+                ? null
+                : () async {
+                    setState(() {
+                      selectedDayIndex--;
+                    });
+
+                    await _loadDailyData();
+                  },
             icon: const Icon(Icons.arrow_forward_ios_rounded),
           ),
         ],
@@ -312,138 +397,89 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
     );
   }
 
-  Widget _nutritionCircle({
-    required double waterProgress,
-    required double calorieProgress,
-  }) {
-    final Color calorieColor = _calorieColor();
-
-    return SizedBox(
-      height: 285,
-      width: 285,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Container(
-            height: 270,
-            width: 270,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF6C4DCC).withOpacity(0.13),
-                  blurRadius: 28,
-                  offset: const Offset(0, 12),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 245,
-            width: 245,
-            child: CircularProgressIndicator(
-              value: calorieProgress.clamp(0, 1.3),
-              strokeWidth: 17,
-              backgroundColor: const Color(0xFFEDE8F8),
-              color: calorieColor,
-              strokeCap: StrokeCap.round,
-            ),
-          ),
-          SizedBox(
-            height: 195,
-            width: 195,
-            child: CircularProgressIndicator(
-              value: waterProgress.clamp(0, 1),
-              strokeWidth: 15,
-              backgroundColor: const Color(0xFFE7F4FF),
-              color: const Color(0xFF42A5F5),
-              strokeCap: StrokeCap.round,
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '$caloriesEaten',
-                style: TextStyle(
-                  fontSize: 38,
-                  fontWeight: FontWeight.w900,
-                  color: calorieColor,
-                ),
-              ),
-              const Text(
-                'kcal eaten',
-                style: TextStyle(fontSize: 13, color: Color(0xFF7A728A)),
-              ),
-              const SizedBox(height: 14),
-              Text(
-                '$waterDrunkMl ml',
-                style: const TextStyle(
-                  fontSize: 23,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFF42A5F5),
-                ),
-              ),
-              const Text(
-                'water',
-                style: TextStyle(fontSize: 13, color: Color(0xFF7A728A)),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _burnedCaloriesFocus(int netCalories) {
+  Widget _overviewCard(double waterProgress, double calorieProgress) {
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: const Color(0xFF1F1A2E),
-        borderRadius: BorderRadius.circular(26),
+        color: const Color(0xFF241C3B),
+        borderRadius: BorderRadius.circular(34),
       ),
-      child: Row(
+      child: Column(
         children: [
-          Container(
-            width: 58,
-            height: 58,
-            decoration: BoxDecoration(
-              color: const Color(0xFFFF7043).withOpacity(0.15),
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: const Icon(
-              Icons.local_fire_department_rounded,
-              color: Color(0xFFFF7043),
-              size: 34,
+          Text(
+            isToday ? 'Today’s Progress' : 'Saved Day Overview',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 23,
+              fontWeight: FontWeight.w900,
             ),
           ),
-          const SizedBox(width: 15),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+
+          const SizedBox(height: 18),
+
+          SizedBox(
+            height: 230,
+            width: 230,
+            child: Stack(
+              alignment: Alignment.center,
               children: [
-                const Text(
-                  'Burned through workout',
-                  style: TextStyle(color: Color(0xFFCFC8E6), fontSize: 13),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  '-$burnedCalories kcal',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 29,
-                    fontWeight: FontWeight.w900,
+                SizedBox(
+                  height: 220,
+                  width: 220,
+                  child: CircularProgressIndicator(
+                    value: calorieProgress.clamp(0, 1.3),
+                    strokeWidth: 17,
+                    backgroundColor: Colors.white.withOpacity(0.12),
+                    color: _calorieColor(),
+                    strokeCap: StrokeCap.round,
                   ),
                 ),
-                const SizedBox(height: 3),
-                Text(
-                  'Net calories: $netCalories kcal',
-                  style: const TextStyle(
-                    color: Color(0xFFFFCCBC),
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
+
+                SizedBox(
+                  height: 168,
+                  width: 168,
+                  child: CircularProgressIndicator(
+                    value: waterProgress.clamp(0, 1),
+                    strokeWidth: 14,
+                    backgroundColor: Colors.white.withOpacity(0.12),
+                    color: const Color(0xFF42A5F5),
+                    strokeCap: StrokeCap.round,
                   ),
+                ),
+
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '$caloriesEaten',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 38,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+
+                    const Text(
+                      'kcal eaten',
+                      style: TextStyle(color: Color(0xFFCFC8E6)),
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    Text(
+                      '$waterDrunkMl ml',
+                      style: const TextStyle(
+                        color: Color(0xFF42A5F5),
+                        fontSize: 22,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+
+                    const Text(
+                      'water',
+                      style: TextStyle(color: Color(0xFFCFC8E6)),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -453,15 +489,105 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
     );
   }
 
-  Widget _macroCompactPanel() {
+  Widget _calorieSummary() {
+    return Row(
+      children: [
+        Expanded(
+          child: _summaryCard(
+            title: 'Eaten',
+            value: '$caloriesEaten',
+            unit: 'kcal',
+            icon: Icons.restaurant_rounded,
+            color: const Color(0xFF4CAF50),
+          ),
+        ),
+
+        const SizedBox(width: 10),
+
+        Expanded(
+          child: _summaryCard(
+            title: 'Burned',
+            value: '-$burnedCalories',
+            unit: 'kcal',
+            icon: Icons.local_fire_department_rounded,
+            color: const Color(0xFFFF7043),
+          ),
+        ),
+
+        const SizedBox(width: 10),
+
+        Expanded(
+          child: _summaryCard(
+            title: 'Net',
+            value: '$netCalories',
+            unit: 'kcal',
+            icon: Icons.balance_rounded,
+            color: const Color(0xFF6C4DCC),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _summaryCard({
+    required String title,
+    required String value,
+    required String unit,
+    required IconData icon,
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(21),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: color),
+
+          const SizedBox(height: 7),
+
+          Text(
+            value,
+            style: const TextStyle(
+              color: Color(0xFF241C3B),
+              fontWeight: FontWeight.w900,
+              fontSize: 17,
+            ),
+          ),
+
+          Text(
+            unit,
+            style: const TextStyle(color: Color(0xFF7A728A), fontSize: 11),
+          ),
+
+          const SizedBox(height: 3),
+
+          Text(
+            title,
+            style: const TextStyle(color: Color(0xFF7A728A), fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _macroPanel() {
     return Row(
       children: [
         Expanded(child: _macroSmallCard('Protein', proteinIntake, 'g')),
-        const SizedBox(width: 10),
+
+        const SizedBox(width: 9),
+
         Expanded(child: _macroSmallCard('Carbs', carbsIntake, 'g')),
-        const SizedBox(width: 10),
+
+        const SizedBox(width: 9),
+
         Expanded(child: _macroSmallCard('Fiber', fiberIntake, 'g')),
-        const SizedBox(width: 10),
+
+        const SizedBox(width: 9),
+
         Expanded(child: _macroSmallCard('Fat', fatIntake, 'g')),
       ],
     );
@@ -469,7 +595,7 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
 
   Widget _macroSmallCard(String title, int value, String unit) {
     return GestureDetector(
-      onTap: _showEditDailySheet,
+      onTap: isToday ? _showEditDailySheet : null,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 8),
         decoration: BoxDecoration(
@@ -486,7 +612,9 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
                 color: Color(0xFF241C3B),
               ),
             ),
+
             const SizedBox(height: 4),
+
             Text(
               title,
               style: const TextStyle(fontSize: 12, color: Color(0xFF7A728A)),
@@ -497,110 +625,67 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
     );
   }
 
-  Widget _waterEditor() {
-    return Row(
-      children: [
-        Expanded(
-          child: _infoButton(
-            title: 'Water',
-            value: '$waterDrunkMl / $waterGoalMl ml',
-            icon: Icons.water_drop_rounded,
-            color: const Color(0xFF42A5F5),
-            onTap: _showEditDailySheet,
+  Widget _waterCard() {
+    return Container(
+      padding: const EdgeInsets.all(17),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Row(
+        children: [
+          const CircleAvatar(
+            backgroundColor: Color(0xFFE7F4FF),
+            child: Icon(Icons.water_drop_rounded, color: Color(0xFF42A5F5)),
           ),
-        ),
-        const SizedBox(width: 10),
-        _roundActionButton(Icons.remove_rounded, () async {
-          setState(() => waterDrunkMl = max(0, waterDrunkMl - 250));
-          await _saveDailyData();
-        }),
-        const SizedBox(width: 8),
-        _roundActionButton(Icons.add_rounded, () async {
-          setState(() => waterDrunkMl += 250);
-          await _saveDailyData();
-        }),
-      ],
-    );
-  }
 
-  Widget _infoButton({
-    required String title,
-    required String value,
-    required IconData icon,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(22),
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(17),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(22),
-        ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              backgroundColor: color.withOpacity(0.15),
-              child: Icon(icon, color: color),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: Color(0xFF7A728A),
-                    ),
-                  ),
-                  Text(
-                    value,
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF241C3B),
-                    ),
-                  ),
-                ],
+          const SizedBox(width: 12),
+
+          Expanded(
+            child: Text(
+              '$waterDrunkMl / $waterGoalMl ml water',
+              style: const TextStyle(
+                color: Color(0xFF241C3B),
+                fontWeight: FontWeight.w900,
+                fontSize: 16,
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
+          ),
 
-  Widget _roundActionButton(IconData icon, VoidCallback onTap) {
-    return IconButton(
-      onPressed: onTap,
-      style: IconButton.styleFrom(
-        backgroundColor: Colors.white,
-        foregroundColor: const Color(0xFF6C4DCC),
-        fixedSize: const Size(48, 48),
+          if (isToday) ...[
+            IconButton(
+              onPressed: () async {
+                setState(() {
+                  waterDrunkMl = max(0, waterDrunkMl - 250);
+                });
+
+                await _saveDailyData();
+              },
+              icon: const Icon(Icons.remove_rounded),
+            ),
+
+            IconButton(
+              onPressed: () async {
+                setState(() {
+                  waterDrunkMl += 250;
+                });
+
+                await _saveDailyData();
+              },
+              icon: const Icon(Icons.add_rounded),
+            ),
+          ],
+        ],
       ),
-      icon: Icon(icon),
     );
   }
 
   Widget _mealsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Meals',
-          style: TextStyle(
-            fontSize: 21,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF241C3B),
-          ),
-        ),
-        const SizedBox(height: 12),
-        ...meals.map((meal) => _mealListTile(meal)),
-      ],
+    return _section(
+      title: 'Meals',
+      child: Column(
+        children: meals.map((meal) => _mealListTile(meal)).toList(),
+      ),
     );
   }
 
@@ -609,8 +694,8 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
       margin: const EdgeInsets.only(bottom: 11),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        color: const Color(0xFFF7F4FF),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         children: [
@@ -619,7 +704,9 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
             backgroundColor: const Color(0xFFECE5FF),
             child: Icon(meal['icon'], color: const Color(0xFF6C4DCC)),
           ),
+
           const SizedBox(width: 13),
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -628,119 +715,82 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
                   meal['title'],
                   style: const TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w900,
                     color: Color(0xFF241C3B),
                   ),
                 ),
+
                 const SizedBox(height: 3),
+
                 Text(
                   meal['items'],
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 12,
                     color: Color(0xFF7A728A),
                   ),
                 ),
+
                 const SizedBox(height: 5),
+
                 Text(
-                  '${meal['protein']}g protein • ${meal['calories']} kcal',
+                  '${meal['protein']}g protein • '
+                  '${meal['calories']} kcal',
                   style: const TextStyle(
                     fontSize: 12,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w800,
                     color: Color(0xFF4CAF50),
                   ),
                 ),
               ],
             ),
           ),
-          IconButton(
-            onPressed: () => _showEditMealSheet(meal),
-            style: IconButton.styleFrom(
-              backgroundColor: const Color(0xFF6C4DCC),
-              foregroundColor: Colors.white,
+
+          if (isToday)
+            IconButton(
+              onPressed: () {
+                _showEditMealSheet(meal);
+              },
+              style: IconButton.styleFrom(
+                backgroundColor: const Color(0xFF6C4DCC),
+                foregroundColor: Colors.white,
+              ),
+              icon: const Icon(Icons.add_rounded),
             ),
-            icon: const Icon(Icons.edit_rounded),
-          ),
         ],
       ),
     );
   }
 
   Widget _workoutSection() {
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(28),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Expanded(
-                child: Text(
-                  'Workout Activity',
-                  style: TextStyle(
-                    fontSize: 21,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF241C3B),
-                  ),
-                ),
-              ),
-              Text(
-                '-$burnedCalories kcal',
-                style: const TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.w900,
-                  color: Color(0xFFFF7043),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          if (workouts.isEmpty)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF7F4FF),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: const Text(
-                'No workout added yet',
-                style: TextStyle(
-                  color: Color(0xFF7A728A),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            )
-          else
-            ...workouts.map((workout) => _workoutListTile(workout)),
-          const SizedBox(height: 14),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: _showAddWorkoutSheet,
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-                backgroundColor: const Color(0xFF241C3B),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-              ),
+    return _section(
+      title: 'Workout Activity',
+
+      trailing: isToday
+          ? IconButton(
+              onPressed: _openWorkoutSearch,
               icon: const Icon(Icons.add_rounded),
-              label: const Text(
-                'Add Workout',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              color: const Color(0xFF6C4DCC),
+            )
+          : Text(
+              '-$burnedCalories kcal',
+              style: const TextStyle(
+                fontWeight: FontWeight.w900,
+                color: Color(0xFFFF7043),
               ),
             ),
-          ),
-        ],
-      ),
+
+      child: workouts.isEmpty
+          ? const Text(
+              'No workout saved for this day.',
+              style: TextStyle(color: Color(0xFF7A728A)),
+            )
+          : Column(
+              children: workouts
+                  .map((workout) => _workoutListTile(workout))
+                  .toList(),
+            ),
     );
   }
 
@@ -754,69 +804,159 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
       ),
       child: Row(
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             radius: 23,
-            backgroundColor: const Color(0xFFFFE3D8),
-            child: Icon(
-              workout['icon'] as IconData,
-              color: const Color(0xFFFF7043),
-            ),
+            backgroundColor: Color(0xFFFFE3D8),
+            child: Icon(Icons.fitness_center_rounded, color: Color(0xFFFF7043)),
           ),
+
           const SizedBox(width: 13),
+
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  workout['name'].toString(),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xFF241C3B),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '${workout['duration']} min',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF7A728A),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
+            child: Text(
+              '${workout['name']} • '
+              '${_durationText(workout['duration'])}',
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w800,
+                color: Color(0xFF241C3B),
+              ),
             ),
           ),
+
           Text(
             '-${workout['calories']} kcal',
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: FontWeight.w900,
               color: Color(0xFFFF7043),
             ),
           ),
-          IconButton(
-            onPressed: () => _showEditWorkoutItemSheet(workout),
-            icon: const Icon(Icons.edit_rounded, size: 20),
-            color: const Color(0xFF6C4DCC),
-          ),
+
+          if (isToday)
+            IconButton(
+              onPressed: () {
+                _showEditWorkoutItemSheet(workout);
+              },
+              icon: const Icon(Icons.edit_rounded, size: 20),
+              color: const Color(0xFF6C4DCC),
+            ),
         ],
       ),
     );
   }
 
+  String _durationText(dynamic rawMinutes) {
+    final minutes = rawMinutes is num ? rawMinutes.round() : 0;
+
+    final hours = minutes ~/ 60;
+
+    final remaining = minutes % 60;
+
+    if (hours > 0 && remaining > 0) {
+      return '${hours}h ${remaining}min';
+    }
+
+    if (hours > 0) {
+      return '${hours}h';
+    }
+
+    return '${remaining}min';
+  }
+
+  Widget _section({
+    required String title,
+    required Widget child,
+    Widget? trailing,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(28),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    color: Color(0xFF241C3B),
+                    fontSize: 21,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+
+              if (trailing != null) trailing,
+            ],
+          ),
+
+          const SizedBox(height: 12),
+
+          child,
+        ],
+      ),
+    );
+  }
+
+  Future<void> _openWorkoutSearch() async {
+    if (!isToday) {
+      return;
+    }
+
+    // Später automatisch aus User Profile holen.
+    const double weightKg = 60;
+
+    final result = await Navigator.push<Map<String, dynamic>>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const WorkoutSearchScreen(weightKg: weightKg),
+      ),
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    setState(() {
+      workouts.add({
+        'name': result['name'] ?? 'Workout',
+
+        'duration': result['duration'] ?? 0,
+
+        'calories': result['calories'] ?? 0,
+
+        'icon': Icons.fitness_center_rounded,
+      });
+    });
+
+    await _saveDailyData();
+  }
+
   void _showEditDailySheet() {
+    if (!isToday) {
+      return;
+    }
+
     final waterController = TextEditingController(
       text: waterDrunkMl.toString(),
     );
+
     final caloriesController = TextEditingController(
       text: caloriesEaten.toString(),
     );
+
     final proteinController = TextEditingController(
       text: proteinIntake.toString(),
     );
+
     final carbsController = TextEditingController(text: carbsIntake.toString());
+
     final fiberController = TextEditingController(text: fiberIntake.toString());
+
     final fatController = TextEditingController(text: fatIntake.toString());
 
     showModalBottomSheet(
@@ -828,88 +968,43 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
       ),
       builder: (context) {
         return _editSheet(
-          title: 'Edit Daily Intake',
+          title: 'Edit Today',
+
           children: [
             _numberField(waterController, 'Water ml'),
+
             _numberField(caloriesController, 'Calories eaten'),
+
             _numberField(proteinController, 'Protein g'),
+
             _numberField(carbsController, 'Carbs g'),
+
             _numberField(fiberController, 'Fiber g'),
+
             _numberField(fatController, 'Fat g'),
           ],
+
           onSave: () async {
             setState(() {
               waterDrunkMl = int.tryParse(waterController.text) ?? waterDrunkMl;
+
               caloriesEaten =
                   int.tryParse(caloriesController.text) ?? caloriesEaten;
+
               proteinIntake =
                   int.tryParse(proteinController.text) ?? proteinIntake;
+
               carbsIntake = int.tryParse(carbsController.text) ?? carbsIntake;
+
               fiberIntake = int.tryParse(fiberController.text) ?? fiberIntake;
+
               fatIntake = int.tryParse(fatController.text) ?? fatIntake;
             });
 
             await _saveDailyData();
 
             if (!mounted) return;
-            Navigator.pop(context);
-          },
-        );
-      },
-    );
-  }
 
-  void _showAddWorkoutSheet() {
-    final nameController = TextEditingController();
-    final minutesController = TextEditingController();
-    final caloriesController = TextEditingController();
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-      ),
-      builder: (context) {
-        return _editSheet(
-          title: 'Add Workout',
-          children: [
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: 'Workout name',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            _numberField(minutesController, 'Duration minutes'),
-            _numberField(caloriesController, 'Burned calories'),
-          ],
-          onSave: () async {
-            final String name =
-                nameController.text.trim().isEmpty
-                    ? 'Workout'
-                    : nameController.text.trim();
-
-            final int minutes = int.tryParse(minutesController.text) ?? 0;
-            final int calories =
-                int.tryParse(caloriesController.text) ?? max(0, minutes * 6);
-
-            setState(() {
-              workouts.add({
-                'name': name,
-                'duration': minutes,
-                'calories': calories,
-                'icon': Icons.fitness_center_rounded,
-              });
-            });
-
-            await _saveDailyData();
-
-            if (!mounted) return;
             Navigator.pop(context);
           },
         );
@@ -918,10 +1013,16 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
   }
 
   void _showEditWorkoutItemSheet(Map<String, dynamic> workout) {
+    if (!isToday) {
+      return;
+    }
+
     final nameController = TextEditingController(text: workout['name']);
+
     final minutesController = TextEditingController(
       text: workout['duration'].toString(),
     );
+
     final caloriesController = TextEditingController(
       text: workout['calories'].toString(),
     );
@@ -936,42 +1037,41 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
       builder: (context) {
         return _editSheet(
           title: 'Edit Workout',
+
           children: [
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: 'Workout name',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
+            _textField(nameController, 'Workout name'),
+
             _numberField(minutesController, 'Duration minutes'),
+
             _numberField(caloriesController, 'Burned calories'),
+
             TextButton.icon(
               onPressed: () async {
-                setState(() => workouts.remove(workout));
+                setState(() {
+                  workouts.remove(workout);
+                });
+
                 await _saveDailyData();
 
                 if (!mounted) return;
+
                 Navigator.pop(context);
               },
               icon: const Icon(Icons.delete_rounded),
               label: const Text('Delete Workout'),
-              style: TextButton.styleFrom(
-                foregroundColor: const Color(0xFFE53935),
-              ),
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
             ),
           ],
+
           onSave: () async {
             setState(() {
-              workout['name'] =
-                  nameController.text.trim().isEmpty
-                      ? 'Workout'
-                      : nameController.text.trim();
+              workout['name'] = nameController.text.trim().isEmpty
+                  ? 'Workout'
+                  : nameController.text.trim();
+
               workout['duration'] =
                   int.tryParse(minutesController.text) ?? workout['duration'];
+
               workout['calories'] =
                   int.tryParse(caloriesController.text) ?? workout['calories'];
             });
@@ -979,6 +1079,7 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
             await _saveDailyData();
 
             if (!mounted) return;
+
             Navigator.pop(context);
           },
         );
@@ -986,71 +1087,87 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
     );
   }
 
-  void _showEditMealSheet(Map<String, dynamic> meal) {
-    final itemController = TextEditingController(text: meal['items']);
-    final proteinController = TextEditingController(
-      text: meal['protein'].toString(),
-    );
-    final caloriesController = TextEditingController(
-      text: meal['calories'].toString(),
-    );
+  Future<void> _showEditMealSheet(Map<String, dynamic> meal) async {
+    if (!isToday) {
+      return;
+    }
 
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+    final result = await Navigator.push<Map<String, dynamic>>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => FoodSearchScreen(mealTitle: meal['title'].toString()),
       ),
-      builder: (context) {
-        return _editSheet(
-          title: 'Edit ${meal['title']}',
-          children: [
-            TextField(
-              controller: itemController,
-              decoration: InputDecoration(
-                labelText: 'Food eaten',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            _numberField(proteinController, 'Protein g'),
-            _numberField(caloriesController, 'Calories kcal'),
-          ],
-          onSave: () async {
-            setState(() {
-              meal['items'] =
-                  itemController.text.trim().isEmpty
-                      ? 'Not added yet'
-                      : itemController.text.trim();
-
-              meal['protein'] =
-                  int.tryParse(proteinController.text) ?? meal['protein'];
-
-              meal['calories'] =
-                  int.tryParse(caloriesController.text) ?? meal['calories'];
-
-              proteinIntake = meals.fold<int>(
-                0,
-                (sum, m) => sum + ((m['protein'] ?? 0) as int),
-              );
-
-              caloriesEaten = meals.fold<int>(
-                0,
-                (sum, m) => sum + ((m['calories'] ?? 0) as int),
-              );
-            });
-
-            await _saveDailyData();
-
-            if (!mounted) return;
-            Navigator.pop(context);
-          },
-        );
-      },
     );
+
+    if (result == null) {
+      return;
+    }
+
+    setState(() {
+      meal['items'] = result['foodName'] ?? 'Not added yet';
+
+      meal['calories'] = result['calories'] ?? 0;
+
+      meal['protein'] = result['protein'] ?? 0;
+
+      meal['carbs'] = result['carbs'] ?? 0;
+
+      meal['fat'] = result['fat'] ?? 0;
+
+      meal['fiber'] = result['fiber'] ?? 0;
+
+      caloriesEaten = meals.fold<int>(0, (sum, m) {
+        final value = m['calories'];
+
+        if (value is num) {
+          return sum + value.round();
+        }
+
+        return sum;
+      });
+
+      proteinIntake = meals.fold<int>(0, (sum, m) {
+        final value = m['protein'];
+
+        if (value is num) {
+          return sum + value.round();
+        }
+
+        return sum;
+      });
+
+      carbsIntake = meals.fold<int>(0, (sum, m) {
+        final value = m['carbs'];
+
+        if (value is num) {
+          return sum + value.round();
+        }
+
+        return sum;
+      });
+
+      fatIntake = meals.fold<int>(0, (sum, m) {
+        final value = m['fat'];
+
+        if (value is num) {
+          return sum + value.round();
+        }
+
+        return sum;
+      });
+
+      fiberIntake = meals.fold<int>(0, (sum, m) {
+        final value = m['fiber'];
+
+        if (value is num) {
+          return sum + value.round();
+        }
+
+        return sum;
+      });
+    });
+
+    await _saveDailyData();
   }
 
   Widget _editSheet({
@@ -1073,13 +1190,17 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
               title,
               style: const TextStyle(
                 fontSize: 22,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w900,
                 color: Color(0xFF241C3B),
               ),
             ),
+
             const SizedBox(height: 18),
+
             ...children,
+
             const SizedBox(height: 18),
+
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -1094,7 +1215,7 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
                 ),
                 child: const Text(
                   'Save Changes',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.w900),
                 ),
               ),
             ),
@@ -1118,11 +1239,30 @@ class _DailyDashboardScreenState extends State<DailyDashboardScreen> {
     );
   }
 
-  Color _calorieColor() {
-    final double percent = calorieGoal == 0 ? 0 : caloriesEaten / calorieGoal;
+  Widget _textField(TextEditingController controller, String label) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(18)),
+        ),
+      ),
+    );
+  }
 
-    if (percent <= 0.8) return const Color(0xFF4CAF50);
-    if (percent <= 1.05) return const Color(0xFFFFC107);
+  Color _calorieColor() {
+    final percent = calorieGoal == 0 ? 0 : caloriesEaten / calorieGoal;
+
+    if (percent <= 0.8) {
+      return const Color(0xFF4CAF50);
+    }
+
+    if (percent <= 1.05) {
+      return const Color(0xFFFFC107);
+    }
+
     return const Color(0xFFE53935);
   }
 }

@@ -203,10 +203,35 @@ class _NutritionScreenState extends State<NutritionScreen> {
             ),
           ),
 
-          // Delete this button after uploading recipes once.
           ElevatedButton(
             onPressed: () async {
-              await RecipeSeedUploader.uploadAllRecipes();
+              print('🔵 Upload button clicked');
+
+              try {
+                await RecipeSeedUploader.uploadAllRecipes();
+
+                print('✅ Upload finished');
+
+                if (!mounted) return;
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('✅ Recipes uploaded successfully!'),
+                    duration: Duration(seconds: 3),
+                  ),
+                );
+              } catch (e) {
+                print('❌ Upload failed: $e');
+
+                if (!mounted) return;
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('❌ Upload failed: $e'),
+                    duration: const Duration(seconds: 5),
+                  ),
+                );
+              }
             },
             child: const Text('Upload Recipes'),
           ),

@@ -5,7 +5,7 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.7.0
+  sdk: ^3.11.0
 
 dependencies:
   flutter:
@@ -13,15 +13,23 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
+  # Firebase
   firebase_core: ^4.9.0
   firebase_auth: ^6.5.1
   cloud_firestore: ^6.4.1
 
+  # Login
   google_sign_in: ^6.3.0
   sign_in_with_apple: ^8.0.0
 
+  # Storage
   shared_preferences: ^2.0.15
+
+  # Utilities
   intl: ^0.20.2
+  http: ^1.2.1
+
+  # Notifications
   flutter_local_notifications: ^17.2.2
   timezone: ^0.9.4
 
@@ -36,8 +44,6 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/images/foods/
-    - assets/images/muscles/
     - assets/images/workouts/
     - assets/images/recipes/
     - assets/images/recipes/breakfast/
@@ -46,7 +52,7 @@ flutter:
     - assets/images/recipes/snacks/
     - assets/images/recipes/drinks/
     - assets/images/recipes/desserts/
-    - assets/images/recipes/starters/
+    - assets/images/recipes/Starter/
 
 dependency_overrides:
   async: ^2.13.0

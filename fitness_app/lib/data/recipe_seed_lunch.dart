@@ -836,5 +836,449 @@ class RecipeSeedLunch {
       'goal':
           'A high-protein comfort meal designed to refuel energy and support muscle recovery.',
     },
+    {
+      'id': 'crispy_rice_salmon_salad',
+      'title': 'Crispy Rice Salmon Salad',
+      'category': 'Lunch',
+      'imageUrl': 'assets/images/recipes/lunch/crispy_rice_salmon_salad.jpg',
+      'calories': 585,
+      'protein': 37,
+      'carbs': 52,
+      'fats': 25,
+      'fiber': 7,
+      'time': '25 min',
+      'difficulty': 'Medium',
+      'servings': 1,
+      'tags': ['Trendy', 'Crispy', 'Omega 3', 'Fresh'],
+
+      'ingredients': [
+        '130g salmon fillet',
+        '120g cooked jasmine rice',
+        '1/3 avocado',
+        '1/2 cucumber',
+        '50g edamame',
+        '1 spring onion',
+        '1 tsp sesame oil',
+        '1 tbsp sriracha',
+        '1 tbsp greek yogurt',
+        '1 tsp soy sauce',
+        'Sesame seeds',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Make crispy rice',
+          'description':
+              'Press the cooked rice into a hot non-stick pan with sesame oil and cook until golden and crispy.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook salmon',
+          'description':
+              'Season the salmon and cook in a pan or air fryer until tender inside and lightly crispy outside.',
+        },
+        {
+          'step': 3,
+          'title': 'Prepare dressing',
+          'description':
+              'Mix greek yogurt, sriracha and soy sauce into a creamy spicy dressing.',
+        },
+        {
+          'step': 4,
+          'title': 'Assemble',
+          'description':
+              'Combine crispy rice, cucumber, avocado and edamame. Add salmon and finish with dressing, spring onion and sesame seeds.',
+        },
+      ],
+
+      'goal':
+          'A fresh and satisfying lunch with salmon, crispy rice, vegetables and healthy fats.',
+    },
+
+    {
+      'id': 'chicken_caesar_wrap',
+      'title': 'Chicken Caesar Wrap',
+      'category': 'Lunch',
+      'imageUrl': 'assets/images/recipes/lunch/chicken_caesar_wrap.jpg',
+      'calories': 525,
+      'protein': 43,
+      'carbs': 41,
+      'fats': 21,
+      'fiber': 6,
+      'time': '18 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Quick Lunch', 'High Protein', 'Classic', 'Meal Prep'],
+
+      'ingredients': [
+        '1 large whole wheat tortilla',
+        '140g chicken breast',
+        '80g romaine lettuce',
+        '20g parmesan cheese',
+        '5 cherry tomatoes',
+        '2 tbsp light Caesar dressing',
+        '1 tsp olive oil',
+        'Black pepper',
+        'Lemon juice',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook chicken',
+          'description':
+              'Season the chicken with salt and pepper and cook in olive oil until golden and fully cooked.',
+        },
+        {
+          'step': 2,
+          'title': 'Prepare filling',
+          'description':
+              'Slice the lettuce, tomatoes and cooked chicken into bite-sized pieces.',
+        },
+        {
+          'step': 3,
+          'title': 'Mix',
+          'description':
+              'Combine lettuce, chicken, parmesan and Caesar dressing with a squeeze of lemon.',
+        },
+        {
+          'step': 4,
+          'title': 'Wrap',
+          'description':
+              'Place the filling in the tortilla, fold tightly and toast briefly in a dry pan until lightly golden.',
+        },
+      ],
+
+      'goal':
+          'A satisfying café-style lunch combining juicy chicken with a fresh Caesar salad in a crispy wrap.',
+    },
+
+    {
+      'id': 'hot_honey_chicken_flatbread',
+      'title': 'Hot Honey Chicken Flatbread',
+      'category': 'Lunch',
+      'imageUrl': 'assets/images/recipes/lunch/hot_honey_chicken_flatbread.jpg',
+      'calories': 595,
+      'protein': 45,
+      'carbs': 57,
+      'fats': 21,
+      'fiber': 5,
+      'time': '22 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Hot Honey', 'Sweet & Spicy', 'Trendy', 'High Protein'],
+
+      'ingredients': [
+        '1 flatbread',
+        '140g chicken breast',
+        '50g mozzarella',
+        '1/4 red onion',
+        '30g tomato sauce',
+        '1 tbsp honey',
+        'Chili flakes',
+        'Fresh rocket',
+        '1 tsp olive oil',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Prepare chicken',
+          'description':
+              'Cut chicken into small pieces, season and cook in olive oil until golden.',
+        },
+        {
+          'step': 2,
+          'title': 'Build flatbread',
+          'description':
+              'Spread tomato sauce over the flatbread and add mozzarella, chicken and thinly sliced red onion.',
+        },
+        {
+          'step': 3,
+          'title': 'Bake',
+          'description':
+              'Bake at 200°C for 8–10 minutes until the cheese melts and the edges become crispy.',
+        },
+        {
+          'step': 4,
+          'title': 'Add hot honey',
+          'description':
+              'Mix honey with chili flakes and drizzle over the hot flatbread.',
+        },
+        {
+          'step': 5,
+          'title': 'Finish',
+          'description': 'Add fresh rocket and serve immediately.',
+        },
+      ],
+
+      'goal':
+          'A sweet, spicy and crispy lunch with a satisfying balance of chicken, melted cheese and hot honey.',
+    },
+
+    {
+      'id': 'gochujang_chicken_noodles',
+      'title': 'Gochujang Chicken Noodles',
+      'category': 'Lunch',
+      'imageUrl': 'assets/images/recipes/lunch/gochujang_chicken_noodles.jpg',
+      'calories': 610,
+      'protein': 44,
+      'carbs': 66,
+      'fats': 19,
+      'fiber': 7,
+      'time': '20 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Spicy', 'Creamy', 'Noodles', 'High Protein'],
+
+      'ingredients': [
+        '140g chicken breast',
+        '90g noodles',
+        '1 tbsp gochujang',
+        '1 tbsp soy sauce',
+        '40ml light cooking cream',
+        '1 garlic clove',
+        '1 tsp sesame oil',
+        '1 spring onion',
+        '1/2 cucumber',
+        'Sesame seeds',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook noodles',
+          'description':
+              'Cook the noodles according to package instructions and reserve a little cooking water.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook chicken',
+          'description':
+              'Slice the chicken and cook in sesame oil until golden and fully cooked.',
+        },
+        {
+          'step': 3,
+          'title': 'Make sauce',
+          'description':
+              'Add garlic, gochujang, soy sauce and light cream to the pan and stir until smooth.',
+        },
+        {
+          'step': 4,
+          'title': 'Combine',
+          'description':
+              'Add the noodles and a splash of cooking water and toss until coated in the creamy sauce.',
+        },
+        {
+          'step': 5,
+          'title': 'Finish',
+          'description':
+              'Top with sliced cucumber, spring onion and sesame seeds.',
+        },
+      ],
+
+      'goal':
+          'Creamy and spicy noodles with plenty of protein for a flavorful and satisfying lunch.',
+    },
+
+    {
+      'id': 'whipped_feta_roasted_veggie_pita',
+      'title': 'Whipped Feta Roasted Veggie Pita',
+      'category': 'Lunch',
+      'imageUrl':
+          'assets/images/recipes/lunch/whipped_feta_roasted_veggie_pita.jpg',
+      'calories': 510,
+      'protein': 23,
+      'carbs': 55,
+      'fats': 23,
+      'fiber': 11,
+      'time': '25 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Vegetarian', 'Mediterranean', 'High Fiber', 'Fresh'],
+
+      'ingredients': [
+        '1 large pita bread',
+        '60g feta cheese',
+        '60g greek yogurt',
+        '70g chickpeas',
+        '1/2 zucchini',
+        '1/2 red bell pepper',
+        '5 cherry tomatoes',
+        '1 tsp olive oil',
+        'Lemon juice',
+        'Fresh parsley',
+        'Paprika',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Roast vegetables',
+          'description':
+              'Chop zucchini and bell pepper and roast with chickpeas, olive oil and paprika until golden.',
+        },
+        {
+          'step': 2,
+          'title': 'Make whipped feta',
+          'description':
+              'Blend or mash feta with greek yogurt and a squeeze of lemon until creamy.',
+        },
+        {
+          'step': 3,
+          'title': 'Warm pita',
+          'description':
+              'Warm the pita in a dry pan or oven until soft with lightly toasted edges.',
+        },
+        {
+          'step': 4,
+          'title': 'Assemble',
+          'description':
+              'Spread whipped feta inside the pita and fill with roasted vegetables, chickpeas and tomatoes.',
+        },
+        {
+          'step': 5,
+          'title': 'Finish',
+          'description':
+              'Add fresh parsley and another squeeze of lemon before serving.',
+        },
+      ],
+
+      'goal':
+          'A colorful vegetarian lunch with creamy feta, roasted vegetables and fiber-rich chickpeas.',
+    },
+
+    {
+      'id': 'crispy_smashed_potato_chicken_salad',
+      'title': 'Crispy Smashed Potato & Chicken Salad',
+      'category': 'Lunch',
+      'imageUrl':
+          'assets/images/recipes/lunch/crispy_smashed_potato_chicken_salad.jpg',
+      'calories': 545,
+      'protein': 44,
+      'carbs': 45,
+      'fats': 20,
+      'fiber': 8,
+      'time': '35 min',
+      'difficulty': 'Medium',
+      'servings': 1,
+      'tags': ['Crispy', 'High Protein', 'Fresh', 'Trendy'],
+
+      'ingredients': [
+        '200g baby potatoes',
+        '140g chicken breast',
+        '70g greek yogurt',
+        '1/2 cucumber',
+        '50g mixed lettuce',
+        '5 cherry tomatoes',
+        '1 tsp olive oil',
+        '1 tsp mustard',
+        'Lemon juice',
+        'Fresh dill',
+        'Garlic powder',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Boil potatoes',
+          'description':
+              'Boil baby potatoes until tender, then drain and allow them to cool slightly.',
+        },
+        {
+          'step': 2,
+          'title': 'Smash and crisp',
+          'description':
+              'Gently smash the potatoes, brush with olive oil and bake or air fry until very crispy.',
+        },
+        {
+          'step': 3,
+          'title': 'Cook chicken',
+          'description':
+              'Season chicken with garlic powder, salt and pepper and cook until golden.',
+        },
+        {
+          'step': 4,
+          'title': 'Make dressing',
+          'description':
+              'Mix greek yogurt with mustard, lemon juice, dill, salt and pepper.',
+        },
+        {
+          'step': 5,
+          'title': 'Assemble salad',
+          'description':
+              'Combine lettuce, cucumber, tomatoes, sliced chicken and crispy potatoes and finish with the yogurt dressing.',
+        },
+      ],
+
+      'goal':
+          'A filling salad that combines crispy potatoes, juicy chicken and a fresh creamy herb dressing.',
+    },
+
+    {
+      'id': 'creamy_tuscan_chicken_orzo',
+      'title': 'Creamy Tuscan Chicken Orzo',
+      'category': 'Lunch',
+      'imageUrl': 'assets/images/recipes/lunch/creamy_tuscan_chicken_orzo.jpg',
+      'calories': 620,
+      'protein': 48,
+      'carbs': 58,
+      'fats': 21,
+      'fiber': 7,
+      'time': '28 min',
+      'difficulty': 'Medium',
+      'servings': 1,
+      'tags': ['Creamy', 'Comfort Food', 'High Protein', 'One Pan'],
+
+      'ingredients': [
+        '150g chicken breast',
+        '80g dry orzo',
+        '50g spinach',
+        '30g sun-dried tomatoes',
+        '20g parmesan cheese',
+        '60ml light cooking cream',
+        '1 garlic clove',
+        '250ml chicken stock',
+        '1 tsp olive oil',
+        'Italian herbs',
+      ],
+
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook chicken',
+          'description':
+              'Season the chicken and cook in olive oil until golden. Remove from the pan and set aside.',
+        },
+        {
+          'step': 2,
+          'title': 'Start orzo',
+          'description':
+              'Add garlic and orzo to the same pan and cook for about 1 minute.',
+        },
+        {
+          'step': 3,
+          'title': 'Simmer',
+          'description':
+              'Add chicken stock and cook the orzo until tender, stirring occasionally.',
+        },
+        {
+          'step': 4,
+          'title': 'Make creamy',
+          'description':
+              'Stir in spinach, sun-dried tomatoes, light cream and parmesan.',
+        },
+        {
+          'step': 5,
+          'title': 'Finish',
+          'description':
+              'Slice the chicken, return it to the pan and cook for another minute before serving.',
+        },
+      ],
+
+      'goal':
+          'A creamy one-pan lunch with tender chicken, orzo, spinach and sun-dried tomatoes.',
+    },
   ];
 }

@@ -1385,5 +1385,314 @@ class RecipeSeedBreakfast {
       ],
       'goal': 'Healthy breakfast with natural energy and balanced nutrients.',
     },
+    {
+      'id': 'dubai_chocolate_protein_oats',
+      'title': 'Dubai Chocolate Protein Oats',
+      'category': 'Breakfast',
+      'imageUrl':
+          'assets/images/recipes/breakfast/dubai_chocolate_protein_oats.jpg',
+      'calories': 405,
+      'protein': 29,
+      'carbs': 42,
+      'fats': 14,
+      'fiber': 8,
+      'time': '10 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['High Protein', 'Trendy', 'Chocolate', 'Middle Eastern'],
+      'ingredients': [
+        '45g oats',
+        '150ml milk',
+        '20g chocolate protein powder',
+        '100g skyr',
+        '10g pistachio butter',
+        '5g dark chocolate',
+        '1 tsp chia seeds',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Cook oats',
+          'description':
+              'Cook oats with milk over medium heat until thick and creamy.',
+        },
+        {
+          'step': 2,
+          'title': 'Add protein',
+          'description':
+              'Remove from heat and stir in the chocolate protein powder.',
+        },
+        {
+          'step': 3,
+          'title': 'Add topping',
+          'description': 'Top with skyr and drizzle with pistachio butter.',
+        },
+        {
+          'step': 4,
+          'title': 'Finish',
+          'description':
+              'Add chopped dark chocolate and chia seeds before serving.',
+        },
+      ],
+      'goal':
+          'A high-protein chocolate breakfast inspired by pistachio-rich Middle Eastern flavors.',
+    },
+
+    {
+      'id': 'turkish_cilbir_protein_bowl',
+      'title': 'Turkish Çılbır Protein Bowl',
+      'category': 'Breakfast',
+      'imageUrl':
+          'assets/images/recipes/breakfast/turkish_cilbir_protein_bowl.jpg',
+      'calories': 350,
+      'protein': 28,
+      'carbs': 19,
+      'fats': 18,
+      'fiber': 4,
+      'time': '15 min',
+      'difficulty': 'Medium',
+      'servings': 1,
+      'tags': ['Turkish', 'High Protein', 'Savory', 'Vegetarian'],
+      'ingredients': [
+        '2 eggs',
+        '170g greek yogurt',
+        '1 small garlic clove',
+        '1 tsp olive oil',
+        '1/2 tsp paprika',
+        '1 slice sourdough bread',
+        'Fresh dill',
+        'Salt and pepper',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Prepare yogurt',
+          'description':
+              'Mix greek yogurt with grated garlic, salt and pepper.',
+        },
+        {
+          'step': 2,
+          'title': 'Poach eggs',
+          'description':
+              'Poach the eggs in gently simmering water until the whites are set.',
+        },
+        {
+          'step': 3,
+          'title': 'Prepare paprika oil',
+          'description': 'Warm olive oil with paprika for about 30 seconds.',
+        },
+        {
+          'step': 4,
+          'title': 'Assemble',
+          'description':
+              'Add the eggs over the yogurt and finish with paprika oil and fresh dill. Serve with sourdough.',
+        },
+      ],
+      'goal':
+          'A protein-rich Turkish-inspired savory breakfast with eggs and creamy yogurt.',
+    },
+
+    {
+      'id': 'tiramisu_protein_overnight_oats',
+      'title': 'Tiramisu Protein Overnight Oats',
+      'category': 'Breakfast',
+      'imageUrl':
+          'assets/images/recipes/breakfast/tiramisu_protein_overnight_oats.jpg',
+      'calories': 365,
+      'protein': 32,
+      'carbs': 43,
+      'fats': 8,
+      'fiber': 7,
+      'time': '8 min + overnight',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Italian Inspired', 'High Protein', 'Meal Prep', 'Sweet'],
+      'ingredients': [
+        '45g oats',
+        '150ml milk',
+        '100g skyr',
+        '20g vanilla protein powder',
+        '30ml espresso',
+        '1 tsp chia seeds',
+        '1 tsp cocoa powder',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Mix oats',
+          'description':
+              'Combine oats, milk, protein powder, espresso and chia seeds.',
+        },
+        {
+          'step': 2,
+          'title': 'Refrigerate',
+          'description':
+              'Cover and refrigerate overnight or for at least 4 hours.',
+        },
+        {
+          'step': 3,
+          'title': 'Add cream layer',
+          'description': 'Spread the skyr over the chilled oats.',
+        },
+        {
+          'step': 4,
+          'title': 'Finish',
+          'description': 'Dust generously with cocoa powder before serving.',
+        },
+      ],
+      'goal':
+          'A meal-prep friendly high-protein breakfast inspired by classic Italian tiramisu.',
+    },
+
+    {
+      'id': 'korean_kimchi_egg_toast',
+      'title': 'Korean Kimchi Egg Toast',
+      'category': 'Breakfast',
+      'imageUrl': 'assets/images/recipes/breakfast/korean_kimchi_egg_toast.jpg',
+      'calories': 380,
+      'protein': 24,
+      'carbs': 36,
+      'fats': 16,
+      'fiber': 5,
+      'time': '12 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Korean', 'Savory', 'High Protein', 'Spicy'],
+      'ingredients': [
+        '2 slices sourdough bread',
+        '2 eggs',
+        '50g kimchi',
+        '30g light mozzarella',
+        '1 spring onion',
+        '1 tsp sesame seeds',
+        'Chili flakes',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Toast bread',
+          'description':
+              'Toast the sourdough until golden and slightly crispy.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook eggs',
+          'description': 'Scramble the eggs gently in a non-stick pan.',
+        },
+        {
+          'step': 3,
+          'title': 'Assemble',
+          'description':
+              'Top the toast with kimchi, scrambled eggs and mozzarella.',
+        },
+        {
+          'step': 4,
+          'title': 'Finish',
+          'description': 'Add spring onion, sesame seeds and chili flakes.',
+        },
+      ],
+      'goal':
+          'A savory Korean-inspired breakfast combining protein with spicy fermented flavors.',
+    },
+
+    {
+      'id': 'brazilian_acai_protein_bowl',
+      'title': 'Brazilian Açaí Protein Bowl',
+      'category': 'Breakfast',
+      'imageUrl':
+          'assets/images/recipes/breakfast/brazilian_acai_protein_bowl.jpg',
+      'calories': 390,
+      'protein': 25,
+      'carbs': 49,
+      'fats': 11,
+      'fiber': 10,
+      'time': '7 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Brazilian', 'High Protein', 'High Fiber', 'Fresh'],
+      'ingredients': [
+        '100g unsweetened frozen açaí puree',
+        '1/2 frozen banana',
+        '100g skyr',
+        '20g vanilla protein powder',
+        '50g mixed berries',
+        '15g granola',
+        '1 tsp chia seeds',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Blend base',
+          'description':
+              'Blend frozen açaí, banana, skyr and protein powder until thick and creamy.',
+        },
+        {
+          'step': 2,
+          'title': 'Prepare bowl',
+          'description': 'Transfer the thick açaí mixture into a chilled bowl.',
+        },
+        {
+          'step': 3,
+          'title': 'Add toppings',
+          'description': 'Top with mixed berries, granola and chia seeds.',
+        },
+      ],
+      'goal':
+          'A refreshing Brazilian-inspired breakfast with protein, fruit and fiber.',
+    },
+
+    {
+      'id': 'mexican_huevos_rancheros_bowl',
+      'title': 'Mexican Huevos Rancheros Bowl',
+      'category': 'Breakfast',
+      'imageUrl':
+          'assets/images/recipes/breakfast/mexican_huevos_rancheros_bowl.jpg',
+      'calories': 435,
+      'protein': 27,
+      'carbs': 40,
+      'fats': 19,
+      'fiber': 11,
+      'time': '15 min',
+      'difficulty': 'Easy',
+      'servings': 1,
+      'tags': ['Mexican', 'High Protein', 'High Fiber', 'Savory'],
+      'ingredients': [
+        '2 eggs',
+        '80g black beans',
+        '80g cooked rice',
+        '70g tomato salsa',
+        '40g avocado',
+        '30g greek yogurt',
+        'Fresh coriander',
+        'Lime juice',
+      ],
+      'instructions': [
+        {
+          'step': 1,
+          'title': 'Prepare base',
+          'description': 'Add warm rice and black beans to a serving bowl.',
+        },
+        {
+          'step': 2,
+          'title': 'Cook eggs',
+          'description':
+              'Cook the eggs sunny side up or to your preferred consistency.',
+        },
+        {
+          'step': 3,
+          'title': 'Assemble bowl',
+          'description':
+              'Place the eggs over the rice and beans and add tomato salsa and avocado.',
+        },
+        {
+          'step': 4,
+          'title': 'Finish',
+          'description':
+              'Top with greek yogurt, coriander and a squeeze of fresh lime.',
+        },
+      ],
+      'goal':
+          'A filling Mexican-inspired breakfast with protein, fiber and balanced carbohydrates.',
+    },
   ];
 }
