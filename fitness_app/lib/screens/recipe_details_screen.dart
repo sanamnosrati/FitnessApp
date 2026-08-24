@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_theme.dart';
+
 class RecipeDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> recipe;
 
@@ -8,25 +10,30 @@ class RecipeDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List ingredients = recipe['ingredients'] ?? [];
+
     final List instructions = recipe['instructions'] ?? [];
+
     final List tags = recipe['tags'] ?? [];
 
-    final String imageUrl =
-        (recipe['imageUrl'] ?? '').toString().isNotEmpty
-            ? recipe['imageUrl']
-            : 'assets/images/recipes/breakfast/${recipe['id']}.jpg';
+    final String imageUrl = (recipe['imageUrl'] ?? '').toString().isNotEmpty
+        ? recipe['imageUrl'].toString()
+        : 'assets/images/recipes/breakfast/${recipe['id']}.jpg';
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppTheme.backgroundColor,
 
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 470,
+            expandedHeight: 440,
             pinned: true,
             elevation: 0,
-            backgroundColor: const Color(0xFFF8F9FB),
-            foregroundColor: Colors.black,
+
+            backgroundColor: AppTheme.backgroundColor,
+
+            foregroundColor: AppTheme.textPrimaryColor,
+
+            surfaceTintColor: Colors.transparent,
 
             flexibleSpace: FlexibleSpaceBar(
               titlePadding: const EdgeInsets.only(left: 20, bottom: 18),
@@ -37,7 +44,7 @@ class RecipeDetailsScreen extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 19,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: AppTheme.textPrimaryColor,
                 ),
               ),
 
@@ -45,48 +52,27 @@ class RecipeDetailsScreen extends StatelessWidget {
                 fit: StackFit.expand,
 
                 children: [
-                  Container(color: const Color(0xFFF8F9FB)),
+                  Container(color: AppTheme.backgroundColor),
 
                   Positioned(
                     top: 58,
-                    left: 10,
-                    right: 10,
+                    left: 14,
+                    right: 14,
                     bottom: 18,
 
                     child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(42),
+                        color: AppTheme.surfaceColor,
 
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.18),
-                            blurRadius: 28,
-                            offset: const Offset(0, 14),
-                          ),
-                        ],
+                        borderRadius: BorderRadius.circular(30),
+
+                        border: Border.all(color: AppTheme.borderColor),
                       ),
 
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(42),
+                        borderRadius: BorderRadius.circular(30),
 
-                        child: Container(
-                          color: Colors.white,
-
-                          padding: const EdgeInsets.all(14),
-
-                          child: InteractiveViewer(
-                            minScale: 1,
-                            maxScale: 4,
-
-                            child: Image.asset(
-                              imageUrl,
-
-                              fit: BoxFit.contain,
-                              width: double.infinity,
-                              height: double.infinity,
-                            ),
-                          ),
-                        ),
+                        child: _recipeImage(imageUrl),
                       ),
                     ),
                   ),
@@ -105,7 +91,7 @@ class RecipeDetailsScreen extends StatelessWidget {
                 children: [
                   _infoCards(),
 
-                  const SizedBox(height: 22),
+                  const SizedBox(height: 26),
 
                   if (tags.isNotEmpty) ...[
                     _sectionTitle('Tags'),
@@ -114,7 +100,7 @@ class RecipeDetailsScreen extends StatelessWidget {
 
                     _tagWrap(tags),
 
-                    const SizedBox(height: 26),
+                    const SizedBox(height: 28),
                   ],
 
                   if (recipe['goal'] != null) ...[
@@ -124,16 +110,16 @@ class RecipeDetailsScreen extends StatelessWidget {
 
                     _goalBox(recipe['goal']),
 
-                    const SizedBox(height: 26),
+                    const SizedBox(height: 28),
                   ],
 
                   _sectionTitle('Ingredients'),
 
                   const SizedBox(height: 12),
 
-                  ...ingredients.map((item) => _bulletItem(item)).toList(),
+                  ...ingredients.map((item) => _bulletItem(item)),
 
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 30),
 
                   _sectionTitle('Preparation'),
 
@@ -141,6 +127,7 @@ class RecipeDetailsScreen extends StatelessWidget {
 
                   ...instructions.asMap().entries.map((entry) {
                     final stepNumber = entry.key + 1;
+
                     final step = entry.value;
 
                     if (step is Map) {
@@ -156,12 +143,54 @@ class RecipeDetailsScreen extends StatelessWidget {
                       'Step $stepNumber',
                       step.toString(),
                     );
-                  }).toList(),
+                  }),
+
+                  const SizedBox(height: 30),
                 ],
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _recipeImage(String imageUrl) {
+    if (imageUrl.startsWith('http')) {
+      return Image.network(
+        imageUrl,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+
+        errorBuilder: (_, __, ___) {
+          return _imageFallback();
+        },
+      );
+    }
+
+    return Image.asset(
+      imageUrl,
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: double.infinity,
+
+      errorBuilder: (_, __, ___) {
+        return _imageFallback();
+      },
+    );
+  }
+
+  Widget _imageFallback() {
+    return Container(
+      color: AppTheme.surfaceLightColor,
+
+      child: const Center(
+        child: Icon(
+          Icons.restaurant_rounded,
+          color: AppTheme.primaryColor,
+          size: 56,
+        ),
       ),
     );
   }
@@ -211,24 +240,19 @@ class RecipeDetailsScreen extends StatelessWidget {
   Widget _infoCard(IconData icon, String text) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 17),
+        padding: const EdgeInsets.symmetric(vertical: 17, horizontal: 6),
 
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(24),
+          color: AppTheme.surfaceColor,
 
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 12,
-              offset: const Offset(0, 5),
-            ),
-          ],
+          borderRadius: BorderRadius.circular(20),
+
+          border: Border.all(color: AppTheme.borderColor),
         ),
 
         child: Column(
           children: [
-            Icon(icon, color: Colors.green, size: 24),
+            Icon(icon, color: AppTheme.primaryColor, size: 24),
 
             const SizedBox(height: 8),
 
@@ -236,7 +260,11 @@ class RecipeDetailsScreen extends StatelessWidget {
               text,
               textAlign: TextAlign.center,
 
-              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+              style: const TextStyle(
+                color: AppTheme.textPrimaryColor,
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
+              ),
             ),
           ],
         ),
@@ -248,7 +276,11 @@ class RecipeDetailsScreen extends StatelessWidget {
     return Text(
       title,
 
-      style: const TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+      style: const TextStyle(
+        color: AppTheme.textPrimaryColor,
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 
@@ -257,26 +289,28 @@ class RecipeDetailsScreen extends StatelessWidget {
       spacing: 8,
       runSpacing: 8,
 
-      children:
-          tags.map((tag) {
-            return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+      children: tags.map((tag) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
 
-              decoration: BoxDecoration(
-                color: Colors.green.withOpacity(0.12),
-                borderRadius: BorderRadius.circular(20),
-              ),
+          decoration: BoxDecoration(
+            color: AppTheme.primaryColor.withOpacity(0.12),
 
-              child: Text(
-                tag.toString(),
+            borderRadius: BorderRadius.circular(20),
 
-                style: const TextStyle(
-                  color: Colors.green,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            );
-          }).toList(),
+            border: Border.all(color: AppTheme.primaryColor.withOpacity(0.25)),
+          ),
+
+          child: Text(
+            tag.toString(),
+
+            style: const TextStyle(
+              color: AppTheme.purpleSoft,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 
@@ -287,14 +321,18 @@ class RecipeDetailsScreen extends StatelessWidget {
       padding: const EdgeInsets.all(18),
 
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.10),
-        borderRadius: BorderRadius.circular(24),
+        color: AppTheme.purpleSurface,
+
+        borderRadius: BorderRadius.circular(20),
+
+        border: Border.all(color: AppTheme.primaryColor.withOpacity(0.25)),
       ),
 
       child: Text(
         goal.toString(),
 
         style: const TextStyle(
+          color: AppTheme.textSecondaryColor,
           fontSize: 15,
           height: 1.5,
           fontWeight: FontWeight.w500,
@@ -305,31 +343,33 @@ class RecipeDetailsScreen extends StatelessWidget {
 
   Widget _bulletItem(dynamic text) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 10),
 
       padding: const EdgeInsets.all(15),
 
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        color: AppTheme.surfaceColor,
 
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(18),
+
+        border: Border.all(color: AppTheme.borderColor),
       ),
 
       child: Row(
         children: [
-          const Icon(Icons.check_circle_rounded, color: Colors.green),
+          const Icon(Icons.check_circle_rounded, color: AppTheme.primaryColor),
 
           const SizedBox(width: 12),
 
           Expanded(
-            child: Text(text.toString(), style: const TextStyle(fontSize: 15)),
+            child: Text(
+              text.toString(),
+
+              style: const TextStyle(
+                color: AppTheme.textPrimaryColor,
+                fontSize: 15,
+              ),
+            ),
           ),
         ],
       ),
@@ -338,21 +378,16 @@ class RecipeDetailsScreen extends StatelessWidget {
 
   Widget _stepItem(dynamic number, String title, String description) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 14),
+      margin: const EdgeInsets.only(bottom: 12),
 
       padding: const EdgeInsets.all(15),
 
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        color: AppTheme.surfaceColor,
 
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(18),
+
+        border: Border.all(color: AppTheme.borderColor),
       ),
 
       child: Row(
@@ -361,7 +396,8 @@ class RecipeDetailsScreen extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 16,
-            backgroundColor: Colors.green,
+
+            backgroundColor: AppTheme.primaryColor,
 
             child: Text(
               '$number',
@@ -385,6 +421,7 @@ class RecipeDetailsScreen extends StatelessWidget {
                   title,
 
                   style: const TextStyle(
+                    color: AppTheme.textPrimaryColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
@@ -395,7 +432,11 @@ class RecipeDetailsScreen extends StatelessWidget {
                 Text(
                   description,
 
-                  style: const TextStyle(height: 1.5, fontSize: 14),
+                  style: const TextStyle(
+                    color: AppTheme.textSecondaryColor,
+                    height: 1.5,
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),

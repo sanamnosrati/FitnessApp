@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../screens/exercise_seed_data.dart';
+import '../theme/app_theme.dart';
+
 import 'cardioOptionsScreen.dart';
 import 'coreMusclesScreen.dart';
 import 'lowerBodyMusclesScreen.dart';
@@ -30,61 +32,61 @@ class WorkoutCategoriesScreen extends StatelessWidget {
       {
         'name': 'Upper Body',
         'subtitle': 'Chest, back, shoulders and arms',
-        'image': 'assets/images/workouts/upper_body.jpg',
-        'icon': Icons.fitness_center,
+        'icon': Icons.fitness_center_rounded,
+        'color': const Color(0xFF8B5CF6),
       },
       {
         'name': 'Core',
         'subtitle': 'Abs, stability and strong center',
-        'image': 'assets/images/workouts/core.jpg',
-        'icon': Icons.accessibility_new,
+        'icon': Icons.accessibility_new_rounded,
+        'color': const Color(0xFF3B82F6),
       },
       {
         'name': 'Lower Body',
         'subtitle': 'Legs, glutes and power training',
-        'image': 'assets/images/workouts/lower_body.jpg',
-        'icon': Icons.directions_run,
+        'icon': Icons.directions_run_rounded,
+        'color': const Color(0xFFF97316),
       },
       {
         'name': 'Full Body Stretch',
         'subtitle': 'Mobility, flexibility and recovery',
-        'image': 'assets/images/workouts/stretch.jpg',
-        'icon': Icons.self_improvement,
+        'icon': Icons.self_improvement_rounded,
+        'color': const Color(0xFF14B8A6),
       },
       {
         'name': 'Cardio',
         'subtitle': 'Burn calories and improve endurance',
-        'image': 'assets/images/workouts/cardio.jpg',
-        'icon': Icons.favorite,
+        'icon': Icons.favorite_rounded,
+        'color': const Color(0xFFEF4444),
       },
     ];
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F3FA),
+      backgroundColor: AppTheme.backgroundColor,
 
       appBar: AppBar(
         title: const Text(
           'Workout Categories',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: AppTheme.textPrimaryColor,
+          ),
         ),
-
         centerTitle: true,
-        backgroundColor: const Color(0xFFF8F3FA),
+        backgroundColor: AppTheme.backgroundColor,
         elevation: 0,
-        foregroundColor: Colors.black,
+        foregroundColor: AppTheme.textPrimaryColor,
       ),
 
       body: ListView(
-        padding: const EdgeInsets.all(16),
-
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
         children: [
           ...categories.map((category) {
             return _WorkoutCategoryCard(
               title: category['name'] as String,
               subtitle: category['subtitle'] as String,
-              imagePath: category['image'] as String,
               icon: category['icon'] as IconData,
-
+              color: category['color'] as Color,
               onTap: () {
                 switch (category['name']) {
                   case 'Upper Body':
@@ -144,133 +146,86 @@ class WorkoutCategoriesScreen extends StatelessWidget {
 class _WorkoutCategoryCard extends StatelessWidget {
   final String title;
   final String subtitle;
-  final String imagePath;
   final IconData icon;
+  final Color color;
   final VoidCallback onTap;
 
   const _WorkoutCategoryCard({
     required this.title,
     required this.subtitle,
-    required this.imagePath,
     required this.icon,
+    required this.color,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-
-      child: Container(
-        height: 75,
-        margin: const EdgeInsets.only(bottom: 12),
-
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.15),
-              blurRadius: 14,
-              offset: const Offset(0, 6),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(20),
+          child: Ink(
+            height: 92,
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceColor,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: color.withOpacity(0.28), width: 1),
             ),
-          ],
-        ),
+            child: Row(
+              children: [
+                Container(
+                  width: 54,
+                  height: 54,
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.14),
+                    borderRadius: BorderRadius.circular(17),
+                  ),
+                  child: Icon(icon, color: color, size: 28),
+                ),
 
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(18),
+                const SizedBox(width: 16),
 
-          child: Stack(
-            fit: StackFit.expand,
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          color: AppTheme.textPrimaryColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
 
-            children: [
-              Image.asset(
-                imagePath,
-                fit: BoxFit.cover,
+                      const SizedBox(height: 5),
 
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.grey.shade300,
-
-                    child: const Icon(
-                      Icons.fitness_center_rounded,
-                      size: 40,
-                      color: Colors.grey,
-                    ),
-                  );
-                },
-              ),
-
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.black.withOpacity(0.72),
-                      Colors.black.withOpacity(0.25),
-                      Colors.transparent,
+                      Text(
+                        subtitle,
+                        style: const TextStyle(
+                          color: AppTheme.textSecondaryColor,
+                          fontSize: 13,
+                          height: 1.2,
+                        ),
+                      ),
                     ],
-
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
                   ),
                 ),
-              ),
 
-              Padding(
-                padding: const EdgeInsets.all(14),
+                const SizedBox(width: 10),
 
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.white.withOpacity(0.2),
-
-                      child: Icon(icon, color: Colors.white, size: 22),
-                    ),
-
-                    const SizedBox(width: 16),
-
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-
-                        crossAxisAlignment: CrossAxisAlignment.start,
-
-                        children: [
-                          Text(
-                            title,
-
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-
-                          const SizedBox(height: 4),
-
-                          Text(
-                            subtitle,
-
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.9),
-
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                  ],
+                const Icon(
+                  Icons.chevron_right_rounded,
+                  color: AppTheme.textSecondaryColor,
+                  size: 27,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

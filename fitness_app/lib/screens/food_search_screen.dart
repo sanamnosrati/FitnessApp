@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../services/food_api_service.dart';
+import '../theme/app_theme.dart';
 
 class FoodSearchScreen extends StatefulWidget {
   final String mealTitle;
@@ -104,7 +105,6 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
         final recipe = doc.data();
 
         final title = (recipe['title'] ?? '').toString();
-
         final category = (recipe['category'] ?? '').toString();
 
         final rawIngredients = recipe['ingredients'] ?? [];
@@ -126,37 +126,22 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
         matches.add({
           'id': 'recipe_${doc.id}',
           'externalId': doc.id,
-
-          // kept internally - NOT displayed
           'source': 'Recipe',
           'type': 'Recipe',
-
           'name': title,
           'brand': category,
-
           'imageUrl': recipe['imageUrl'] ?? recipe['image'] ?? '',
-
           'calories': _toDouble(recipe['calories']),
-
           'protein': _toDouble(recipe['protein']),
-
           'carbs': _toDouble(recipe['carbs']),
-
           'fat': _toDouble(recipe['fat']),
-
           'fiber': _toDouble(recipe['fiber']),
-
           'sugar': _toDouble(recipe['sugar']),
-
           'sodium': _toDouble(recipe['sodium']),
-
           'servingDescription': '1 serving',
-
           'servingAmount': 1.0,
           'servingUnit': 'serving',
-
           'isRecipe': true,
-
           'servingOptions': [
             {
               'label': 'Serving',
@@ -165,7 +150,6 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
               'grams': null,
             },
           ],
-
           'recipeData': recipe,
         });
       }
@@ -188,38 +172,22 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
 
     items.sort((a, b) {
       final aName = (a['name'] ?? '').toString().toLowerCase();
-
       final bName = (b['name'] ?? '').toString().toLowerCase();
 
-      if (aName == q && bName != q) {
-        return -1;
-      }
-
-      if (bName == q && aName != q) {
-        return 1;
-      }
+      if (aName == q && bName != q) return -1;
+      if (bName == q && aName != q) return 1;
 
       final aStarts = aName.startsWith(q);
       final bStarts = bName.startsWith(q);
 
-      if (aStarts && !bStarts) {
-        return -1;
-      }
-
-      if (bStarts && !aStarts) {
-        return 1;
-      }
+      if (aStarts && !bStarts) return -1;
+      if (bStarts && !aStarts) return 1;
 
       final aContains = aName.contains(q);
       final bContains = bName.contains(q);
 
-      if (aContains && !bContains) {
-        return -1;
-      }
-
-      if (bContains && !aContains) {
-        return 1;
-      }
+      if (aContains && !bContains) return -1;
+      if (bContains && !aContains) return 1;
 
       return aName.length.compareTo(bName.length);
     });
@@ -228,7 +196,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
   }
 
   // ============================================================
-  // SELECT FOOD
+  // SELECT
   // ============================================================
 
   Future<void> _openFood(Map<String, dynamic> item) async {
@@ -257,16 +225,13 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const background = Color(0xFFF7F4FF);
-    const dark = Color(0xFF241C3B);
-    const purple = Color(0xFF6C4DCC);
-
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: AppTheme.backgroundColor,
+
       appBar: AppBar(
-        backgroundColor: background,
+        backgroundColor: AppTheme.backgroundColor,
+        foregroundColor: AppTheme.textPrimaryColor,
         elevation: 0,
-        foregroundColor: dark,
         centerTitle: false,
         title: Text(
           'Add ${widget.mealTitle}',
@@ -276,7 +241,6 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
 
       body: Column(
         children: [
-          // SEARCH ALWAYS STAYS ON TOP
           Padding(
             padding: const EdgeInsets.fromLTRB(18, 8, 18, 12),
             child: _searchBox(),
@@ -285,7 +249,7 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
           if (isLoading)
             const LinearProgressIndicator(
               minHeight: 2,
-              color: purple,
+              color: AppTheme.primaryColor,
               backgroundColor: Colors.transparent,
             ),
 
@@ -321,14 +285,23 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
     return TextField(
       controller: searchController,
       autofocus: true,
+
+      style: const TextStyle(color: AppTheme.textPrimaryColor),
+
+      cursorColor: AppTheme.primaryColor,
+
       onChanged: (value) {
         setState(() {});
         _onSearchChanged(value);
       },
+
       textInputAction: TextInputAction.search,
+
       decoration: InputDecoration(
         hintText: 'Search food or recipe...',
+
         prefixIcon: const Icon(Icons.search_rounded),
+
         suffixIcon: searchController.text.isEmpty
             ? null
             : IconButton(
@@ -341,116 +314,117 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
                   });
                 },
               ),
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(vertical: 18),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(22),
-          borderSide: BorderSide.none,
-        ),
       ),
     );
   }
 
   Widget _resultTile(Map<String, dynamic> item) {
     final imageUrl = item['imageUrl']?.toString() ?? '';
-
     final brand = item['brand']?.toString() ?? '';
 
     final calories = _toDouble(item['calories']);
-
     final protein = _toDouble(item['protein']);
-
     final carbs = _toDouble(item['carbs']);
-
     final fat = _toDouble(item['fat']);
 
     final isRecipe = item['isRecipe'] == true;
 
     final servingText = isRecipe ? 'per serving' : _smallServingText(item);
 
-    return InkWell(
-      borderRadius: BorderRadius.circular(22),
-      onTap: () => _openFood(item),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(13),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(22),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _resultImage(imageUrl),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
 
-            const SizedBox(width: 13),
+      child: Material(
+        color: Colors.transparent,
 
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item['name']?.toString() ?? '',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF241C3B),
-                      fontSize: 15,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: () => _openFood(item),
 
-                  if (brand.trim().isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 3),
-                      child: Text(
-                        brand,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Color(0xFF8C8499),
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
+          child: Ink(
+            padding: const EdgeInsets.all(14),
 
-                  const SizedBox(height: 7),
-
-                  Text(
-                    '${_formatNumber(calories)} kcal  •  '
-                    'P ${_formatNumber(protein)}g  •  '
-                    'C ${_formatNumber(carbs)}g  •  '
-                    'F ${_formatNumber(fat)}g',
-                    style: const TextStyle(
-                      color: Color(0xFF5B5369),
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-
-                  const SizedBox(height: 3),
-
-                  Text(
-                    servingText,
-                    style: const TextStyle(
-                      color: Color(0xFFA098AB),
-                      fontSize: 10,
-                    ),
-                  ),
-
-                  // NO SOURCE DISPLAY
-                  // NO USDA
-                  // NO FATSECRET
-                  // NO RECIPE LABEL
-                ],
-              ),
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceColor,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: AppTheme.borderColor),
             ),
 
-            const SizedBox(width: 8),
+            child: Row(
+              children: [
+                _resultImage(imageUrl),
 
-            const Icon(Icons.chevron_right_rounded, color: Color(0xFFB2AABC)),
-          ],
+                const SizedBox(width: 14),
+
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item['name']?.toString() ?? '',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+
+                        style: const TextStyle(
+                          color: AppTheme.textPrimaryColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+
+                      if (brand.trim().isNotEmpty) ...[
+                        const SizedBox(height: 3),
+
+                        Text(
+                          brand,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+
+                          style: const TextStyle(
+                            color: AppTheme.textSecondaryColor,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+
+                      const SizedBox(height: 8),
+
+                      Text(
+                        '${_formatNumber(calories)} kcal  •  '
+                        'P ${_formatNumber(protein)}g  •  '
+                        'C ${_formatNumber(carbs)}g  •  '
+                        'F ${_formatNumber(fat)}g',
+
+                        style: const TextStyle(
+                          color: AppTheme.purpleSoft,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+
+                      const SizedBox(height: 3),
+
+                      Text(
+                        servingText,
+
+                        style: const TextStyle(
+                          color: AppTheme.textSecondaryColor,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(width: 8),
+
+                const Icon(
+                  Icons.chevron_right_rounded,
+                  color: AppTheme.textSecondaryColor,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -458,36 +432,36 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
 
   Widget _resultImage(String imageUrl) {
     if (imageUrl.trim().isEmpty) {
-      return Container(
-        width: 56,
-        height: 56,
-        decoration: BoxDecoration(
-          color: const Color(0xFFF3EFFF),
-          borderRadius: BorderRadius.circular(17),
-        ),
-        child: const Icon(Icons.restaurant_rounded, color: Color(0xFF6C4DCC)),
-      );
+      return _foodPlaceholder();
     }
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(17),
+      borderRadius: BorderRadius.circular(16),
+
       child: Image.network(
         imageUrl,
-        width: 56,
-        height: 56,
+        width: 58,
+        height: 58,
         fit: BoxFit.cover,
+
         errorBuilder: (_, __, ___) {
-          return Container(
-            width: 56,
-            height: 56,
-            color: const Color(0xFFF3EFFF),
-            child: const Icon(
-              Icons.restaurant_rounded,
-              color: Color(0xFF6C4DCC),
-            ),
-          );
+          return _foodPlaceholder();
         },
       ),
+    );
+  }
+
+  Widget _foodPlaceholder() {
+    return Container(
+      width: 58,
+      height: 58,
+
+      decoration: BoxDecoration(
+        color: AppTheme.purpleSurface,
+        borderRadius: BorderRadius.circular(16),
+      ),
+
+      child: const Icon(Icons.restaurant_rounded, color: AppTheme.primaryColor),
     );
   }
 
@@ -495,20 +469,23 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
+
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               width: 78,
               height: 78,
-              decoration: const BoxDecoration(
-                color: Color(0xFFEDE6FF),
+
+              decoration: BoxDecoration(
+                color: AppTheme.primaryColor.withOpacity(0.14),
                 shape: BoxShape.circle,
               ),
+
               child: const Icon(
                 Icons.search_rounded,
                 size: 36,
-                color: Color(0xFF6C4DCC),
+                color: AppTheme.primaryColor,
               ),
             ),
 
@@ -516,8 +493,9 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
 
             const Text(
               'What did you eat?',
+
               style: TextStyle(
-                color: Color(0xFF241C3B),
+                color: AppTheme.textPrimaryColor,
                 fontSize: 21,
                 fontWeight: FontWeight.w900,
               ),
@@ -528,7 +506,8 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
             const Text(
               'Search foods, products or your saved recipes.',
               textAlign: TextAlign.center,
-              style: TextStyle(color: Color(0xFF8C8499)),
+
+              style: TextStyle(color: AppTheme.textSecondaryColor),
             ),
           ],
         ),
@@ -540,11 +519,13 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
     return const Center(
       child: Padding(
         padding: EdgeInsets.all(32),
+
         child: Text(
           'No food found.\nTry another name or brand.',
           textAlign: TextAlign.center,
+
           style: TextStyle(
-            color: Color(0xFF8C8499),
+            color: AppTheme.textSecondaryColor,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -563,15 +544,11 @@ class _FoodSearchScreenState extends State<FoodSearchScreen> {
   }
 
   void _showSnack(String text) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(text), behavior: SnackBarBehavior.floating),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
   double _toDouble(dynamic value) {
-    if (value == null) {
-      return 0;
-    }
+    if (value == null) return 0;
 
     if (value is num) {
       return value.toDouble();
@@ -607,7 +584,6 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
   late final TextEditingController amountController;
 
   late List<_ServingChoice> choices;
-
   late _ServingChoice selectedChoice;
 
   @override
@@ -615,7 +591,6 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
     super.initState();
 
     choices = _buildServingChoices();
-
     selectedChoice = choices.first;
 
     amountController = TextEditingController(
@@ -651,29 +626,17 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
 
     if (rawOptions is List) {
       for (final raw in rawOptions) {
-        if (raw is! Map) {
-          continue;
-        }
+        if (raw is! Map) continue;
 
         final map = Map<String, dynamic>.from(raw);
 
         final label = map['label']?.toString().trim() ?? '';
-
         final unit = map['unit']?.toString().trim().toLowerCase() ?? '';
-
         final grams = _nullableDouble(map['grams']);
 
-        if (label.isEmpty) {
-          continue;
-        }
-
-        if (unit == 'g') {
-          continue;
-        }
-
-        if (grams == null || grams <= 0) {
-          continue;
-        }
+        if (label.isEmpty) continue;
+        if (unit == 'g') continue;
+        if (grams == null || grams <= 0) continue;
 
         result.add(
           _ServingChoice(
@@ -685,9 +648,6 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
       }
     }
 
-    // Existing API fallback:
-    // If backend has one real metric serving,
-    // offer it as a portion.
     final servingAmount = _toDouble(widget.item['servingAmount']);
 
     final servingUnit = widget.item['servingUnit']?.toString().toLowerCase();
@@ -718,9 +678,7 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
   }
 
   double get totalGrams {
-    if (isRecipe) {
-      return 0;
-    }
+    if (isRecipe) return 0;
 
     if (selectedChoice.unit == 'g') {
       return enteredAmount;
@@ -738,13 +696,10 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
 
     final baseUnit = widget.item['servingUnit']?.toString().toLowerCase();
 
-    // Backend nutrition is based on its
-    // returned serving.
     if (baseUnit == 'g' && baseAmount > 0) {
       return totalGrams / baseAmount;
     }
 
-    // fallback for APIs normalised to 100g
     return totalGrams / 100;
   }
 
@@ -755,12 +710,9 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
   }
 
   void _save() {
-    if (enteredAmount <= 0) {
-      return;
-    }
+    if (enteredAmount <= 0) return;
 
     final name = widget.item['name']?.toString() ?? '';
-
     final brand = widget.item['brand']?.toString() ?? '';
 
     final foodName = brand.trim().isEmpty ? name : '$name • $brand';
@@ -768,82 +720,65 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
     Navigator.pop(context, {
       'id': widget.item['id'],
       'externalId': widget.item['externalId'],
-
-      // kept internally
       'source': widget.item['source'],
       'type': widget.item['type'],
-
       'foodName': foodName,
       'name': name,
       'brand': brand,
-
       'imageUrl': widget.item['imageUrl'],
-
       'amount': enteredAmount,
-
       'unit': selectedChoice.unit,
-
       'servingLabel': selectedChoice.label,
-
       'grams': isRecipe ? null : totalGrams,
-
       'calories': _calc('calories').round(),
-
       'protein': _calc('protein'),
-
       'carbs': _calc('carbs'),
-
       'fat': _calc('fat'),
-
       'fiber': _calc('fiber'),
-
       'sugar': _calc('sugar'),
-
       'sodium': _calc('sodium'),
-
       'isRecipe': isRecipe,
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    const dark = Color(0xFF241C3B);
-
-    const purple = Color(0xFF6C4DCC);
-
     return Container(
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * .82,
       ),
+
       decoration: const BoxDecoration(
-        color: Color(0xFFF9F7FD),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+        color: AppTheme.surfaceColor,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
       ),
+
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // HANDLE
           Container(
             width: 42,
             height: 5,
             margin: const EdgeInsets.only(top: 10, bottom: 6),
+
             decoration: BoxDecoration(
-              color: const Color(0xFFD8D1E0),
+              color: AppTheme.borderColor,
               borderRadius: BorderRadius.circular(20),
             ),
           ),
 
-          // CONTENT SCROLLS
           Flexible(
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 18),
+
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     widget.item['name']?.toString() ?? '',
+
                     style: const TextStyle(
-                      color: dark,
+                      color: AppTheme.textPrimaryColor,
                       fontSize: 22,
                       fontWeight: FontWeight.w900,
                     ),
@@ -851,24 +786,26 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
 
                   if ((widget.item['brand']?.toString() ?? '')
                       .trim()
-                      .isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(
-                        widget.item['brand'].toString(),
-                        style: const TextStyle(
-                          color: Color(0xFF81798D),
-                          fontSize: 13,
-                        ),
+                      .isNotEmpty) ...[
+                    const SizedBox(height: 4),
+
+                    Text(
+                      widget.item['brand'].toString(),
+
+                      style: const TextStyle(
+                        color: AppTheme.textSecondaryColor,
+                        fontSize: 13,
                       ),
                     ),
+                  ],
 
                   const SizedBox(height: 22),
 
                   const Text(
                     'Amount',
+
                     style: TextStyle(
-                      color: dark,
+                      color: AppTheme.textPrimaryColor,
                       fontSize: 15,
                       fontWeight: FontWeight.w900,
                     ),
@@ -881,20 +818,18 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
                       Expanded(
                         child: TextField(
                           controller: amountController,
+
+                          style: const TextStyle(
+                            color: AppTheme.textPrimaryColor,
+                          ),
+
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: true,
                           ),
+
                           onChanged: (_) {
                             setState(() {});
                           },
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(18),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
                         ),
                       ),
 
@@ -904,30 +839,29 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
                         child: DropdownButtonFormField<_ServingChoice>(
                           value: selectedChoice,
                           isExpanded: true,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(18),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
+
+                          dropdownColor: AppTheme.surfaceLightColor,
+
+                          decoration: const InputDecoration(),
+
                           items: choices.map((option) {
                             return DropdownMenuItem(
                               value: option,
+
                               child: Text(
                                 option.label,
                                 overflow: TextOverflow.ellipsis,
+
                                 style: const TextStyle(
+                                  color: AppTheme.textPrimaryColor,
                                   fontWeight: FontWeight.w800,
                                 ),
                               ),
                             );
                           }).toList(),
+
                           onChanged: (value) {
-                            if (value == null) {
-                              return;
-                            }
+                            if (value == null) return;
 
                             setState(() {
                               selectedChoice = value;
@@ -944,27 +878,33 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
 
                   if (!isRecipe &&
                       selectedChoice.unit != 'g' &&
-                      selectedChoice.grams != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 9),
-                      child: Text(
-                        '1 ${selectedChoice.label} ≈ '
-                        '${_formatNumber(selectedChoice.grams!)} g',
-                        style: const TextStyle(
-                          color: Color(0xFF8C8499),
-                          fontSize: 12,
-                        ),
+                      selectedChoice.grams != null) ...[
+                    const SizedBox(height: 9),
+
+                    Text(
+                      '1 ${selectedChoice.label} ≈ '
+                      '${_formatNumber(selectedChoice.grams!)} g',
+
+                      style: const TextStyle(
+                        color: AppTheme.textSecondaryColor,
+                        fontSize: 12,
                       ),
                     ),
+                  ],
 
                   const SizedBox(height: 22),
 
                   Container(
                     padding: const EdgeInsets.all(18),
+
                     decoration: BoxDecoration(
-                      color: dark,
-                      borderRadius: BorderRadius.circular(24),
+                      color: AppTheme.purpleSurface,
+                      borderRadius: BorderRadius.circular(22),
+                      border: Border.all(
+                        color: AppTheme.primaryColor.withOpacity(0.25),
+                      ),
                     ),
+
                     child: Column(
                       children: [
                         Row(
@@ -972,19 +912,23 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
+
                                 children: [
                                   const Text(
                                     'Calories',
                                     style: TextStyle(
-                                      color: Color(0xFFC9C2DC),
+                                      color: AppTheme.textSecondaryColor,
                                       fontSize: 12,
                                     ),
                                   ),
+
                                   const SizedBox(height: 3),
+
                                   Text(
                                     '${_calc('calories').round()} kcal',
+
                                     style: const TextStyle(
-                                      color: Colors.white,
+                                      color: AppTheme.textPrimaryColor,
                                       fontSize: 25,
                                       fontWeight: FontWeight.w900,
                                     ),
@@ -1009,14 +953,11 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
                       ],
                     ),
                   ),
-
-                  const SizedBox(height: 8),
                 ],
               ),
             ),
           ),
 
-          // BUTTON IS ALWAYS VISIBLE
           Container(
             padding: EdgeInsets.fromLTRB(
               20,
@@ -1024,24 +965,22 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
               20,
               14 + MediaQuery.of(context).padding.bottom,
             ),
+
             decoration: const BoxDecoration(
-              color: Colors.white,
-              border: Border(top: BorderSide(color: Color(0xFFEDE8F2))),
+              color: AppTheme.surfaceColor,
+              border: Border(top: BorderSide(color: AppTheme.borderColor)),
             ),
+
             child: SizedBox(
               width: double.infinity,
               height: 56,
+
               child: ElevatedButton(
                 onPressed: enteredAmount > 0 ? _save : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: purple,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
+
                 child: Text(
                   'Add to ${widget.mealTitle}',
+
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w900,
@@ -1061,13 +1000,20 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
       children: [
         Text(
           label,
-          style: const TextStyle(color: Color(0xFFC9C2DC), fontSize: 11),
+
+          style: const TextStyle(
+            color: AppTheme.textSecondaryColor,
+            fontSize: 11,
+          ),
         ),
+
         const SizedBox(height: 3),
+
         Text(
           '${_formatNumber(value)} g',
+
           style: const TextStyle(
-            color: Colors.white,
+            color: AppTheme.purpleSoft,
             fontWeight: FontWeight.w900,
           ),
         ),
@@ -1078,29 +1024,21 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
   static String _friendlyLabel(String input) {
     final lower = input.toLowerCase();
 
-    if (lower.contains('slice')) {
-      return 'Slice';
-    }
+    if (lower.contains('slice')) return 'Slice';
 
     if (lower.contains('piece') || lower.contains('pcs') || lower == '1 item') {
       return 'Piece';
     }
 
-    if (lower.contains('serving')) {
-      return 'Serving';
-    }
+    if (lower.contains('serving')) return 'Serving';
 
-    if (lower.contains('portion')) {
-      return 'Portion';
-    }
+    if (lower.contains('portion')) return 'Portion';
 
     return input;
   }
 
   static double _toDouble(dynamic value) {
-    if (value == null) {
-      return 0;
-    }
+    if (value == null) return 0;
 
     if (value is num) {
       return value.toDouble();
@@ -1110,9 +1048,7 @@ class _FoodAmountSheetState extends State<_FoodAmountSheet> {
   }
 
   static double? _nullableDouble(dynamic value) {
-    if (value == null) {
-      return null;
-    }
+    if (value == null) return null;
 
     if (value is num) {
       return value.toDouble();
